@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.IO;
+using System.Collections.ObjectModel;
 
 namespace MojiCollaTool
 {
@@ -22,7 +23,7 @@ namespace MojiCollaTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        private List<Moji> mojiList = new List<Moji>();
+        ObservableCollection<MojiWindow> mojiWindows = new ObservableCollection<MojiWindow>();
 
         public MainWindow()
         {
@@ -55,7 +56,7 @@ namespace MojiCollaTool
             }
         }
 
-        private void ShowError(string message, Exception ex = null)
+        private void ShowError(string message, Exception? ex = null)
         {
             StringBuilder logMessage = new StringBuilder();
             logMessage.AppendLine(message);
@@ -63,19 +64,24 @@ namespace MojiCollaTool
             {
                 logMessage.AppendLine(ex.ToString());
             }
-
             File.WriteAllText($"{System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)}\\ErrorLog\\ErrorLog {DateTime.Now:yyyyMMdd-HHmmss}.txt", logMessage.ToString());
 
-            MessageBox.Show($"{message}\r\n({ex.Message})", "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            StringBuilder dialogMessage = new StringBuilder();
+            dialogMessage.AppendLine(message);
+            if(ex != null)
+            {
+                dialogMessage.Append(ex.Message);
+            }
+            MessageBox.Show(dialogMessage.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
 
         private void AddTextButton_Click(object sender, RoutedEventArgs e)
         {
-            var moji = new Moji(mojiList.Count + 1);
+            var mojiWindow = new MojiWindow(mojiWindows.Count + 1, this);
 
-            mojiList.Add(moji);
+            mojiWindows.Add(mojiWindow);
 
-            MainCanvas.Children.Add(moji.MojiPanel);
+            MainCanvas.Children.Add(mojiWindow.Moji.MojiPanel);
         }
 
         private void MainImage_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

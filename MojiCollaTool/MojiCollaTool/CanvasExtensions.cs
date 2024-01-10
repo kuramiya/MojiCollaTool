@@ -15,7 +15,7 @@ namespace MojiCollaTool
     public static class CanvasExtensions
     {
         // Canvas を画像ファイルとして保存する。
-        public static void ToImage(this Canvas canvas, string path, BitmapEncoder encoder)
+        public static void ToImage(this Canvas canvas, string path, BitmapEncoder? encoder = null)
         {
             // レイアウトを再計算させる
             var size = new Size(canvas.Width, canvas.Height);

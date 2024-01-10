@@ -20,6 +20,8 @@ namespace MojiCollaTool
 
         public string FullText { get; set; } = "サンプル";
 
+        public string ExampleText => FullText.Replace(Environment.NewLine, string.Empty).Substring(0, 10);
+
         public StackPanel MojiPanel { get; set; } = new StackPanel();
 
         public Point Location { get; set; } = new Point(0, 0);
