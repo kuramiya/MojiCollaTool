@@ -1,0 +1,47 @@
+﻿<Window x:Class="MojiCollaTool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MojiCollaTool"
+        mc:Ignorable="d"
+        Title="MojiCollaTool ver1.0.0.0" Height="675" Width="1200">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+            <Button x:Name="LoadImageButton" Content="Load Image" Click="LoadImageButton_Click"/>
+            <Button x:Name="LoadProjectButton" Content="Load Project"/>
+            <Button x:Name="SaveProjectButton" Content="Save Project"/>
+            <Button x:Name="OutputImageButton" Content="Output Image" Click="OutputImageButton_Click"/>
+        </StackPanel>
+        <Button x:Name="AddTextButton" Content="Add Text" Grid.Row="0" Grid.Column="1" Click="AddTextButton_Click"/>
+        <Grid x:Name="CanvasGrid" Grid.Row="1" Grid.Column="0" Background="Gray">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+                <Canvas x:Name="MainCanvas" Background="Gray" Grid.Column="0">
+                    <Image x:Name="MainImage" PreviewMouseLeftButtonDown="MainImage_PreviewMouseLeftButtonDown"/>
+                </Canvas>
+            </ScrollViewer>
+        </Grid>
+        <StackPanel x:Name="ControlPanel" Orientation="Vertical" Grid.Row="1" Grid.Column="1" IsEnabled="False">
+            <Label x:Name="MojiIdLabel" Content="Moji Id:0"/>
+            <GroupBox Header="Text">
+                <TextBox x:Name="TextTextBox" Text="サンプル"/>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</Window>
