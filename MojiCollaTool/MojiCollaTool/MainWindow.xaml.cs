@@ -23,7 +23,7 @@ namespace MojiCollaTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        ObservableCollection<MojiPanel> mojiPanels = new ObservableCollection<MojiPanel>();
+        private ObservableCollection<MojiPanel> mojiPanels = new ObservableCollection<MojiPanel>();
 
         public MainWindow()
         {
@@ -114,5 +114,8 @@ namespace MojiCollaTool
                 ShowError("Image create, output error.", ex);
             }
         }
+
+
+
     }
 }
