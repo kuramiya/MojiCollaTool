@@ -5,8 +5,56 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MojiCollaTool"
         mc:Ignorable="d"
+        ContentRendered="Window_ContentRendered"
+        Closing="Window_Closing"
         Title="MojiWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Label x:Name="IDLabel" Content="Moji ID:X"/>
+            <Button x:Name="ReproductionButton" Content="Reproduction"/>
+            <Button x:Name="DeleteButton" Content="Delete"/>
+        </StackPanel>
+        <GroupBox Header="Text" Grid.Row="1">
+            <TextBox x:Name="TextTextBox" Text="サンプル" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" TextChanged="TextTextBox_TextChanged"/>
+        </GroupBox>
+        <StackPanel Orientation="Vertical" Grid.Row="2">
+            <GroupBox Header="Location">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="X:"/>
+                    <local:UpDownTextBox x:Name="LocationXTextBox"/>
+                    <Label Content="Y:"/>
+                    <local:UpDownTextBox x:Name="LocationYTextBox"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Direction">
+                <ComboBox x:Name="DirectionComboBox" SelectedIndex="0">
+                    <ComboBoxItem Content="Yokogaki"/>
+                    <ComboBoxItem Content="Tategaki"/>
+                </ComboBox>
+            </GroupBox>
+            <GroupBox Header="Font">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Font Size:"/>
+                    <local:UpDownTextBox x:Name="FontSizeTextBox" ValueChanged="FontSizeTextBox_ValueChanged"/>
+                    <Label Content="Font:"/>
+                    <ComboBox x:Name="FontComboBox" Width="100"/>
+                    <CheckBox x:Name="Bold" Content="Bold" VerticalAlignment="Center"/>
+                    <CheckBox x:Name="Italic" Content="Italic" VerticalAlignment="Center"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Margin">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Character Margin:"/>
+                    <local:UpDownTextBox x:Name="CharacterMarginTextBox"/>
+                    <Label Content="Line Margin:"/>
+                    <local:UpDownTextBox x:Name="LineMarginTextBox"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
     </Grid>
 </Window>

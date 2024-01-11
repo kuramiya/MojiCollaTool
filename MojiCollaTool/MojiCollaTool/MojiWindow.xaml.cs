@@ -19,28 +19,68 @@ namespace MojiCollaTool
     /// </summary>
     public partial class MojiWindow : Window
     {
-        public Moji Moji { get; set; }
+        private MojiPanel mojiPanel;
 
-        public int Id => Moji.Id;
+        private MainWindow? mainWindow;
 
-        public string ExampleText => Moji.ExampleText;
+        public bool IsHideOnly = true;
 
-        private MainWindow mainWindow;
+        private bool runEvent = false;
 
-        public MojiWindow(int id, MainWindow mainWindow)
+        public MojiWindow(MojiPanel mojiPanel)
         {
-            Moji = new Moji(id);
-            this.mainWindow = mainWindow;
+            this.mojiPanel= mojiPanel;
 
             InitializeComponent();
         }
 
-        public MojiWindow(Moji moji, MainWindow mainWindow)
+        private void Window_ContentRendered(object sender, EventArgs e)
         {
-            Moji = moji;
-            this.mainWindow = mainWindow;
+            LoadMojiDataToWindow(mojiPanel.MojiData);
 
-            InitializeComponent();
+            runEvent = true;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //  画面が閉じられても、隠すだけにしている
+            //  ただしこの場合だとアプリが終わってもウィンドウが保持されたままとなりアプリが終了しない
+            //  隠すのをやめるフラグを設定することで終了可能にする
+            if(IsHideOnly)
+            {
+                e.Cancel = true;
+                Hide();
+            }
+        }
+
+        public void LoadMojiDataToWindow(MojiData mojiData)
+        {
+            runEvent = false;
+
+            Title = $"ID:{mojiData.Id} {mojiData.ExampleText}";
+            IDLabel.Content = $"Moji ID:{mojiData.Id}";
+            TextTextBox.Text = mojiData.FullText;
+            FontSizeTextBox.SetValue(mojiData.FontSize, false);
+
+            runEvent = true;
+        }
+
+        private void TextTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (runEvent == false) return;
+
+            mojiPanel.MojiData.FullText = TextTextBox.Text;
+            Title = $"ID:{mojiPanel.MojiData.Id} {mojiPanel.MojiData.ExampleText}";
+
+            mojiPanel.UpdateMojiView();
+        }
+
+        private void FontSizeTextBox_ValueChanged(object sender, UpDownTextBoxEvent e)
+        {
+            if (runEvent == false) return;
+
+            mojiPanel.MojiData.FontSize = e.Value;
+            mojiPanel.UpdateMojiView();
         }
 
     }

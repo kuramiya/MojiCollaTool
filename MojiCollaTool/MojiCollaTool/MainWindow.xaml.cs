@@ -23,7 +23,7 @@ namespace MojiCollaTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        ObservableCollection<MojiWindow> mojiWindows = new ObservableCollection<MojiWindow>();
+        ObservableCollection<MojiPanel> mojiPanels = new ObservableCollection<MojiPanel>();
 
         public MainWindow()
         {
@@ -77,11 +77,11 @@ namespace MojiCollaTool
 
         private void AddTextButton_Click(object sender, RoutedEventArgs e)
         {
-            var mojiWindow = new MojiWindow(mojiWindows.Count + 1, this);
+            var mojiPanel = new MojiPanel(mojiPanels.Count + 1, this);
 
-            mojiWindows.Add(mojiWindow);
+            mojiPanels.Add(mojiPanel);
 
-            MainCanvas.Children.Add(mojiWindow.Moji.MojiPanel);
+            MainCanvas.Children.Add(mojiPanel);
         }
 
         private void MainImage_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
