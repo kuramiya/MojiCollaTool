@@ -86,6 +86,24 @@ namespace MojiCollaTool
             MainCanvas.Children.Add(mojiPanel);
         }
 
+        public void ReproductionMoji(MojiPanel mojiPanel)
+        {
+            var reproductedMojiData = mojiPanel.MojiData.Reproduct(mojiPanels.Count + 1);
+
+            var reproductedMojiPanel = new MojiPanel(reproductedMojiData, this);
+
+            mojiPanels.Add(reproductedMojiPanel);
+
+            MainCanvas.Children.Add(reproductedMojiPanel);
+        }
+
+        public void RemoveMoji(MojiPanel mojiPanel)
+        {
+            mojiPanels.Remove(mojiPanel);
+
+            MainCanvas.Children.Remove(mojiPanel);
+        }
+
         private void MainImage_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Point p = e.GetPosition(this);
@@ -116,8 +134,5 @@ namespace MojiCollaTool
                 ShowError("Image create, output error.", ex);
             }
         }
-
-
-
     }
 }

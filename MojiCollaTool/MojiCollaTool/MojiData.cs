@@ -8,10 +8,10 @@ using System.Windows.Controls;
 
 namespace MojiCollaTool
 {
-    public enum TextDirection
+    public enum TextDirection : int
     {
-        Yokogaki,
-        Tategaki,
+        Yokogaki = 0,
+        Tategaki = 1,
     }
 
     [Serializable]
@@ -43,6 +43,32 @@ namespace MojiCollaTool
         {
             Id = id;
             FullText = $"サンプル{id}";
+        }
+
+        public void Copy(MojiData source)
+        {
+            FullText = source.FullText;
+            X = source.X;
+            Y = source.Y;
+            FontSize = source.FontSize;
+            TextDirection = source.TextDirection;
+            IsBold = source.IsBold;
+            IsItalic = source.IsItalic;
+            CharacterMargin = source.CharacterMargin;
+            LineMargin = source.LineMargin;
+        }
+
+        public MojiData Reproduct(int id)
+        {
+            var reproductionMojiData = new MojiData(id);
+
+            reproductionMojiData.Copy(this);
+
+            //  わかりやすくするために、座標を少しずらす
+            reproductionMojiData.X += 10;
+            reproductionMojiData.Y += 10;
+
+            return reproductionMojiData;
         }
     }
 }

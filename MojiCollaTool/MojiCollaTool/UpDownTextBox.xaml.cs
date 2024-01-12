@@ -31,6 +31,8 @@ namespace MojiCollaTool
 
         public bool IsMinusAllowed { get; set; } = false;
 
+        public bool IsZeroAllowed { get; set; } = true;
+
         public event EventHandler<UpDownTextBoxEvent>? ValueChanged;
 
         private DispatcherTimer longPressEventTimer = new DispatcherTimer();
@@ -59,10 +61,9 @@ namespace MojiCollaTool
         private void DownButton_Click(object sender, RoutedEventArgs e)
         {
             Value--;
-            if (Value < 0 && IsMinusAllowed == false)
-            {
-                Value = 0;
-            }
+
+            LimitValueMinimum();
+
             ValueTextBox.Text = Value.ToString();
         }
 
@@ -82,6 +83,8 @@ namespace MojiCollaTool
             if(parseOk)
             {
                 Value = tempValue;
+                LimitValueMinimum();
+
                 if (ValueChanged != null) ValueChanged(this, new UpDownTextBoxEvent(Value));
             }
         }
@@ -124,8 +127,21 @@ namespace MojiCollaTool
             else
             {
                 Value--;
+                LimitValueMinimum();
             }
             ValueTextBox.Text = Value.ToString();
+        }
+
+        private void LimitValueMinimum()
+        {
+            if (Value <= 0 && IsZeroAllowed == false)
+            {
+                Value = 1;
+            }
+            else if (Value < 0 && IsMinusAllowed == false)
+            {
+                Value = 0;
+            }
         }
     }
 

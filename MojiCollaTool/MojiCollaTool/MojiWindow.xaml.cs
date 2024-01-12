@@ -21,8 +21,6 @@ namespace MojiCollaTool
     {
         private MojiPanel mojiPanel;
 
-        private MainWindow? mainWindow;
-
         public bool IsHideOnly = true;
 
         private bool runEvent = false;
@@ -75,6 +73,16 @@ namespace MojiCollaTool
             runEvent = true;
         }
 
+        private void ReproductionButton_Click(object sender, RoutedEventArgs e)
+        {
+            mojiPanel.Reproduction();
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            mojiPanel.Remove();
+        }
+
         private void TextTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (runEvent == false) return;
@@ -100,6 +108,32 @@ namespace MojiCollaTool
             mojiPanel.MojiData.X = LocationXTextBox.Value;
             mojiPanel.MojiData.Y = LocationYTextBox.Value;
             mojiPanel.UpdateXYView();
+        }
+
+        private void DirectionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (runEvent == false) return;
+
+            mojiPanel.MojiData.TextDirection = (TextDirection)DirectionComboBox.SelectedIndex;
+            mojiPanel.UpdateMojiView();
+        }
+
+        private void FontStyleCheckBox_CheckChanged(object sender, RoutedEventArgs e)
+        {
+            if (runEvent == false) return;
+
+            mojiPanel.MojiData.IsBold = (BoldCheckBox.IsChecked == true);
+            mojiPanel.MojiData.IsItalic = (ItalicCheckBox.IsChecked == true);
+            mojiPanel.UpdateMojiView();
+        }
+
+        private void MarginTextBox_ValueChanged(object sender, UpDownTextBoxEvent e)
+        {
+            if (runEvent == false) return;
+
+            mojiPanel.MojiData.LineMargin = LineMarginTextBox.Value;
+            mojiPanel.MojiData.CharacterMargin = CharacterMarginTextBox.Value;
+            mojiPanel.UpdateMojiView();
         }
     }
 }

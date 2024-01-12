@@ -16,8 +16,8 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Label x:Name="IDLabel" Content="Moji ID:X"/>
-            <Button x:Name="ReproductionButton" Content="Reproduction"/>
-            <Button x:Name="DeleteButton" Content="Delete"/>
+            <Button x:Name="ReproductionButton" Content="Reproduction" Click="ReproductionButton_Click"/>
+            <Button x:Name="DeleteButton" Content="Delete" Click="DeleteButton_Click"/>
         </StackPanel>
         <GroupBox Header="Text" Grid.Row="1">
             <TextBox x:Name="TextTextBox" Text="サンプル" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" TextChanged="TextTextBox_TextChanged"/>
@@ -26,13 +26,13 @@
             <GroupBox Header="Location">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="X:"/>
-                    <local:UpDownTextBox x:Name="LocationXTextBox" ValueChanged="LocationTextBox_ValueChanged"/>
+                    <local:UpDownTextBox x:Name="LocationXTextBox" IsMinusAllowed="True" ValueChanged="LocationTextBox_ValueChanged"/>
                     <Label Content="Y:"/>
-                    <local:UpDownTextBox x:Name="LocationYTextBox" ValueChanged="LocationTextBox_ValueChanged"/>
+                    <local:UpDownTextBox x:Name="LocationYTextBox" IsMinusAllowed="True" ValueChanged="LocationTextBox_ValueChanged"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Direction">
-                <ComboBox x:Name="DirectionComboBox" SelectedIndex="0">
+                <ComboBox x:Name="DirectionComboBox" SelectedIndex="0" SelectedValuePath="SelectedIndex" SelectionChanged="DirectionComboBox_SelectionChanged">
                     <ComboBoxItem Content="Yokogaki"/>
                     <ComboBoxItem Content="Tategaki"/>
                 </ComboBox>
@@ -40,19 +40,19 @@
             <GroupBox Header="Font">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Font Size:"/>
-                    <local:UpDownTextBox x:Name="FontSizeTextBox" ValueChanged="FontSizeTextBox_ValueChanged"/>
+                    <local:UpDownTextBox x:Name="FontSizeTextBox" IsZeroAllowed="False" ValueChanged="FontSizeTextBox_ValueChanged"/>
                     <Label Content="Font:"/>
                     <ComboBox x:Name="FontComboBox" Width="100"/>
-                    <CheckBox x:Name="Bold" Content="Bold" VerticalAlignment="Center"/>
-                    <CheckBox x:Name="Italic" Content="Italic" VerticalAlignment="Center"/>
+                    <CheckBox x:Name="BoldCheckBox" Content="Bold" VerticalAlignment="Center" Checked="FontStyleCheckBox_CheckChanged" Unchecked="FontStyleCheckBox_CheckChanged"/>
+                    <CheckBox x:Name="ItalicCheckBox" Content="Italic" VerticalAlignment="Center" Checked="FontStyleCheckBox_CheckChanged" Unchecked="FontStyleCheckBox_CheckChanged"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Margin">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Character Margin:"/>
-                    <local:UpDownTextBox x:Name="CharacterMarginTextBox"/>
+                    <local:UpDownTextBox x:Name="CharacterMarginTextBox" IsMinusAllowed="True" ValueChanged="MarginTextBox_ValueChanged"/>
                     <Label Content="Line Margin:"/>
-                    <local:UpDownTextBox x:Name="LineMarginTextBox"/>
+                    <local:UpDownTextBox x:Name="LineMarginTextBox" IsMinusAllowed="True" ValueChanged="MarginTextBox_ValueChanged"/>
                 </StackPanel>
             </GroupBox>
         </StackPanel>

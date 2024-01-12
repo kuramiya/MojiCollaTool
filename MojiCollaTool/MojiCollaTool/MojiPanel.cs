@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Media3D;
 
 namespace MojiCollaTool
 {
     public class MojiPanel : ContentControl
     {
+        private static readonly char[] TategakiRotateTargetCharacters = { '「', '」', '(', ')', '【', '】' };
+
         public int Id => MojiData.Id;
 
         public string ExampleText => MojiData.ExampleText;
@@ -25,27 +31,15 @@ namespace MojiCollaTool
 
         private Nullable<Point> dragStart = null;
 
+        private TransformGroup tategakiTransformGroup = new TransformGroup();
+
         public MojiPanel(int id, MainWindow mainWindow)
         {
             this.mainWindow = mainWindow;
 
             MojiData = new MojiData(id);
-            MojiWindow = new MojiWindow(this);
 
-            AddChild(stackPanel);
-
-            MouseDown += MojiPanel_MouseDown;
-            MouseUp += MojiPanel_MouseUp;
-            MouseMove += MojiPanel_MouseMove;
-            MouseDoubleClick += MojiPanel_MouseDoubleClick;
-            Unloaded += MojiPanel_Unloaded;
-
-            UpdateMojiView();
-        }
-
-        private void MojiPanel_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            MojiWindow?.Show();
+            Init();
         }
 
         public MojiPanel(MojiData mojiData, MainWindow mainWindow)
@@ -53,6 +47,15 @@ namespace MojiCollaTool
             this.mainWindow = mainWindow;
 
             MojiData = mojiData;
+
+            Init();
+        }
+
+        private void Init()
+        {
+            tategakiTransformGroup.Children.Add(new RotateTransform(90));
+            tategakiTransformGroup.Children.Add(new TranslateTransform(2, 0));
+
             MojiWindow = new MojiWindow(this);
 
             AddChild(stackPanel);
@@ -64,6 +67,21 @@ namespace MojiCollaTool
             Unloaded += MojiPanel_Unloaded;
 
             UpdateMojiView();
+        }
+
+        public void Reproduction()
+        {
+            mainWindow.ReproductionMoji(this);
+        }
+
+        public void Remove()
+        {
+            mainWindow.RemoveMoji(this);
+        }
+
+        private void MojiPanel_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            MojiWindow?.Show();
         }
 
         private void MojiPanel_MouseMove(object sender, MouseEventArgs e)
@@ -72,8 +90,11 @@ namespace MojiCollaTool
             {
                 var element = (UIElement)sender;
                 var p2 = e.GetPosition(mainWindow.MainCanvas);
-                Canvas.SetLeft(element, p2.X - dragStart.Value.X);
-                Canvas.SetTop(element, p2.Y - dragStart.Value.Y);
+
+                MojiData.X = p2.X - dragStart.Value.X;
+                MojiData.Y = p2.Y - dragStart.Value.Y;
+
+                Margin = new Thickness(MojiData.X, MojiData.Y, 0, 0);
             }
         }
 
@@ -113,7 +134,7 @@ namespace MojiCollaTool
         public void UpdateXYView()
         {
             //  文字パネルの位置を設定する
-            VisualOffset = new Vector(MojiData.X, MojiData.Y);
+            Margin = new Thickness(MojiData.X, MojiData.Y, 0, 0);
         }
 
         public void UpdateMojiView()
@@ -122,7 +143,20 @@ namespace MojiCollaTool
             stackPanel.Children.Clear();
 
             //  文字パネルの位置を設定する
-            VisualOffset = new Vector(MojiData.X, MojiData.Y);
+            Margin = new Thickness(MojiData.X, MojiData.Y, 0, 0);
+
+            //  縦書き、横書きで配置方法が異なる
+            switch (MojiData.TextDirection)
+            {
+                case TextDirection.Yokogaki:
+                    stackPanel.Orientation = Orientation.Vertical;
+                    break;
+                case TextDirection.Tategaki:
+                    stackPanel.Orientation = Orientation.Horizontal;
+                    break;
+                default:
+                    break;
+            }
 
             //  改行ごとに分ける
             var lines = MojiData.FullText.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
@@ -144,7 +178,7 @@ namespace MojiCollaTool
                         linePanel.Orientation = Orientation.Horizontal;
                         break;
                     case TextDirection.Tategaki:
-                        linePanel.Margin = new Thickness(MojiData.LineMargin, 0, 0, 0);
+                        linePanel.Margin = new Thickness(0, 0, MojiData.LineMargin, 0);
                         linePanel.Orientation = Orientation.Vertical;
                         break;
                     default:
@@ -162,27 +196,31 @@ namespace MojiCollaTool
                 foreach (var character in characters)
                 {
                     //  文字ごとにラベルを用意する
-                    var charLabel = new Label();
+                    var charTextBlock = new TextBlock();
+
+                    //  中心配置にする
+                    charTextBlock.VerticalAlignment = VerticalAlignment.Center;
+                    charTextBlock.HorizontalAlignment = HorizontalAlignment.Center;
 
                     //  todo 装飾を付加する必要あり、おそらくFormattedTextを使用する
-                    charLabel.Content = character;
+                    charTextBlock.Text = character.ToString();
 
-                    charLabel.FontSize = MojiData.FontSize;
+                    charTextBlock.FontSize = MojiData.FontSize;
                     if(MojiData.IsBold)
                     {
-                        charLabel.FontWeight = FontWeights.Bold;
+                        charTextBlock.FontWeight = FontWeights.Bold;
                     }
                     else
                     {
-                        charLabel.FontWeight = FontWeights.Normal;
+                        charTextBlock.FontWeight = FontWeights.Normal;
                     }
                     if(MojiData.IsItalic)
                     {
-                        charLabel.FontStyle = FontStyles.Italic;
+                        charTextBlock.FontStyle = FontStyles.Italic;
                     }
                     else
                     {
-                        charLabel.FontStyle = FontStyles.Normal;
+                        charTextBlock.FontStyle = FontStyles.Normal;
                     }
 
                     //  文字間隔を設定する
@@ -191,17 +229,22 @@ namespace MojiCollaTool
                     switch (MojiData.TextDirection)
                     {
                         case TextDirection.Yokogaki:
-                            charLabel.Margin = new Thickness(0, 0, MojiData.CharacterMargin, 0);
+                            charTextBlock.Margin = new Thickness(0, 0, MojiData.CharacterMargin, 0);
                             break;
                         case TextDirection.Tategaki:
-                            charLabel.Margin = new Thickness(0, 0, 0, MojiData.CharacterMargin);
+                            charTextBlock.Margin = new Thickness(0, 0, 0, MojiData.CharacterMargin);
+                            if(TategakiRotateTargetCharacters.Contains(character))
+                            {
+                                charTextBlock.RenderTransformOrigin = new Point(0.5, 0.5);
+                                charTextBlock.RenderTransform = tategakiTransformGroup;
+                            }
                             break;
                         default:
                             break;
                     }
 
                     //  行パネルに追加する
-                    linePanel.Children.Add(charLabel);
+                    linePanel.Children.Add(charTextBlock);
                 }
 
                 linePanels.Add(linePanel);
@@ -211,6 +254,9 @@ namespace MojiCollaTool
             if (MojiData.TextDirection == TextDirection.Tategaki)
             {
                 linePanels.Reverse();
+
+                //  縦書きの末尾の行の要素のマージンは不要、あった場合、マイナス値の場合文字が隠れていく
+                linePanels.Last().Margin = new Thickness(0);
             }
             foreach (var linePanel in linePanels)
             {
