@@ -23,7 +23,9 @@ namespace MojiCollaTool
 
         public string ExampleText => new string(FullText.Replace(Environment.NewLine, string.Empty).Take(10).ToArray());
 
-        public Point Location { get; set; } = new Point(0, 0);
+        public double X { get; set; }
+
+        public double Y { get; set; }
 
         public int FontSize { get; set; } = 20;
 

@@ -65,6 +65,16 @@ namespace MojiCollaTool
             runEvent = true;
         }
 
+        public void UpdateXY(double x, double y)
+        {
+            runEvent = false;
+
+            LocationXTextBox.SetValue((int)x, false);
+            LocationYTextBox.SetValue((int)y, false);
+
+            runEvent = true;
+        }
+
         private void TextTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (runEvent == false) return;
@@ -83,5 +93,13 @@ namespace MojiCollaTool
             mojiPanel.UpdateMojiView();
         }
 
+        private void LocationTextBox_ValueChanged(object sender, UpDownTextBoxEvent e)
+        {
+            if (runEvent == false) return;
+
+            mojiPanel.MojiData.X = LocationXTextBox.Value;
+            mojiPanel.MojiData.Y = LocationYTextBox.Value;
+            mojiPanel.UpdateXYView();
+        }
     }
 }

@@ -28,6 +28,8 @@ namespace MojiCollaTool
         public MainWindow()
         {
             InitializeComponent();
+
+            Title = $"MojiCollaTool ver{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
         }
 
         private void LoadImageButton_Click(object sender, RoutedEventArgs e)

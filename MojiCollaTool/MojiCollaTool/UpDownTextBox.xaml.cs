@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.Xml;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace MojiCollaTool
 {
@@ -21,6 +23,8 @@ namespace MojiCollaTool
     /// </summary>
     public partial class UpDownTextBox : UserControl
     {
+        private const int LONG_PRESS_START_WAIT_TIME_MSEC = 300;
+
         public int Value { get; set; } = 0;
 
         public bool RunEvent { get; set; } = true;
@@ -29,9 +33,18 @@ namespace MojiCollaTool
 
         public event EventHandler<UpDownTextBoxEvent>? ValueChanged;
 
+        private DispatcherTimer longPressEventTimer = new DispatcherTimer();
+
+        private bool isLongPress = false;
+
+        private bool isLongPressEventUp;
+
         public UpDownTextBox()
         {
             InitializeComponent();
+
+            longPressEventTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            longPressEventTimer.Tick += LongPressEventTimer_Tick;
         }
 
         public void SetValue(int value, bool runEvent = true)
@@ -71,6 +84,48 @@ namespace MojiCollaTool
                 Value = tempValue;
                 if (ValueChanged != null) ValueChanged(this, new UpDownTextBoxEvent(Value));
             }
+        }
+
+        private async void DownButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            await StartLongPressAsync(false);
+        }
+
+        private async void UpButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            await StartLongPressAsync(true);
+        }
+
+        private async Task StartLongPressAsync(bool isUp)
+        {
+            isLongPress = true;
+
+            await Task.Delay(LONG_PRESS_START_WAIT_TIME_MSEC);
+
+            if (isLongPress == false) return;
+
+            isLongPressEventUp = isUp;
+
+            longPressEventTimer.Start();
+        }
+
+        private void UpDownButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            isLongPress = false;
+            longPressEventTimer.Stop();
+        }
+
+        private void LongPressEventTimer_Tick(object? sender, EventArgs e)
+        {
+            if(isLongPressEventUp)
+            {
+                Value++;
+            }
+            else
+            {
+                Value--;
+            }
+            ValueTextBox.Text = Value.ToString();
         }
     }
 

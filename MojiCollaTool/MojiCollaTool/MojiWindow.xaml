@@ -26,9 +26,9 @@
             <GroupBox Header="Location">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="X:"/>
-                    <local:UpDownTextBox x:Name="LocationXTextBox"/>
+                    <local:UpDownTextBox x:Name="LocationXTextBox" ValueChanged="LocationTextBox_ValueChanged"/>
                     <Label Content="Y:"/>
-                    <local:UpDownTextBox x:Name="LocationYTextBox"/>
+                    <local:UpDownTextBox x:Name="LocationYTextBox" ValueChanged="LocationTextBox_ValueChanged"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Direction">
