@@ -25,6 +25,8 @@ namespace MojiCollaTool
     {
         private ObservableCollection<MojiPanel> mojiPanels = new ObservableCollection<MojiPanel>();
 
+        private int nextMojiId = 1;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -79,7 +81,8 @@ namespace MojiCollaTool
 
         private void AddTextButton_Click(object sender, RoutedEventArgs e)
         {
-            var mojiPanel = new MojiPanel(mojiPanels.Count + 1, this);
+            var mojiPanel = new MojiPanel(nextMojiId, this);
+            ++nextMojiId;
 
             mojiPanels.Add(mojiPanel);
 
@@ -88,7 +91,8 @@ namespace MojiCollaTool
 
         public void ReproductionMoji(MojiPanel mojiPanel)
         {
-            var reproductedMojiData = mojiPanel.MojiData.Reproduct(mojiPanels.Count + 1);
+            var reproductedMojiData = mojiPanel.MojiData.Reproduct(nextMojiId);
+            ++nextMojiId;
 
             var reproductedMojiPanel = new MojiPanel(reproductedMojiData, this);
 

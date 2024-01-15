@@ -29,6 +29,8 @@ namespace MojiCollaTool
 
         public int FontSize { get; set; } = 20;
 
+        public string FontFamilyName { get; set; } = "ＭＳ ゴシック";
+
         public TextDirection TextDirection { get; set; } = TextDirection.Yokogaki;
 
         public bool IsBold { get; set; } = false;
@@ -51,6 +53,7 @@ namespace MojiCollaTool
             X = source.X;
             Y = source.Y;
             FontSize = source.FontSize;
+            FontFamilyName = source.FontFamilyName;
             TextDirection = source.TextDirection;
             IsBold = source.IsBold;
             IsItalic = source.IsItalic;

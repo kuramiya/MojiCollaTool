@@ -204,6 +204,7 @@ namespace MojiCollaTool
 
                     //  todo 装飾を付加する必要あり、おそらくFormattedTextを使用する
                     charTextBlock.Text = character.ToString();
+                    charTextBlock.FontFamily = new FontFamily(MojiData.FontFamilyName);
 
                     charTextBlock.FontSize = MojiData.FontSize;
                     if(MojiData.IsBold)

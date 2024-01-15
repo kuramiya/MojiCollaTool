@@ -30,6 +30,8 @@ namespace MojiCollaTool
             this.mojiPanel= mojiPanel;
 
             InitializeComponent();
+
+            FontComboBox.ItemsSource = FontUtil.FontTextBlocks;
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -133,6 +135,12 @@ namespace MojiCollaTool
 
             mojiPanel.MojiData.LineMargin = LineMarginTextBox.Value;
             mojiPanel.MojiData.CharacterMargin = CharacterMarginTextBox.Value;
+            mojiPanel.UpdateMojiView();
+        }
+
+        private void FontComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            mojiPanel.MojiData.FontFamilyName = (string)FontComboBox.SelectedValue;
             mojiPanel.UpdateMojiView();
         }
     }
