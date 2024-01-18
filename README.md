@@ -129,15 +129,42 @@
   - 別画面にしたほうが良いのではないか？
   - そうなると文字入力コントロール自体を別画面にしたほうが良さそう
 
-## 懸念点
+## 懸念点、その他
+### 懸念点一覧
+#### 未解決
 - 画像の拡大と縮小が、画像の出力に影響しないか？
-- 縦書き文字をどのように実装するか？
-  - かっこや伸ばし棒などを、どのように縦書き配置にするか？
-  - プロポーショナルフォントの縦書き配置をどのようにするか？
 - 文字の背景色の範囲をどのように指定するか？
   - プロポーショナルフォントの影響を受けないか？
+#### 解決済み
+- 縦書き文字をどのように実装するか？
+  - かっこや伸ばし棒などを、どのように縦書き配置にするか？
+   - リストを用意し、それを90度回転させることで対処する
+  - プロポーショナルフォントの縦書き配置をどのようにするか？
+   - 細かい配置方法は諦める
 - パネル上でのダブルクリックの実装
-  - ダブルクリックのイベントは存在しないので、自力で実装する必要がある
-  - とりあえず普通のクリックで対処する
+  - ~~ダブルクリックのイベントは存在しないので、自力で実装する必要がある~~
+  - ~~とりあえず普通のクリックで対処する~~
+  - ContentControlを上位に配置することで解決した
 
+### 文字の装飾処理
+- ネット上のサンプルでは縁取りと縁取りのぼかしは別々の項目となっている
+- 縁取りだけを対象にぼかしをした場合、文字とぼかされた縁取りの間に隙間ができるはず
+- 縁取りの中はFillしておく必要がある
+  - 輪を描いている文字の中身をきれいに埋めることができるのか？
+
+#### 文字の縁取り
+- https://learn.microsoft.com/ja-jp/dotnet/desktop/wpf/advanced/how-to-create-outlined-text?view=netframeworkdesktop-4.8
+- https://pikopiko.chikuwasoft.com/page/note/11/
+- https://github.com/Hondarer/OutlineText
+#### 縁取りのぼかし
+- https://learn.microsoft.com/ja-jp/dotnet/desktop/wpf/advanced/how-to-create-text-with-a-shadow?view=netframeworkdesktop-4.8
+
+### カラーピッカー
+#### 参考
+- https://github.com/MT224244/WpfColorPicker
+- https://araramistudio.jimdo.com/2016/10/05/wpf%E3%81%A7%E8%89%B2%E9%81%B8%E6%8A%9E%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%AB%E3%82%92%E8%87%AA%E4%BD%9C%E3%81%99%E3%82%8B/
+- http://www.kanazawa-net.ne.jp/~pmansato/wpf/wpf_custom_ColorPicker.htm
+- http://www.kanazawa-net.ne.jp/~pmansato/wpf/wpf_custom_BrushEditor.htm
+- https://github.com/PixiEditor/ColorPicker
+- https://github.com/xceedsoftware/wpftoolkit/wiki/ColorPicker
 
