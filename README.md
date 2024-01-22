@@ -162,9 +162,15 @@
 ### カラーピッカー
 #### 参考
 - https://github.com/MT224244/WpfColorPicker
+  - ちょっとシンプルすぎて微妙
 - https://araramistudio.jimdo.com/2016/10/05/wpf%E3%81%A7%E8%89%B2%E9%81%B8%E6%8A%9E%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%AB%E3%82%92%E8%87%AA%E4%BD%9C%E3%81%99%E3%82%8B/
 - http://www.kanazawa-net.ne.jp/~pmansato/wpf/wpf_custom_ColorPicker.htm
 - http://www.kanazawa-net.ne.jp/~pmansato/wpf/wpf_custom_BrushEditor.htm
+- 使い勝手が良さそうだけど、少し小さいかも
 - https://github.com/PixiEditor/ColorPicker
+  - ものすごく作りが良いが、立派すぎて逆に使いにくい
+  - 色の履歴がない
 - https://github.com/xceedsoftware/wpftoolkit/wiki/ColorPicker
+  - 色選択履歴あり、使いやすそう
+  - スタンダードカラーの選択が良くない
 
