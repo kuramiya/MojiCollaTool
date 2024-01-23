@@ -35,18 +35,9 @@ namespace MojiCollaTool
 
         public event EventHandler<UpDownTextBoxEvent>? ValueChanged;
 
-        private DispatcherTimer longPressEventTimer = new DispatcherTimer();
-
-        private bool isLongPress = false;
-
-        private bool isLongPressEventUp;
-
         public UpDownTextBox()
         {
             InitializeComponent();
-
-            longPressEventTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
-            longPressEventTimer.Tick += LongPressEventTimer_Tick;
         }
 
         public void SetValue(int value, bool runEvent = true)
@@ -89,49 +80,6 @@ namespace MojiCollaTool
             }
         }
 
-        private async void DownButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            await StartLongPressAsync(false);
-        }
-
-        private async void UpButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            await StartLongPressAsync(true);
-        }
-
-        private async Task StartLongPressAsync(bool isUp)
-        {
-            isLongPress = true;
-
-            await Task.Delay(LONG_PRESS_START_WAIT_TIME_MSEC);
-
-            if (isLongPress == false) return;
-
-            isLongPressEventUp = isUp;
-
-            longPressEventTimer.Start();
-        }
-
-        private void UpDownButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            isLongPress = false;
-            longPressEventTimer.Stop();
-        }
-
-        private void LongPressEventTimer_Tick(object? sender, EventArgs e)
-        {
-            if(isLongPressEventUp)
-            {
-                Value++;
-            }
-            else
-            {
-                Value--;
-                LimitValueMinimum();
-            }
-            ValueTextBox.Text = Value.ToString();
-        }
-
         private void LimitValueMinimum()
         {
             if (Value <= 0 && IsZeroAllowed == false)
@@ -141,6 +89,25 @@ namespace MojiCollaTool
             else if (Value < 0 && IsMinusAllowed == false)
             {
                 Value = 0;
+            }
+        }
+
+        private void ValueTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (RunEvent == false) return;
+
+            if(e.Key == Key.Up)
+            {
+                Value++;
+                ValueTextBox.Text = Value.ToString();
+            }
+            else if(e.Key == Key.Down)
+            {
+                Value--;
+
+                LimitValueMinimum();
+
+                ValueTextBox.Text = Value.ToString();
             }
         }
     }

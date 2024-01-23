@@ -12,8 +12,8 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="DownButton" Content="▼" Width="28" FontSize="12" Grid.Column="0" Click="DownButton_Click" PreviewMouseDown="DownButton_PreviewMouseDown" PreviewMouseUp="UpDownButton_PreviewMouseUp"/>
-        <TextBox x:Name="ValueTextBox" Text="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Width="50" Grid.Column="1" TextChanged="ValueTextBox_TextChanged"/>
-        <Button x:Name="UpButton" Content="▲" Width="28" FontSize="12" Grid.Column="2" Click="UpButton_Click" PreviewMouseDown="UpButton_PreviewMouseDown" PreviewMouseUp="UpDownButton_PreviewMouseUp"/>
+        <RepeatButton x:Name="DownButton" Content="▼" Width="28" FontSize="12" Grid.Column="0" Click="DownButton_Click"/>
+        <TextBox x:Name="ValueTextBox" Text="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Width="50" Grid.Column="1" TextChanged="ValueTextBox_TextChanged" PreviewKeyDown="ValueTextBox_PreviewKeyDown"/>
+        <RepeatButton x:Name="UpButton" Content="▲" Width="28" FontSize="12" Grid.Column="2" Click="UpButton_Click"/>
     </Grid>
 </UserControl>

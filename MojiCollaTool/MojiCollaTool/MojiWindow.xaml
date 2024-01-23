@@ -55,6 +55,11 @@
                     <local:UpDownTextBox x:Name="LineMarginTextBox" IsMinusAllowed="True" ValueChanged="MarginTextBox_ValueChanged"/>
                 </StackPanel>
             </GroupBox>
+            <GroupBox Header="Fore Color">
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{DynamicResource ColorButtonStyle}" x:Name="ForeColorButton" Width="100" Height="28" Background="Black" BorderBrush="Black" Click="ForeColorButton_Click"/>
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
     </Grid>
 </Window>

@@ -1,0 +1,34 @@
+﻿<Window x:Class="MojiCollaTool.WpfColorPicker.ColorPickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MojiCollaTool.WpfColorPicker"
+        xmlns:cp="clr-namespace:WpfColorPicker"
+        mc:Ignorable="d"
+        Background="#28282E"
+        Title="ColorPickerWindow" Height="400" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <GroupBox Header="Color List" Grid.Row="0">
+                
+            </GroupBox>
+            <GroupBox Header="Color History" Grid.Row="1">
+                
+            </GroupBox>
+            <DockPanel Grid.Row="2">
+                
+            </DockPanel>
+        </Grid>
+        <cp:ColorPicker Grid.Column="1" Width="300"/>
+    </Grid>
+</Window>

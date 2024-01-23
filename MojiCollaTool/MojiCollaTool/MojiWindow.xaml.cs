@@ -143,5 +143,11 @@ namespace MojiCollaTool
             mojiPanel.MojiData.FontFamilyName = (string)FontComboBox.SelectedValue;
             mojiPanel.UpdateMojiView();
         }
+
+        private void ForeColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            WpfColorPicker.ColorPickerWindow colorPickerWindow = new WpfColorPicker.ColorPickerWindow();
+            colorPickerWindow.ShowDialog();
+        }
     }
 }
