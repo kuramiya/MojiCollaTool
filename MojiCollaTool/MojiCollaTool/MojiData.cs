@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace MojiCollaTool
 {
@@ -41,6 +42,12 @@ namespace MojiCollaTool
 
         public double LineMargin { get; set; } = 0;
 
+        public Color ForeColor { get; set; } = Colors.Black;
+
+        public Color BorderColor { get; set; } = Colors.White;
+
+        public Color BackgroundColor { get; set; } = Colors.White;
+
         public MojiData(int id)
         {
             Id = id;
@@ -59,6 +66,9 @@ namespace MojiCollaTool
             IsItalic = source.IsItalic;
             CharacterMargin = source.CharacterMargin;
             LineMargin = source.LineMargin;
+            ForeColor = source.ForeColor;
+            BorderColor = source.BorderColor;
+            BackgroundColor = source.BackgroundColor;
         }
 
         public MojiData Reproduct(int id)

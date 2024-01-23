@@ -42,7 +42,7 @@
                     <Label Content="Font Size:"/>
                     <local:UpDownTextBox x:Name="FontSizeTextBox" IsZeroAllowed="False" ValueChanged="FontSizeTextBox_ValueChanged"/>
                     <Label Content="Font:"/>
-                    <ComboBox x:Name="FontComboBox" Width="300" VerticalContentAlignment="Center" SelectedValuePath="Text" SelectionChanged="FontComboBox_SelectionChanged"/>
+                    <ComboBox x:Name="FontFamilyComboBox" Width="300" VerticalContentAlignment="Center" SelectedValuePath="Text" SelectionChanged="FontFamilyComboBox_SelectionChanged"/>
                     <CheckBox x:Name="BoldCheckBox" Content="Bold" VerticalAlignment="Center" Checked="FontStyleCheckBox_CheckChanged" Unchecked="FontStyleCheckBox_CheckChanged"/>
                     <CheckBox x:Name="ItalicCheckBox" Content="Italic" VerticalAlignment="Center" Checked="FontStyleCheckBox_CheckChanged" Unchecked="FontStyleCheckBox_CheckChanged"/>
                 </StackPanel>

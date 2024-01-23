@@ -87,7 +87,7 @@
 
         <!-- Labelのスタイル -->
         <Style TargetType="Label">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
             <Setter Property="Width" Value="12"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -97,9 +97,9 @@
         
         <!-- TextBoxのスタイル -->
         <Style TargetType="TextBox">
-            <Setter Property="Background" Value="#FF212126"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Height" Value="20"/>
             <Setter Property="HorizontalContentAlignment" Value="Right"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -107,7 +107,8 @@
         </Style>
     </UserControl.Resources>
 
-    <Border Background="#FF28282E" Padding="10,10,0,10">
+    <!--元は#FF28282E-->
+    <Border Padding="10,10,0,10">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

@@ -31,7 +31,7 @@ namespace MojiCollaTool
 
             InitializeComponent();
 
-            FontComboBox.ItemsSource = FontUtil.FontTextBlocks;
+            FontFamilyComboBox.ItemsSource = FontUtil.FontTextBlocks;
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -57,10 +57,20 @@ namespace MojiCollaTool
         {
             runEvent = false;
 
-            Title = $"ID:{mojiData.Id} {mojiData.ExampleText}";
+            Title = $"[{mojiData.Id}] {mojiData.ExampleText}";
             IDLabel.Content = $"Moji ID:{mojiData.Id}";
             TextTextBox.Text = mojiData.FullText;
+            LocationXTextBox.SetValue((int)mojiData.X, false);
+            LocationYTextBox.SetValue((int)mojiData.Y, false);
             FontSizeTextBox.SetValue(mojiData.FontSize, false);
+            if (FontUtil.GetFontFamilies().ContainsKey(mojiData.FontFamilyName))
+            {
+                FontFamilyComboBox.SelectedValue = mojiData.FontFamilyName;
+            }
+            BoldCheckBox.IsChecked = mojiData.IsBold;
+            ItalicCheckBox.IsChecked = mojiData.IsItalic;
+            CharacterMarginTextBox.SetValue((int)mojiData.CharacterMargin);
+            LineMarginTextBox.SetValue((int)mojiData.LineMargin);
 
             runEvent = true;
         }
@@ -138,15 +148,15 @@ namespace MojiCollaTool
             mojiPanel.UpdateMojiView();
         }
 
-        private void FontComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void FontFamilyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            mojiPanel.MojiData.FontFamilyName = (string)FontComboBox.SelectedValue;
+            mojiPanel.MojiData.FontFamilyName = (string)FontFamilyComboBox.SelectedValue;
             mojiPanel.UpdateMojiView();
         }
 
         private void ForeColorButton_Click(object sender, RoutedEventArgs e)
         {
-            WpfColorPicker.ColorPickerWindow colorPickerWindow = new WpfColorPicker.ColorPickerWindow();
+            ColorSelector.ColorSelectorWindow colorPickerWindow = new ColorSelector.ColorSelectorWindow(mojiPanel.MojiData.ForeColor);
             colorPickerWindow.ShowDialog();
         }
     }
