@@ -156,7 +156,7 @@ namespace MojiCollaTool
 
         private void ForeColorButton_Click(object sender, RoutedEventArgs e)
         {
-            ColorSelector.ColorSelectorWindow colorPickerWindow = new ColorSelector.ColorSelectorWindow(mojiPanel.MojiData.ForeColor);
+            ColorSelector.ColorSelectorWindow colorPickerWindow = new ColorSelector.ColorSelectorWindow(ForeBack.Fore, mojiPanel.MojiData.ForeColor, mojiPanel.MojiData.BackgroundColor);
             colorPickerWindow.ShowDialog();
         }
     }

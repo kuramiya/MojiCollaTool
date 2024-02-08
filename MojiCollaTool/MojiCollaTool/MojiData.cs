@@ -15,6 +15,15 @@ namespace MojiCollaTool
         Tategaki = 1,
     }
 
+    /// <summary>
+    /// 文字色（前面）or背景色
+    /// </summary>
+    public enum ForeBack
+    {
+        Fore,
+        Back,
+    }
+
     [Serializable]
     public class MojiData
     {

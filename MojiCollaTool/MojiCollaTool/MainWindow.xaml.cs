@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.IO;
 using System.Collections.ObjectModel;
+using System.Net.NetworkInformation;
 
 namespace MojiCollaTool
 {
