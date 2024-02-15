@@ -121,5 +121,10 @@ namespace MojiCollaTool.ColorSelector
 
             UpdateColorHistory(color);
         }
+
+        private void RepColorButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
