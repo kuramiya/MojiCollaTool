@@ -71,6 +71,7 @@ namespace MojiCollaTool
             ItalicCheckBox.IsChecked = mojiData.IsItalic;
             CharacterMarginTextBox.SetValue((int)mojiData.CharacterMargin);
             LineMarginTextBox.SetValue((int)mojiData.LineMargin);
+            ForeColorButton.Background = new SolidColorBrush(mojiData.ForeColor);
 
             runEvent = true;
         }
@@ -156,8 +157,15 @@ namespace MojiCollaTool
 
         private void ForeColorButton_Click(object sender, RoutedEventArgs e)
         {
-            ColorSelector.ColorSelectorWindow colorPickerWindow = new ColorSelector.ColorSelectorWindow(ForeBack.Fore, mojiPanel.MojiData.ForeColor, mojiPanel.MojiData.BackgroundColor);
-            colorPickerWindow.ShowDialog();
+            ColorSelector.ColorSelectorWindow colorSelectorWindow = new ColorSelector.ColorSelectorWindow(ForeBack.Fore, mojiPanel.MojiData.ForeColor, mojiPanel.MojiData.BackgroundColor);
+            var dialogResult = colorSelectorWindow.ShowDialog();
+
+            if(dialogResult.HasValue && dialogResult.Value) 
+            {
+                mojiPanel.MojiData.ForeColor = colorSelectorWindow.GetNextColor();
+                ForeColorButton.Background = new SolidColorBrush(mojiPanel.MojiData.ForeColor);
+                mojiPanel.UpdateMojiView();
+            }
         }
     }
 }

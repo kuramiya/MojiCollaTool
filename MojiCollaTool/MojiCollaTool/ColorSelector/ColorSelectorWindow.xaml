@@ -9,100 +9,91 @@
         Title="ColorSelectorWindow" Height="400" Width="800">
     <Grid Margin="5">
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0" Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="Current -> Next" Grid.Row="0" Grid.Column="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="CurrentColorButton" Style="{StaticResource ColorButtonStyle}" Content="文字コラ MojiColla" FontWeight="Bold" Height="30" Foreground="Black" Background="White" Grid.Column="0" Click="CurrentColorButton_Click"/>
+                <Button x:Name="NextColorButton" Style="{StaticResource ColorButtonStyle}" Content="文字コラ MojiColla" FontWeight="Bold" Height="30" Foreground="White" Background="Black" Grid.Column="1"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Color List" Grid.Row="1" Grid.Column="0">
+            <Grid x:Name="ColorListGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <GroupBox Header="Color List" Grid.Row="0">
-                    <Grid x:Name="ColorListGrid">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <!--コードビハインドで追加される-->
-                    </Grid>
-                </GroupBox>
-                <GroupBox Header="Color History" Grid.Row="1">
-                    <StackPanel Orientation="Horizontal">
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History1" Width="20" Height="20" Margin="2" Background="Black" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History2" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History3" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History4" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History5" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History6" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History7" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History8" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History9" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History10" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History11" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History12" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History13" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History14" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History15" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History16" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History17" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History18" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History19" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                        <Button Style="{StaticResource ColorButtonStyle}" x:Name="History20" Width="20" Height="20" Margin="2" Background="White" Click="History_Click"/>
-                    </StackPanel>
-                </GroupBox>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!--コードビハインドで追加される-->
             </Grid>
-            <cp:ColorPicker x:Name="ManualColorPicker" Grid.Column="1" Width="300"/>
-        </Grid>
-        <Grid Grid.Row="1" Margin="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Column="0">
-                <Button x:Name="CurrentColorButton" Style="{StaticResource ColorButtonStyle}" Content="あa" Width="50" Height="30" Foreground="Black" Background="White"/>
-                <Button x:Name="NextColorButton" Style="{StaticResource ColorButtonStyle}" Content="あa" Width="50" Height="30" Foreground="White" Background="Black"/>
+        </GroupBox>
+        <GroupBox Header="Color History" Grid.Row="2" Grid.Column="0">
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History1" Width="20" Height="20" Margin="1" Background="Black" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History2" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History3" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History4" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History5" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History6" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History7" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History8" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History9" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History10" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History11" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History12" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History13" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History14" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History15" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History16" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History17" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History18" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History19" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
+                <Button Style="{StaticResource ColorButtonStyle}" x:Name="History20" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
             </StackPanel>
-            <Button x:Name="OKButton" Content="OK" Width="100" FontSize="20" Grid.Column="2" HorizontalAlignment="Center"/>
-        </Grid>
+        </GroupBox>
+        <cp:ColorPicker x:Name="ManualColorPicker" Width="300" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"/>
+        <Button x:Name="OKButton" Content="OK" Width="100" FontSize="20" Margin="5" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Click="OKButton_Click"/>
     </Grid>
 </Window>

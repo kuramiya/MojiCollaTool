@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
@@ -223,6 +224,9 @@ namespace MojiCollaTool
                     {
                         charTextBlock.FontStyle = FontStyles.Normal;
                     }
+
+                    //  文字色を設定する
+                    charTextBlock.Foreground = new SolidColorBrush(MojiData.ForeColor);
 
                     //  文字間隔を設定する
                     //  縦書き横書きで異なる
