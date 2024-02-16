@@ -24,8 +24,12 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <GroupBox Header="Color List" Grid.Row="0">
-                    <Grid>
+                    <Grid x:Name="ColorListGrid">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
@@ -58,37 +62,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Grid.Row="0" Style="{StaticResource ColorButtonStyle}" Margin="1" Background="#FFEBEE" Click="RepColorButton_Click"/>
-                        <Button Grid.Column="0" Grid.Row="1" Style="{StaticResource ColorButtonStyle}" Margin="1" Background="#FFCDD2" Click="RepColorButton_Click"/>
-                        <Button Grid.Column="0" Grid.Row="2" Style="{StaticResource ColorButtonStyle}" Margin="1" Background="#EF9A9A" Click="RepColorButton_Click"/>
-                        <Button Grid.Column="0" Grid.Row="3" Style="{StaticResource ColorButtonStyle}" Margin="1" Background="#E57373" Click="RepColorButton_Click"/>
-                        <Button Grid.Column="0" Grid.Row="4" Style="{StaticResource ColorButtonStyle}" Margin="1" Background="#EF5350" Click="RepColorButton_Click"/>
-                        <Button Grid.Column="0" Grid.Row="5" Style="{StaticResource ColorButtonStyle}" Margin="1" Background="#F44336" Click="RepColorButton_Click"/>
-                        <Button Grid.Column="0" Grid.Row="6" Style="{StaticResource ColorButtonStyle}" Margin="1" Background="#E53935" Click="RepColorButton_Click"/>
-                        <Button Grid.Column="0" Grid.Row="7" Style="{StaticResource ColorButtonStyle}" Margin="1" Background="#D32F2F" Click="RepColorButton_Click"/>
-                        <Button Grid.Column="0" Grid.Row="8" Style="{StaticResource ColorButtonStyle}" Margin="1" Background="#C62828" Click="RepColorButton_Click"/>
-                        <Button Grid.Column="0" Grid.Row="9" Style="{StaticResource ColorButtonStyle}" Margin="1" Background="#B71C1C" Click="RepColorButton_Click"/>
-
-                        <Button  Grid.Column="1" Grid.Row="0" Style="{StaticResource ColorButtonStyle}" Margin="1" Background="#ffa500" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="1" Grid.Row="1" Style="{StaticResource ColorButtonStyle}" Margin="1" Background="#ffa522" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="1" Grid.Row="2" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffa544" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="1" Grid.Row="3" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffa566" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="1" Grid.Row="4" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffa588" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="1" Grid.Row="5" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffa5aa" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="1" Grid.Row="6" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffa5cc" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="1" Grid.Row="7" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffa5ee" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="1" Grid.Row="8" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffa5ff" Click="RepColorButton_Click"/>
-
-                        <Button  Grid.Column="2" Grid.Row="0" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffff00" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="2" Grid.Row="1" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffff22" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="2" Grid.Row="2" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffff44" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="2" Grid.Row="3" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffff66" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="2" Grid.Row="4" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffff88" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="2" Grid.Row="5" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffffaa" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="2" Grid.Row="6" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffffcc" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="2" Grid.Row="7" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffffee" Click="RepColorButton_Click"/>
-                        <Button  Grid.Column="2" Grid.Row="8" Style="{StaticResource ColorButtonStyle}" Margin="5" Background="#ffffff" Click="RepColorButton_Click"/>
-
+                        <!--コードビハインドで追加される-->
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="Color History" Grid.Row="1">

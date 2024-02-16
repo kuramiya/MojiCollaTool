@@ -76,6 +76,8 @@ namespace MojiCollaTool.ColorSelector
             ManualColorPicker.BeforeBrush = CurrentForeBrush;
             ManualColorPicker.AfterBrush = NextForeBrush;
 
+            InitColorListButtons();
+
             colorHistoryButtons.Add(History1);
             colorHistoryButtons.Add(History2);
             colorHistoryButtons.Add(History3);
@@ -99,11 +101,49 @@ namespace MojiCollaTool.ColorSelector
         }
 
         /// <summary>
+        /// カラーリストのボタンを初期化する
+        /// </summary>
+        private void InitColorListButtons()
+        {
+            for (int colIndex = 0; colIndex < ColorPalette.ColorList.GetLength(0); colIndex++)
+            {
+                for (int rowIndex = 0; rowIndex < ColorPalette.ColorList.GetLength(1); rowIndex++)
+                {
+                    PlaceColorButton(colIndex, rowIndex, ColorPalette.ColorList[colIndex, rowIndex]);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// カラー選択用のボタンを配置する
+        /// </summary>
+        /// <param name="colIndex"></param>
+        /// <param name="rowIndex"></param>
+        /// <param name="colorValue"></param>
+        private void PlaceColorButton(int colIndex, int rowIndex, uint colorValue)
+        {
+            Button button = new Button();
+
+            button.Background = new SolidColorBrush(ColorPalette.GetColorFromUInt(colorValue));
+            button.Style = (Style)Application.Current.FindResource("ColorButtonStyle");
+            button.Margin = new Thickness(1);
+            Grid.SetColumn(button, colIndex);
+            Grid.SetRow(button, rowIndex);
+            button.Click += RepColorButton_Click;
+
+            ColorListGrid.Children.Add(button);
+        }
+
+        /// <summary>
         /// 色選択履歴を更新する
         /// </summary>
         /// <param name="color"></param>
         public void UpdateColorHistory(Color color)
         {
+            //  おんなじ色の場合、更新しない
+            if (color == colorHistory[0]) return;
+
             colorHistory.Insert(0, color);
             colorHistory.RemoveAt(COLOR_HISTORY_MAX_COUNT - 1);
 
@@ -113,18 +153,27 @@ namespace MojiCollaTool.ColorSelector
             }
         }
 
-        private void History_Click(object sender, RoutedEventArgs e)
+        private void UpdateNextColor(Color color)
         {
-            var color = ((SolidColorBrush)((Button)sender).Background).Color;
-
             NextForeBrush = new SolidColorBrush(color);
+
+            ManualColorPicker.AfterBrush = new SolidColorBrush(color);
 
             UpdateColorHistory(color);
         }
 
+        private void History_Click(object sender, RoutedEventArgs e)
+        {
+            var color = ((SolidColorBrush)((Button)sender).Background).Color;
+
+            UpdateNextColor(color);
+        }
+
         private void RepColorButton_Click(object sender, RoutedEventArgs e)
         {
+            Color color = ((SolidColorBrush)((Button)sender).Background).Color;
 
+            UpdateNextColor(color);
         }
     }
 }
