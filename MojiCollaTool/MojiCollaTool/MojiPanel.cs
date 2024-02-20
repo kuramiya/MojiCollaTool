@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.Xml;
@@ -196,52 +197,29 @@ namespace MojiCollaTool
 
                 foreach (var character in characters)
                 {
-                    //  文字ごとにラベルを用意する
-                    var charTextBlock = new TextBlock();
-
-                    //  中心配置にする
-                    charTextBlock.VerticalAlignment = VerticalAlignment.Center;
-                    charTextBlock.HorizontalAlignment = HorizontalAlignment.Center;
-
-                    //  todo 装飾を付加する必要あり、おそらくFormattedTextを使用する
-                    charTextBlock.Text = character.ToString();
-                    charTextBlock.FontFamily = new FontFamily(MojiData.FontFamilyName);
-
-                    charTextBlock.FontSize = MojiData.FontSize;
-                    if(MojiData.IsBold)
-                    {
-                        charTextBlock.FontWeight = FontWeights.Bold;
-                    }
-                    else
-                    {
-                        charTextBlock.FontWeight = FontWeights.Normal;
-                    }
-                    if(MojiData.IsItalic)
-                    {
-                        charTextBlock.FontStyle = FontStyles.Italic;
-                    }
-                    else
-                    {
-                        charTextBlock.FontStyle = FontStyles.Normal;
-                    }
-
-                    //  文字色を設定する
-                    charTextBlock.Foreground = new SolidColorBrush(MojiData.ForeColor);
+                    //  縦書きのために、１文字ずつ文字を作成する
+                    DecorationTextControl decorationTextControl = new DecorationTextControl(character, MojiData);
 
                     //  文字間隔を設定する
+                    //  文字の配置を設定する
                     //  縦書き横書きで異なる
-                    //  todo 縦書きの処理が必要
                     switch (MojiData.TextDirection)
                     {
                         case TextDirection.Yokogaki:
-                            charTextBlock.Margin = new Thickness(0, 0, MojiData.CharacterMargin, 0);
+                            decorationTextControl.VerticalAlignment = VerticalAlignment.Bottom;
+                            decorationTextControl.HorizontalAlignment = HorizontalAlignment.Center;
+
+                            decorationTextControl.Margin = new Thickness(0, 0, MojiData.CharacterMargin, 0);
                             break;
                         case TextDirection.Tategaki:
-                            charTextBlock.Margin = new Thickness(0, 0, 0, MojiData.CharacterMargin);
+                            decorationTextControl.VerticalAlignment = VerticalAlignment.Center;
+                            decorationTextControl.HorizontalAlignment = HorizontalAlignment.Center;
+
+                            decorationTextControl.Margin = new Thickness(0, 0, 0, MojiData.CharacterMargin);
                             if(TategakiRotateTargetCharacters.Contains(character))
                             {
-                                charTextBlock.RenderTransformOrigin = new Point(0.5, 0.5);
-                                charTextBlock.RenderTransform = tategakiTransformGroup;
+                                decorationTextControl.RenderTransformOrigin = new Point(0.5, 0.5);
+                                decorationTextControl.RenderTransform = tategakiTransformGroup;
                             }
                             break;
                         default:
@@ -249,7 +227,7 @@ namespace MojiCollaTool
                     }
 
                     //  行パネルに追加する
-                    linePanel.Children.Add(charTextBlock);
+                    linePanel.Children.Add(decorationTextControl);
                 }
 
                 linePanels.Add(linePanel);

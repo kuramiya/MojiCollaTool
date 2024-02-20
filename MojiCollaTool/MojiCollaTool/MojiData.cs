@@ -55,6 +55,10 @@ namespace MojiCollaTool
 
         public Color BorderColor { get; set; } = Colors.White;
 
+        public bool IsBorderExists { get => BorderThickness > 0; }
+
+        public double BorderThickness { get; set; } = 0;
+
         public Color BackgroundColor { get; set; } = Colors.White;
 
         public MojiData(int id)
@@ -77,9 +81,15 @@ namespace MojiCollaTool
             LineMargin = source.LineMargin;
             ForeColor = source.ForeColor;
             BorderColor = source.BorderColor;
+            BorderThickness = source.BorderThickness;
             BackgroundColor = source.BackgroundColor;
         }
 
+        /// <summary>
+        /// 文字を複製する
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public MojiData Reproduct(int id)
         {
             var reproductionMojiData = new MojiData(id);
