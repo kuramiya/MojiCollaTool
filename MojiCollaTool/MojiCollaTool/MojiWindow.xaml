@@ -69,6 +69,16 @@
                     <Button Style="{DynamicResource ColorButtonStyle}" x:Name="BorderColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="BorderColorButton_Click"/>
                 </StackPanel>
             </GroupBox>
+            <GroupBox Header="Background Box">
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox x:Name="BackgroundCheckBox" Content="Show Background Box" VerticalAlignment="Center" Checked="CheckBox_CheckChanged" Unchecked="CheckBox_CheckChanged"/>
+                    <Label Content="Backgournd Box Color:"/>
+                    <Button Style="{DynamicResource ColorButtonStyle}" x:Name="BackgroundColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="BackgroundColorButton_Click"/>
+                    <Label Content="Backgournd Box Padding:"/>
+                    <local:UpDownTextBox x:Name="BackgroundBoxPaddingTextBox" IsMinusAllowed="False" ValueChanged="TextBox_ValueChanged"/>
+
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
     </Grid>
 </Window>

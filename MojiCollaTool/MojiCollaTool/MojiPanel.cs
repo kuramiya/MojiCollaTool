@@ -60,6 +60,8 @@ namespace MojiCollaTool
 
             MojiWindow = new MojiWindow(this);
 
+            stackPanel.VerticalAlignment = VerticalAlignment.Center;
+            stackPanel.HorizontalAlignment = HorizontalAlignment.Center;
             AddChild(stackPanel);
 
             MouseDown += MojiPanel_MouseDown;
@@ -189,10 +191,10 @@ namespace MojiCollaTool
 
                 var characters = new List<Char>(line);
 
-                //  空の行だった場合、配置されずにずれるため、半角スペースを入れておく
+                //  空の行だった場合、配置されずにずれるため、全角スペースを入れておく
                 if (characters.Count <= 0)
                 {
-                    characters.Add(' ');
+                    characters.Add('　');
                 }
 
                 foreach (var character in characters)
@@ -241,9 +243,17 @@ namespace MojiCollaTool
                 //  縦書きの末尾の行の要素のマージンは不要、あった場合、マイナス値の場合文字が隠れていく
                 linePanels.Last().Margin = new Thickness(0);
             }
+
             foreach (var linePanel in linePanels)
             {
                 stackPanel.Children.Add(linePanel);
+            }
+
+            //  背景色を設定する
+            if(MojiData.IsBackgroundBoxExists)
+            {
+                stackPanel.Background = new SolidColorBrush(MojiData.BackgroundBoxColor);
+                //  todo    背景の幅の付け方を考える必要あり
             }
         }
     }

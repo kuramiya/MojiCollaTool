@@ -11,8 +11,9 @@
 - https://pikopiko.chikuwasoft.com/page/note/11/
 - https://github.com/Hondarer/OutlineText
 - https://learn.microsoft.com/ja-jp/dotnet/desktop/wpf/advanced/how-to-create-text-with-a-shadow?view=netframeworkdesktop-4.8#using-a-blur-effect
-
-### 開発メモ
+- https://atmarkit.itmedia.co.jp/ait/articles/1102/02/news100_2.html
+- 
+### 実装メモ
 https://learn.microsoft.com/ja-jp/dotnet/desktop/wpf/advanced/how-to-create-outlined-text?view=netframeworkdesktop-4.8
 テキストをGeometryオブジェクトに変換して、それに対して処理を加える、という流れになる。
 Geometryオブジェクトは図形を描画するもの。文字を図形に変更してから処理をする。
@@ -22,10 +23,15 @@ FormattedTextはMarginなどを持たず、そのままレイアウトに配置�
 サンプルコードとしてOutlineTextControlというものが用意されているが、専用のプロパティやバインディングなどがあるのでそれを削除した専用クラスを作成する。
 https://github.com/dotnet/docs-desktop/blob/main/dotnet-desktop-guide/samples/snippets/csharp/VS_Snippets_Wpf/OutlineTextControlViewer/CSharp/OutlineTextControl.cs
 
+BuildHighlightGeometryを使用すると、その文字の外縁の箱のGeometryオブジェクトを手に入れることができる。
+なにかに使えるかもしれない。
+https://learn.microsoft.com/ja-jp/dotnet/api/system.windows.media.formattedtext.buildhighlightgeometry?view=windowsdesktop-8.0
+
 このクラスをStackPanelにて並べたところ、文字がすべて重なる形で配置された。
 独自クラス故に、WidthとHeightを定義できていないのが問題らしい。
 WidthとHeightはFormattedTextのものを内部的に設定することで対応可能となった。
-空白文字はWidthHeighがないらしく、重なってくる。
+空白文字はWidthHeighがないらしく、重なってくる。要改善。これはWidthIncludingTrailingWhitespaceを使うことで解決した。
+https://learn.microsoft.com/ja-jp/dotnet/api/system.windows.media.formattedtext.widthincludingtrailingwhitespace?view=windowsdesktop-8.0
 
 DrawingContext.DrawGeometryメソッド、fillをnullにするとfillの色が描画されない。
 Penが外縁を示す、nullにすると描画されない。
@@ -33,16 +39,32 @@ https://learn.microsoft.com/ja-jp/dotnet/api/system.windows.media.drawingcontext
 
 
 
-ぼかし効果を使用したほうが手っ取り早いかもしれない？
-しかしその場合、ぼかしのない文字の縁取りができない。
 
+## 文字の縁取りのぼかし
 
-### 文字の縁取りのぼかし
-
-#### 参考リンク集
+### 参考リンク集
 - https://learn.microsoft.com/ja-jp/dotnet/desktop/wpf/advanced/how-to-create-text-with-a-shadow?view=netframeworkdesktop-4.8
 
+### 実装メモ
+BitmapEffect関連の処理はすべて非推奨となっている。Effectを使用する必要あり。
+DrawingGroupの場合でもBitmapEffectを使用している。ダメ。
+EffectはDrawingContextを持つその対象まるごとにかける形になる。
+文字をまるごと書けると文字全体がぼかしされるのでよくない。最悪の場合、文字本体と縁取りで分離して描画する必要があるかもしれないがやりたくはない。
 
+DrawingVisualを経由して書いてみたが、効果が出ない。要確認。
+
+## 文字の背景描画
+
+### 参考リンク集
+
+### 実装メモ
+文字を配置しているStackPanelの背景色を設定する。
+StackPanelのサイズはFormattedTextのサイズに依存しており、文字の縁取りサイズに追従していない。
+そのため、縁取りのサイズを広げても追従してくれない。
+それとは別に、任意のサイズ指定機能が欲しい。
+別途パラメータを追加して対応する。Paddingを指定することで幅を広げる。
+StackPanelにはPaddingがなかった。Gridに入れることで対処する。Gridもなかった。
+要検討。
 
 ## 懸念点メモ
 - ネット上のサンプルでは縁取りと縁取りのぼかしは別々の項目となっている

@@ -112,6 +112,8 @@ namespace MojiCollaTool
             mojiPanel.MojiData.CharacterMargin = CharacterMarginTextBox.Value;
             mojiPanel.MojiData.FontFamilyName = (string)FontFamilyComboBox.SelectedValue;
             mojiPanel.MojiData.BorderThickness = BorderThicknessTextBox.Value;
+            mojiPanel.MojiData.IsBackgroundBoxExists = (BackgroundCheckBox.IsChecked == true);
+            mojiPanel.MojiData.BackgoundBoxPadding = BackgroundBoxPaddingTextBox.Value;
 
             mojiPanel.UpdateMojiView();
         }
@@ -148,7 +150,7 @@ namespace MojiCollaTool
         {
             if (runEvent == false) return;
 
-            ColorSelector.ColorSelectorWindow colorSelectorWindow = new ColorSelector.ColorSelectorWindow(ForeBack.Fore, mojiPanel.MojiData.ForeColor, mojiPanel.MojiData.BackgroundColor);
+            ColorSelector.ColorSelectorWindow colorSelectorWindow = new ColorSelector.ColorSelectorWindow(ForeBack.Fore, mojiPanel.MojiData.ForeColor, mojiPanel.MojiData.BackgroundBoxColor);
             var dialogResult = colorSelectorWindow.ShowDialog();
 
             if(dialogResult.HasValue && dialogResult.Value) 
@@ -170,6 +172,21 @@ namespace MojiCollaTool
             {
                 mojiPanel.MojiData.BorderColor = colorSelectorWindow.GetNextColor();
                 BorderColorButton.Background = new SolidColorBrush(mojiPanel.MojiData.BorderColor);
+                mojiPanel.UpdateMojiView();
+            }
+        }
+
+        private void BackgroundColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (runEvent == false) return;
+
+            ColorSelector.ColorSelectorWindow colorSelectorWindow = new ColorSelector.ColorSelectorWindow(ForeBack.Back, mojiPanel.MojiData.ForeColor, mojiPanel.MojiData.BackgroundBoxColor);
+            var dialogResult = colorSelectorWindow.ShowDialog();
+
+            if (dialogResult.HasValue && dialogResult.Value)
+            {
+                mojiPanel.MojiData.BackgroundBoxColor = colorSelectorWindow.GetNextColor();
+                BackgroundColorButton.Background = new SolidColorBrush(mojiPanel.MojiData.BackgroundBoxColor);
                 mojiPanel.UpdateMojiView();
             }
         }
