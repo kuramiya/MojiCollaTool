@@ -44,6 +44,7 @@ https://learn.microsoft.com/ja-jp/dotnet/api/system.windows.media.drawingcontext
 
 ### 参考リンク集
 - https://learn.microsoft.com/ja-jp/dotnet/desktop/wpf/advanced/how-to-create-text-with-a-shadow?view=netframeworkdesktop-4.8
+- https://www.appsloveworld.com/csharp/100/1593/how-to-blur-drawing-using-the-drawingcontext-wpf
 
 ### 実装メモ
 BitmapEffect関連の処理はすべて非推奨となっている。Effectを使用する必要あり。
@@ -52,6 +53,11 @@ EffectはDrawingContextを持つその対象まるごとにかける形になる
 文字をまるごと書けると文字全体がぼかしされるのでよくない。最悪の場合、文字本体と縁取りで分離して描画する必要があるかもしれないがやりたくはない。
 
 DrawingVisualを経由して書いてみたが、効果が出ない。要確認。
+
+わからないのでスタックオーバーフローに質問した。
+https://stackoverflow.com/questions/78032415/how-to-apply-effect-inside-wpf-uielement-onrender-method
+
+
 
 ## 文字の背景描画
 

@@ -7,6 +7,8 @@ using System.Globalization;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Media.Effects;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace MojiCollaTool
 {
@@ -55,25 +57,20 @@ namespace MojiCollaTool
         protected override void OnRender(DrawingContext drawingContext)
         {
             //  縁取りを描画する
-            if(_borderColorPen.Thickness > 0)
+            if (_borderColorPen.Thickness > 0)
             {
                 //drawingContext.DrawGeometry(null, _borderColorPen, _textGeometry);
 
-                DrawingVisual borderDrawingVisual = new DrawingVisual();
+                DrawingVisual drawingVisual = new DrawingVisual();
 
-                using (DrawingContext borderDrawingContext = borderDrawingVisual.RenderOpen())
+                using(var dc = drawingVisual.RenderOpen())
                 {
-                    borderDrawingContext.DrawGeometry(null, _borderColorPen, _textGeometry);
+                    dc.DrawGeometry(null, _borderColorPen, _textGeometry);
                 }
 
-                BlurEffect blurEffect = new BlurEffect()
-                {
-                    Radius = 20,
-                };
+                drawingVisual.Effect = new BlurEffect { Radius = 5 };
 
-                borderDrawingVisual.Effect = blurEffect;
-
-                drawingContext.DrawDrawing(borderDrawingVisual.Drawing);
+                drawingContext.DrawDrawing(drawingVisual.Drawing);
             }
 
             //  文字本体を描画する
