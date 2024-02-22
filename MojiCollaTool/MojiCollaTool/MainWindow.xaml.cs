@@ -177,5 +177,18 @@ namespace MojiCollaTool
             CanvasScaleTransform.ScaleX = scale_Percent / 100.0;
             CanvasScaleTransform.ScaleY = scale_Percent / 100.0;
         }
+
+        private void CanvasGrid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if(e.Delta > 0)
+            {
+                ScalingTextBox.RunUpButton();
+            }
+
+            if(e.Delta < 0)
+            {
+                ScalingTextBox.RunDownButton();
+            }
+        }
     }
 }

@@ -57,6 +57,11 @@ namespace MojiCollaTool
             RunEvent = true;
         }
 
+        public void RunDownButton()
+        {
+            DownButton_Click(this, new RoutedEventArgs());
+        }
+
         private void DownButton_Click(object sender, RoutedEventArgs e)
         {
             Value -= Step;
@@ -64,6 +69,11 @@ namespace MojiCollaTool
             LimitValueMinimum();
 
             ValueTextBox.Text = Value.ToString();
+        }
+
+        public void RunUpButton()
+        {
+            UpButton_Click(this, new RoutedEventArgs());
         }
 
         private void UpButton_Click(object sender, RoutedEventArgs e)

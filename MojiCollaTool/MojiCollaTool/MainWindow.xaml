@@ -25,7 +25,7 @@
             <Label Content="%"/>
         </StackPanel>
         <Button x:Name="AddTextButton" Grid.Row="0" Grid.Column="1" Content="Add Text" Click="AddTextButton_Click"/>
-        <Grid x:Name="CanvasGrid" Grid.Row="1" Grid.Column="0" Background="Gray">
+        <Grid x:Name="CanvasGrid" Grid.Row="1" Grid.Column="0" Background="Gray" PreviewMouseWheel="CanvasGrid_PreviewMouseWheel">
             <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
                 <Canvas x:Name="MainCanvas" Background="Gray" Grid.Column="0">
                     <Canvas.LayoutTransform>
