@@ -112,6 +112,7 @@ namespace MojiCollaTool
             mojiPanel.MojiData.CharacterMargin = CharacterMarginTextBox.Value;
             mojiPanel.MojiData.FontFamilyName = (string)FontFamilyComboBox.SelectedValue;
             mojiPanel.MojiData.BorderThickness = BorderThicknessTextBox.Value;
+            mojiPanel.MojiData.BorderBlurrRadius = BorderBlurrRadiusTextBox.Value;
             mojiPanel.MojiData.IsBackgroundBoxExists = (BackgroundCheckBox.IsChecked == true);
             mojiPanel.MojiData.BackgoundBoxPadding = BackgroundBoxPaddingTextBox.Value;
 

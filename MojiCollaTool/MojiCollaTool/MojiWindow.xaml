@@ -67,6 +67,8 @@
                     <local:UpDownTextBox x:Name="BorderThicknessTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
                     <Label Content="Border Color:"/>
                     <Button Style="{DynamicResource ColorButtonStyle}" x:Name="BorderColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="BorderColorButton_Click"/>
+                    <Label Content="Border Blurr Radius:"/>
+                    <local:UpDownTextBox x:Name="BorderBlurrRadiusTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Background Box">

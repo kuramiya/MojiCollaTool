@@ -59,6 +59,8 @@ namespace MojiCollaTool
 
         public double BorderThickness { get; set; } = 0;
 
+        public double BorderBlurrRadius { get; set; } = 0;
+
         public bool IsBackgroundBoxExists { get; set; } = false;
 
         public Color BackgroundBoxColor { get; set; } = Colors.White;
