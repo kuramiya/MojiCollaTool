@@ -17,6 +17,9 @@ namespace MojiCollaTool
 {
     public class MojiPanel : ContentControl
     {
+        /// <summary>
+        /// 縦書き対応のために回転させる必要のある文字
+        /// </summary>
         private static readonly char[] TategakiRotateTargetCharacters = { '「', '」', '(', ')', '【', '】' };
 
         public int Id => MojiData.Id;
