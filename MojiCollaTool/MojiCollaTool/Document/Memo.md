@@ -129,6 +129,30 @@
   - 別画面にしたほうが良いのではないか？
   - そうなると文字入力コントロール自体を別画面にしたほうが良さそう
 
+## 各機能の実装
+
+### 文字の装飾処理
+CharDecoration.mdを参照すること。
+[CharDecoration.md](/CharDecoration.md)
+
+### カラーピッカーの実装
+ColorPicker.mdを参照すること。
+[ColorPicker.md](/ColorPicker.md)
+
+### 画面の拡大、縮小機能
+
+#### 参考リンク集
+- http://cswpf.seesaa.net/article/317340776.html
+
+#### 実装メモ
+ScrollViewr -> Canvas -> Imageの順で構成されている。
+Canvasを拡大、縮小すれば良い。
+
+画像出力する際は、拡大、縮小された状態で出力される可能性がある。
+実際そのように出力された。
+出力する直前に倍率を100%に戻し、出力後に設定前に戻すことで解決した。力技だがひとまずそれで対象する。
+
+
 ## 懸念点、その他
 ### 懸念点一覧
 #### 未解決
@@ -148,27 +172,3 @@
   - ~~ダブルクリックのイベントは存在しないので、自力で実装する必要がある~~
   - ~~とりあえず普通のクリックで対処する~~
   - ContentControlを上位に配置することで解決した
-
-### 文字の装飾処理
-CharDecoration.mdを参照すること
-[CharDecoration.md](/CharDecoration.md)
-
-### カラーピッカー
-#### 参考
-- https://github.com/MT224244/WpfColorPicker
-  - ちょっとシンプルすぎて微妙
-  - しかしこれを使ってみることにする
-  - 代表色リスト、使用履歴リストを追加する
-  - ライセンスに注意
-    -  Apache License Version 2.0
-- https://araramistudio.jimdo.com/2016/10/05/wpf%E3%81%A7%E8%89%B2%E9%81%B8%E6%8A%9E%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%AB%E3%82%92%E8%87%AA%E4%BD%9C%E3%81%99%E3%82%8B/
-- http://www.kanazawa-net.ne.jp/~pmansato/wpf/wpf_custom_ColorPicker.htm
-- http://www.kanazawa-net.ne.jp/~pmansato/wpf/wpf_custom_BrushEditor.htm
-- 使い勝手が良さそうだけど、少し小さいかも
-- https://github.com/PixiEditor/ColorPicker
-  - ものすごく作りが良いが、立派すぎて逆に使いにくい
-  - 色の履歴がない
-- https://github.com/xceedsoftware/wpftoolkit/wiki/ColorPicker
-  - 色選択履歴あり、使いやすそう
-  - スタンダードカラーの選択が良くない
-

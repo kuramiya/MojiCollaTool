@@ -255,6 +255,12 @@ namespace MojiCollaTool
                 stackPanel.Background = new SolidColorBrush(MojiData.BackgroundBoxColor);
                 //  todo    背景の幅の付け方を考える必要あり
             }
+            else
+            {
+                //  透明色を設定しておく
+                //  これによりマウスのヒットボックスが背景にも及ぶようになる
+                stackPanel.Background = Brushes.Transparent;
+            }
         }
     }
 }

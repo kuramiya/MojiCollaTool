@@ -29,9 +29,17 @@ namespace MojiCollaTool
 
         public bool RunEvent { get; set; } = true;
 
-        public bool IsMinusAllowed { get; set; } = false;
+        /// <summary>
+        /// 入力可能な最小値、この値を含める
+        /// </summary>
+        public int ValueMinLimit { get; set; } = 0;
 
-        public bool IsZeroAllowed { get; set; } = true;
+        /// <summary>
+        /// 入力可能な最大値、この値を含める
+        /// </summary>
+        public int ValueMaxLimit { get; set; } = int.MaxValue;
+
+        public int Step { get; set; } = 1;
 
         public event EventHandler<UpDownTextBoxEvent>? ValueChanged;
 
@@ -51,7 +59,7 @@ namespace MojiCollaTool
 
         private void DownButton_Click(object sender, RoutedEventArgs e)
         {
-            Value--;
+            Value -= Step;
 
             LimitValueMinimum();
 
@@ -60,7 +68,10 @@ namespace MojiCollaTool
 
         private void UpButton_Click(object sender, RoutedEventArgs e)
         {
-            Value++;
+            Value += Step;
+
+            LimitValueMaximum();
+
             ValueTextBox.Text = Value.ToString();
         }
 
@@ -74,7 +85,9 @@ namespace MojiCollaTool
             if(parseOk)
             {
                 Value = tempValue;
+
                 LimitValueMinimum();
+                LimitValueMaximum();
 
                 if (ValueChanged != null) ValueChanged(this, new UpDownTextBoxEvent(Value));
             }
@@ -82,13 +95,17 @@ namespace MojiCollaTool
 
         private void LimitValueMinimum()
         {
-            if (Value <= 0 && IsZeroAllowed == false)
+            if(Value <= ValueMinLimit)
             {
-                Value = 1;
+                Value = ValueMinLimit;
             }
-            else if (Value < 0 && IsMinusAllowed == false)
+        }
+
+        private void LimitValueMaximum()
+        {
+            if(Value >= ValueMaxLimit)
             {
-                Value = 0;
+                Value = ValueMaxLimit;
             }
         }
 
@@ -98,12 +115,15 @@ namespace MojiCollaTool
 
             if(e.Key == Key.Up)
             {
-                Value++;
+                Value += Step;
+
+                LimitValueMaximum();
+
                 ValueTextBox.Text = Value.ToString();
             }
             else if(e.Key == Key.Down)
             {
-                Value--;
+                Value -= Step;
 
                 LimitValueMinimum();
 

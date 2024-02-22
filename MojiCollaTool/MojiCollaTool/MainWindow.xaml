@@ -20,11 +20,17 @@
             <Button x:Name="LoadProjectButton" Content="Load Project"/>
             <Button x:Name="SaveProjectButton" Content="Save Project"/>
             <Button x:Name="OutputImageButton" Content="Output Image" Click="OutputImageButton_Click"/>
+            <Label Content="Scaling:"/>
+            <local:UpDownTextBox x:Name="ScalingTextBox" ValueMinLimit="10" Step="10" ValueChanged="ScalingTextBox_ValueChanged"/>
+            <Label Content="%"/>
         </StackPanel>
         <Button x:Name="AddTextButton" Grid.Row="0" Grid.Column="1" Content="Add Text" Click="AddTextButton_Click"/>
         <Grid x:Name="CanvasGrid" Grid.Row="1" Grid.Column="0" Background="Gray">
             <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
                 <Canvas x:Name="MainCanvas" Background="Gray" Grid.Column="0">
+                    <Canvas.LayoutTransform>
+                        <ScaleTransform x:Name="CanvasScaleTransform" ScaleX="1" ScaleY="1"/>
+                    </Canvas.LayoutTransform>
                     <Image x:Name="MainImage" PreviewMouseLeftButtonDown="MainImage_PreviewMouseLeftButtonDown"/>
                 </Canvas>
             </ScrollViewer>

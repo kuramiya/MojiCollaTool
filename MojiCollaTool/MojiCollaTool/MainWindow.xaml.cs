@@ -28,11 +28,15 @@ namespace MojiCollaTool
 
         private int nextMojiId = 1;
 
+        private bool runEvent = false;
+
         public MainWindow()
         {
             InitializeComponent();
 
             Title = $"MojiCollaTool ver{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
+
+            ResetScale();
         }
 
         private void LoadImageButton_Click(object sender, RoutedEventArgs e)
@@ -54,6 +58,8 @@ namespace MojiCollaTool
 
                 MainCanvas.Width = bitmapImage.Width;
                 MainCanvas.Height = bitmapImage.Height;
+
+                ResetScale();
             }
             catch (Exception ex)
             {
@@ -123,8 +129,12 @@ namespace MojiCollaTool
 
             if (dialogResult.HasValue == false || dialogResult.Value == false) return;
 
+            double preScale_Perect = ScalingTextBox.Value;
+
             try
             {
+                UpdateScale(100);
+
                 if(saveFileDialog.FileName.EndsWith("jpg"))
                 {
                     MainCanvas.ToImage(saveFileDialog.FileName, new JpegBitmapEncoder());
@@ -138,6 +148,34 @@ namespace MojiCollaTool
             {
                 ShowError("Image create, output error.", ex);
             }
+            finally
+            {
+                UpdateScale(preScale_Perect);
+            }
+        }
+
+        private void ScalingTextBox_ValueChanged(object sender, UpDownTextBoxEvent e)
+        {
+            if (runEvent == false) return;
+
+            UpdateScale(e.Value);
+        }
+
+        private void ResetScale()
+        {
+            runEvent = false;
+
+            UpdateScale(100);
+
+            ScalingTextBox.SetValue(100, false);
+
+            runEvent = true;
+        }
+
+        private void UpdateScale(double scale_Percent)
+        {
+            CanvasScaleTransform.ScaleX = scale_Percent / 100.0;
+            CanvasScaleTransform.ScaleY = scale_Percent / 100.0;
         }
     }
 }

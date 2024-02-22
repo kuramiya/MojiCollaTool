@@ -65,10 +65,11 @@ namespace MojiCollaTool
 
                 using(var dc = drawingVisual.RenderOpen())
                 {
-                    dc.DrawGeometry(null, _borderColorPen, _textGeometry);
+                    dc.DrawRectangle(Brushes.Black, new Pen(Brushes.Blue, 5), new Rect(0, 0, 40, 40));
+                    dc.DrawGeometry(Brushes.Transparent, _borderColorPen, _textGeometry);
                 }
 
-                drawingVisual.Effect = new BlurEffect { Radius = 5 };
+                drawingVisual.Effect = new BlurEffect { Radius = 20 };
 
                 drawingContext.DrawDrawing(drawingVisual.Drawing);
             }
