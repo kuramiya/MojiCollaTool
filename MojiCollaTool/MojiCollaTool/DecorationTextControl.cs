@@ -18,13 +18,13 @@ namespace MojiCollaTool
         /// 縦書き対応のために90°右回転させる必要のある文字
         /// 主にかっこなど
         /// </summary>
-        private const string TATEGAKI_90DEG_ROTATE_TARGET_CHARS = " 　‥…;；（）()｟｠⦅⦆❨❩❪❫⸨⸩⦕⦖⦇⦈⦓⦔﴾﴿⸦⸧⎛⎞⎜⎟⎝⎠╭╮┃┃╰╯⁽⁾₍₎︶⁐「」『』⌜⌟⌞⌝﹂［﹄［〈〉⟨⟩《》⟪⟫‹›«»❮❯❬❭❰❱⦉⦊⦑⦒⦓⦔⦖⦕⧼⧽﹀︾｛｝{}❴❵⦃⦄⎧⎫⎨⎬⎩⎭︸［］[]〚〛⟦⟧⦋⦌⦍⦎⦏⦐⁅⁆⎡⎤⎢⎥⎣⎦⸢⸣⸠⸡⸤⸥﹈⎵【】〖〗︼︘〔〕❲❳〘〙⟬⟭⦗⦘︺’’''“”\"\"❛❜❝❞‚‚„„〝　＜＞<>≪≫≦≧≤≥⩽⩾≲≳⪍⪎⪅⪆⋜⋝⪙⪚≶≷⋚⋛⪋⪌";
+        private const string TATEGAKI_90DEG_ROTATE_TARGET_CHARS = " 　‥…;；-=＝≒ー～─━|（）()｟｠⦅⦆❨❩❪❫⸨⸩⦕⦖⦇⦈⦓⦔﴾﴿⸦⸧⎛⎞⎜⎟⎝⎠╭╮┃┃╰╯⁽⁾₍₎︶⁐「」『』⌜⌟⌞⌝﹂［﹄［〈〉⟨⟩《》⟪⟫‹›«»❮❯❬❭❰❱⦉⦊⦑⦒⦓⦔⦖⦕⧼⧽﹀︾｛｝{}❴❵⦃⦄⎧⎫⎨⎬⎩⎭︸［］[]〚〛⟦⟧⦋⦌⦍⦎⦏⦐⁅⁆⎡⎤⎢⎥⎣⎦⸢⸣⸠⸡⸤⸥﹈⎵【】〖〗︼︘〔〕❲❳〘〙⟬⟭⦗⦘︺’’''“”\"\"❛❜❝❞‚‚„„〝　＜＞<>≪≫≦≧≤≥⩽⩾≲≳⪍⪎⪅⪆⋜⋝⪙⪚≶≷⋚⋛⪋⪌";
 
         /// <summary>
-        /// 縦書き対応のために180°右回転させる必要のある文字
+        /// 縦書き対応のために右上にずらす必要のある文字
         /// 主にかっこなど
         /// </summary>
-        private const string TATEGAKI_180DEG_ROTATE_TARGET_CHARS = "｡。､、.．,，";
+        private const string TATEGAKI_SHIFT_TARGET_CHARS = "｡。､、.．,，";
 
         // Create a collection of child visual objects.
         private readonly VisualCollection _children = null!;
@@ -37,19 +37,7 @@ namespace MojiCollaTool
         /// <summary>
         /// 縦書き対応90°回転用の変換オブジェクト
         /// </summary>
-        private readonly static TransformGroup tategaki90DegTransformGroup = new TransformGroup();
-
-        /// <summary>
-        /// 縦書き対応90°回転用の変換オブジェクト
-        /// </summary>
-        private readonly static TransformGroup tategaki180DegTransformGroup = new TransformGroup();
-
-        static DecorationTextControl()
-        {
-            //  縦書き対応回転用の変換オブジェクトを用意する
-            tategaki90DegTransformGroup.Children.Add(new RotateTransform(90));
-            tategaki180DegTransformGroup.Children.Add(new RotateTransform(180));
-        }
+        private readonly static RotateTransform tategaki90DegRotate = new RotateTransform(90);
 
         public DecorationTextControl(char character, MojiData mojiData)
         {
@@ -106,15 +94,14 @@ namespace MojiCollaTool
                     Margin = new Thickness(0, 0, 0, mojiData.CharacterMargin);
 
                     //  縦書きの場合、かっこや点などの記号を回転させる
-                    if (TATEGAKI_180DEG_ROTATE_TARGET_CHARS.Contains(character))
+                    if (TATEGAKI_SHIFT_TARGET_CHARS.Contains(character))
                     {
-                        RenderTransformOrigin = tategakiTransformOrigin;
-                        RenderTransform = tategaki180DegTransformGroup;
+                        RenderTransform = new TranslateTransform(Width / 2, -Height / 2);
                     }
                     else if (TATEGAKI_90DEG_ROTATE_TARGET_CHARS.Contains(character))
                     {
                         RenderTransformOrigin = tategakiTransformOrigin;
-                        RenderTransform = tategaki90DegTransformGroup;
+                        RenderTransform = tategaki90DegRotate;
                     }
                     break;
                 default:
