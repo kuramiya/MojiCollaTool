@@ -18,7 +18,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
             <Button x:Name="LoadImageButton" Content="Load Image" Click="LoadImageButton_Click"/>
             <Button x:Name="LoadProjectButton" Content="Load Project"/>
-            <Button x:Name="SaveProjectButton" Content="Save Project"/>
+            <Button x:Name="SaveProjectButton" Content="Save Project" Click="SaveProjectButton_Click"/>
             <Button x:Name="OutputImageButton" Content="Output Image" Click="OutputImageButton_Click"/>
             <Label Content="Scaling:"/>
             <local:UpDownTextBox x:Name="ScalingTextBox" ValueMinLimit="10" Step="10" ValueChanged="ScalingTextBox_ValueChanged"/>

@@ -16,6 +16,7 @@ using Microsoft.Win32;
 using System.IO;
 using System.Collections.ObjectModel;
 using System.Net.NetworkInformation;
+using System.Security.AccessControl;
 
 namespace MojiCollaTool
 {
@@ -60,6 +61,8 @@ namespace MojiCollaTool
                 MainCanvas.Height = bitmapImage.Height;
 
                 ResetScale();
+
+                DataIO.CopyImageToWorkingDirectory(openFileDialog.FileName);
             }
             catch (Exception ex)
             {
@@ -75,7 +78,7 @@ namespace MojiCollaTool
             {
                 logMessage.AppendLine(ex.ToString());
             }
-            File.WriteAllText($"{System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)}\\ErrorLog\\ErrorLog {DateTime.Now:yyyyMMdd-HHmmss}.txt", logMessage.ToString());
+            DataIO.WriteErrorLog(logMessage.ToString());
 
             StringBuilder dialogMessage = new StringBuilder();
             dialogMessage.AppendLine(message);
@@ -84,6 +87,11 @@ namespace MojiCollaTool
                 dialogMessage.Append(ex.Message);
             }
             MessageBox.Show(dialogMessage.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        }
+
+        private void ShowInfoDialog(string message)
+        {
+            MessageBox.Show(message, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void AddTextButton_Click(object sender, RoutedEventArgs e)
@@ -143,6 +151,8 @@ namespace MojiCollaTool
                 {
                     MainCanvas.ToImage(saveFileDialog.FileName, new PngBitmapEncoder());
                 }
+
+                ShowInfoDialog($"{saveFileDialog.FileName} image exported.");
             }
             catch (Exception ex)
             {
@@ -188,6 +198,27 @@ namespace MojiCollaTool
             if(e.Delta < 0)
             {
                 ScalingTextBox.RunDownButton();
+            }
+        }
+
+        private void SaveProjectButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "MCTool File|*.mctool";
+
+            var dialogResult = saveFileDialog.ShowDialog();
+
+            if (dialogResult.HasValue == false || dialogResult.Value == false) return;
+
+            try
+            {
+                DataIO.WriteMCToolData(saveFileDialog.FileName, mojiPanels.Select(x => x.MojiData));
+
+                ShowInfoDialog($"{saveFileDialog.FileName} project saved.");
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex.Message, ex);
             }
         }
     }

@@ -27,7 +27,7 @@ namespace MojiCollaTool
     [Serializable]
     public class MojiData
     {
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         public string FullText { get; set; } = "サンプル";
 
@@ -66,6 +66,11 @@ namespace MojiCollaTool
         public Color BackgroundBoxColor { get; set; } = Colors.White;
 
         public double BackgoundBoxPadding { get; set; } = 0;
+
+        public MojiData()
+        {
+            //  何もしない
+        }
 
         public MojiData(int id)
         {
