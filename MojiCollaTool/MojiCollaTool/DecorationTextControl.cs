@@ -14,11 +14,46 @@ namespace MojiCollaTool
 {
     public class DecorationTextControl : FrameworkElement
     {
+        /// <summary>
+        /// 縦書き対応のために90°右回転させる必要のある文字
+        /// 主にかっこなど
+        /// </summary>
+        private const string TATEGAKI_90DEG_ROTATE_TARGET_CHARS = " 　‥…;；（）()｟｠⦅⦆❨❩❪❫⸨⸩⦕⦖⦇⦈⦓⦔﴾﴿⸦⸧⎛⎞⎜⎟⎝⎠╭╮┃┃╰╯⁽⁾₍₎︶⁐「」『』⌜⌟⌞⌝﹂［﹄［〈〉⟨⟩《》⟪⟫‹›«»❮❯❬❭❰❱⦉⦊⦑⦒⦓⦔⦖⦕⧼⧽﹀︾｛｝{}❴❵⦃⦄⎧⎫⎨⎬⎩⎭︸［］[]〚〛⟦⟧⦋⦌⦍⦎⦏⦐⁅⁆⎡⎤⎢⎥⎣⎦⸢⸣⸠⸡⸤⸥﹈⎵【】〖〗︼︘〔〕❲❳〘〙⟬⟭⦗⦘︺’’''“”\"\"❛❜❝❞‚‚„„〝　＜＞<>≪≫≦≧≤≥⩽⩾≲≳⪍⪎⪅⪆⋜⋝⪙⪚≶≷⋚⋛⪋⪌";
+
+        /// <summary>
+        /// 縦書き対応のために180°右回転させる必要のある文字
+        /// 主にかっこなど
+        /// </summary>
+        private const string TATEGAKI_180DEG_ROTATE_TARGET_CHARS = "｡。､、.．,，";
+
         // Create a collection of child visual objects.
         private readonly VisualCollection _children = null!;
 
+        /// <summary>
+        /// 縦書き対応回転原点変更オブジェクト
+        /// </summary>
+        private readonly static Point tategakiTransformOrigin = new Point(0.5, 0.5);
+
+        /// <summary>
+        /// 縦書き対応90°回転用の変換オブジェクト
+        /// </summary>
+        private readonly static TransformGroup tategaki90DegTransformGroup = new TransformGroup();
+
+        /// <summary>
+        /// 縦書き対応90°回転用の変換オブジェクト
+        /// </summary>
+        private readonly static TransformGroup tategaki180DegTransformGroup = new TransformGroup();
+
+        static DecorationTextControl()
+        {
+            //  縦書き対応回転用の変換オブジェクトを用意する
+            tategaki90DegTransformGroup.Children.Add(new RotateTransform(90));
+            tategaki180DegTransformGroup.Children.Add(new RotateTransform(180));
+        }
+
         public DecorationTextControl(char character, MojiData mojiData)
         {
+            //  フォーマットされた描画用文字を作成する
             FormattedText formattedText = new FormattedText(
                 character.ToString(),   //  文字
                 CultureInfo.GetCultureInfo("ja-JP"),    //  文字文化、日本人しか使用しないと思うので日本語固定で良い
@@ -44,38 +79,48 @@ namespace MojiCollaTool
 
             _children = new VisualCollection(this);
 
+            //  文字の縁取りがある場合、その描画オブジェクトを追加する
             if(mojiData.IsBorderExists)
             {
                 _children.Add(CreateCharacterBorderDrawingVisual(characterGeometry, mojiData.BorderThickness, mojiData.BorderColor, mojiData.BorderBlurrRadius));
             }
 
+            //  文字の描画オブジェクト追加する
             _children.Add(CreateCharacterDrawingVisual(characterGeometry, mojiData.ForeColor));
+
+            //  縦書き、横書きに合わせて配置などの処理を行う
+            switch (mojiData.TextDirection)
+            {
+                case TextDirection.Yokogaki:
+                    VerticalAlignment = VerticalAlignment.Bottom;
+                    HorizontalAlignment = HorizontalAlignment.Center;
+
+                    //  横書きの場合、文字の間隔は右側だけ広げる
+                    Margin = new Thickness(0, 0, mojiData.CharacterMargin, 0);
+                    break;
+                case TextDirection.Tategaki:
+                    VerticalAlignment = VerticalAlignment.Center;
+                    HorizontalAlignment = HorizontalAlignment.Center;
+
+                    //  縦書きの場合、文字の間隔は下側だけ広げる
+                    Margin = new Thickness(0, 0, 0, mojiData.CharacterMargin);
+
+                    //  縦書きの場合、かっこや点などの記号を回転させる
+                    if (TATEGAKI_180DEG_ROTATE_TARGET_CHARS.Contains(character))
+                    {
+                        RenderTransformOrigin = tategakiTransformOrigin;
+                        RenderTransform = tategaki180DegTransformGroup;
+                    }
+                    else if (TATEGAKI_90DEG_ROTATE_TARGET_CHARS.Contains(character))
+                    {
+                        RenderTransformOrigin = tategakiTransformOrigin;
+                        RenderTransform = tategaki90DegTransformGroup;
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
-
-        //public void SetText(char character, MojiData mojiData)
-        //{
-        //    FormattedText formattedText = new FormattedText(
-        //        character.ToString(),   //  文字
-        //        CultureInfo.GetCultureInfo("ja-JP"),    //  文字文化、日本人しか使用しないと思うので日本語固定で良い
-        //        FlowDirection.LeftToRight,  //  日本語、英語ともに左から右の配置で問題ない
-        //        new Typeface(   //  文字の表示形式を示すクラスらしい
-        //            new FontFamily(mojiData.FontFamilyName),    //  フォント
-        //            mojiData.IsItalic ? FontStyles.Italic : FontStyles.Normal,  //  イタリック
-        //            mojiData.IsBold ? FontWeights.Bold : FontWeights.Normal,    //  太文字
-        //            FontStretches.Normal    //  使える要素かもしれない
-        //            ),
-        //        mojiData.FontSize,  //  フォントサイズ
-        //        Brushes.White,    //  文字色、これは使用されない
-        //        VisualTreeHelper.GetDpi(this).PixelsPerDip  //  ？
-        //    );
-
-        //    // Build the geometry object that represents the text.
-        //    _textGeometry = formattedText.BuildGeometry(new System.Windows.Point(0, 0));
-        //    //  _textHighLightGeometry = formattedText.BuildHighlightGeometry(new System.Windows.Point(0, 0));
-
-        //    Width = formattedText.WidthIncludingTrailingWhitespace;
-        //    Height = formattedText.Height;
-        //}
 
         protected override int VisualChildrenCount => _children.Count;
 
@@ -120,28 +165,5 @@ namespace MojiCollaTool
 
             return drawingVisual;
         }
-
-        //protected override void OnRender(DrawingContext drawingContext)
-        //{
-        //    //  縁取りを描画する
-        //    if (_borderColorPen.Thickness > 0)
-        //    {
-        //        //drawingContext.DrawGeometry(null, _borderColorPen, _textGeometry);
-
-        //        DrawingVisual drawingVisual = new DrawingVisual();
-
-        //        using(var dc = drawingVisual.RenderOpen())
-        //        {
-        //            dc.DrawGeometry(Brushes.Transparent, _borderColorPen, _textGeometry);
-        //        }
-
-        //        drawingVisual.Effect = new BlurEffect { Radius = 20 };
-
-        //        drawingContext.DrawDrawing(drawingVisual.Drawing);
-        //    }
-
-        //    //  文字本体を描画する
-        //    drawingContext.DrawGeometry(_foreColorBrush, null, _textGeometry);
-        //}
     }
 }

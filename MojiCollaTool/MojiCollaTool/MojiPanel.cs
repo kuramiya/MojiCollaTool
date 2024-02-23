@@ -18,25 +18,27 @@ namespace MojiCollaTool
     public class MojiPanel : ContentControl
     {
         /// <summary>
-        /// 縦書き対応のために回転させる必要のある文字
+        /// 文字のID
         /// </summary>
-        private static readonly char[] TategakiRotateTargetCharacters = { '「', '」', '(', ')', '【', '】' };
-
         public int Id => MojiData.Id;
 
+        /// <summary>
+        /// 代表文字列
+        /// </summary>
         public string ExampleText => MojiData.ExampleText;
 
         public MojiData MojiData { get; set; }
 
         public MojiWindow? MojiWindow { get; set; }
 
+        /// <summary>
+        /// 文字列を配置するパネル
+        /// </summary>
         private StackPanel stackPanel = new StackPanel();
 
         private MainWindow mainWindow;
 
         private Nullable<Point> dragStart = null;
-
-        private TransformGroup tategakiTransformGroup = new TransformGroup();
 
         public MojiPanel(int id, MainWindow mainWindow)
         {
@@ -58,9 +60,6 @@ namespace MojiCollaTool
 
         private void Init()
         {
-            tategakiTransformGroup.Children.Add(new RotateTransform(90));
-            tategakiTransformGroup.Children.Add(new TranslateTransform(2, 0));
-
             MojiWindow = new MojiWindow(this);
 
             stackPanel.VerticalAlignment = VerticalAlignment.Center;
@@ -76,11 +75,17 @@ namespace MojiCollaTool
             UpdateMojiView();
         }
 
+        /// <summary>
+        /// 文字を複製する
+        /// </summary>
         public void Reproduction()
         {
             mainWindow.ReproductionMoji(this);
         }
 
+        /// <summary>
+        /// 文字を削除する
+        /// </summary>
         public void Remove()
         {
             mainWindow.RemoveMoji(this);
@@ -138,12 +143,18 @@ namespace MojiCollaTool
             }
         }
 
+        /// <summary>
+        /// 文字パネルの位置を更新sる
+        /// </summary>
         public void UpdateXYView()
         {
             //  文字パネルの位置を設定する
             Margin = new Thickness(MojiData.X, MojiData.Y, 0, 0);
         }
 
+        /// <summary>
+        /// 文字の表示を更新する
+        /// </summary>
         public void UpdateMojiView()
         {
             //  文字パネルの中身を初期化する
@@ -204,32 +215,6 @@ namespace MojiCollaTool
                 {
                     //  縦書きのために、１文字ずつ文字を作成する
                     DecorationTextControl decorationTextControl = new DecorationTextControl(character, MojiData);
-
-                    //  文字間隔を設定する
-                    //  文字の配置を設定する
-                    //  縦書き横書きで異なる
-                    switch (MojiData.TextDirection)
-                    {
-                        case TextDirection.Yokogaki:
-                            decorationTextControl.VerticalAlignment = VerticalAlignment.Bottom;
-                            decorationTextControl.HorizontalAlignment = HorizontalAlignment.Center;
-
-                            decorationTextControl.Margin = new Thickness(0, 0, MojiData.CharacterMargin, 0);
-                            break;
-                        case TextDirection.Tategaki:
-                            decorationTextControl.VerticalAlignment = VerticalAlignment.Center;
-                            decorationTextControl.HorizontalAlignment = HorizontalAlignment.Center;
-
-                            decorationTextControl.Margin = new Thickness(0, 0, 0, MojiData.CharacterMargin);
-                            if(TategakiRotateTargetCharacters.Contains(character))
-                            {
-                                decorationTextControl.RenderTransformOrigin = new Point(0.5, 0.5);
-                                decorationTextControl.RenderTransform = tategakiTransformGroup;
-                            }
-                            break;
-                        default:
-                            break;
-                    }
 
                     //  行パネルに追加する
                     linePanel.Children.Add(decorationTextControl);

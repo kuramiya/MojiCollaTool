@@ -131,6 +131,17 @@
 
 ## 各機能の実装
 
+### 文字の縦書き処理対応
+
+#### 参考リンク集
+- https://ja.wikipedia.org/wiki/%E7%B4%84%E7%89%A9　約物
+- https://swift-smooth.com/symbol-parenthesis/　かっこ一覧
+
+#### 実装メモ
+かっこについては、エンコードできないもの、普通は使わなさそうなものは排除しておく。
+カッコの場合、縦書き時は右90°回転となる。
+、。などは、縦書き時は右180°回転となる。
+
 ### 文字の装飾処理
 CharDecoration.mdを参照すること。
 [CharDecoration.md](/CharDecoration.md)
