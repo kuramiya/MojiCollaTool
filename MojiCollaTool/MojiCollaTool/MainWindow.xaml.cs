@@ -50,12 +50,7 @@ namespace MojiCollaTool
 
             try
             {
-                var bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.UriSource= new Uri(openFileDialog.FileName);
-                bitmapImage.EndInit();
-
-                var imageSource = CreateResizedImage(bitmapImage, bitmapImage.PixelWidth, bitmapImage.PixelHeight);
+                var imageSource = ImageUtil.LoadImageSource(openFileDialog.FileName);
 
                 MainImage.Source = imageSource;
 
@@ -70,37 +65,6 @@ namespace MojiCollaTool
             {
                 ShowError("Image load error.", ex);
             }
-        }
-
-        /// <summary>
-        /// Creates a new ImageSource with the specified width/height
-        /// https://dlaa.me/blog/post/6129847
-        /// </summary>
-        /// <param name="source">Source image to resize</param>
-        /// <param name="width">Width of resized image</param>
-        /// <param name="height">Height of resized image</param>
-        /// <returns>Resized image</returns>
-        ImageSource CreateResizedImage(ImageSource source, int width, int height)
-        {
-            // Target Rect for the resize operation
-            Rect rect = new Rect(0, 0, width, height);
-
-            // Create a DrawingVisual/Context to render with
-            DrawingVisual drawingVisual = new DrawingVisual();
-            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
-            {
-                drawingContext.DrawImage(source, rect);
-            }
-
-            // Use RenderTargetBitmap to resize the original image
-            RenderTargetBitmap resizedImage = new RenderTargetBitmap(
-                (int)rect.Width, (int)rect.Height,  // Resized dimensions
-                96, 96,                             // Default DPI values
-                PixelFormats.Default);              // Default pixel format
-            resizedImage.Render(drawingVisual);
-
-            // Return the resized image
-            return resizedImage;
         }
 
         private void ShowError(string message, Exception? ex = null)
@@ -252,6 +216,25 @@ namespace MojiCollaTool
             catch (Exception ex)
             {
                 ShowError(ex.Message, ex);
+            }
+        }
+
+        private void LoadProjectButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "mctool File|*.mctool";
+            var dialogResult = openFileDialog.ShowDialog();
+
+            if (dialogResult.HasValue == false || dialogResult.Value == false) return;
+
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
             }
         }
     }

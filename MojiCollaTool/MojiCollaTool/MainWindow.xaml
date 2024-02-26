@@ -17,7 +17,7 @@
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
             <Button x:Name="LoadImageButton" Content="Load Image" Click="LoadImageButton_Click"/>
-            <Button x:Name="LoadProjectButton" Content="Load Project"/>
+            <Button x:Name="LoadProjectButton" Content="Load Project" Click="LoadProjectButton_Click"/>
             <Button x:Name="SaveProjectButton" Content="Save Project" Click="SaveProjectButton_Click"/>
             <Button x:Name="OutputImageButton" Content="Output Image" Click="OutputImageButton_Click"/>
             <Label Content="Scaling:"/>
