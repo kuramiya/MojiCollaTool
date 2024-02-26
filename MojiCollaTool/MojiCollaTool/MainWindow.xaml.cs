@@ -55,10 +55,12 @@ namespace MojiCollaTool
                 bitmapImage.UriSource= new Uri(openFileDialog.FileName);
                 bitmapImage.EndInit();
 
-                MainImage.Source = bitmapImage;
+                var imageSource = CreateResizedImage(bitmapImage, bitmapImage.PixelWidth, bitmapImage.PixelHeight);
 
-                MainCanvas.Width = bitmapImage.Width;
-                MainCanvas.Height = bitmapImage.Height;
+                MainImage.Source = imageSource;
+
+                MainCanvas.Width = imageSource.Width;
+                MainCanvas.Height = imageSource.Height;
 
                 ResetScale();
 
@@ -68,6 +70,37 @@ namespace MojiCollaTool
             {
                 ShowError("Image load error.", ex);
             }
+        }
+
+        /// <summary>
+        /// Creates a new ImageSource with the specified width/height
+        /// https://dlaa.me/blog/post/6129847
+        /// </summary>
+        /// <param name="source">Source image to resize</param>
+        /// <param name="width">Width of resized image</param>
+        /// <param name="height">Height of resized image</param>
+        /// <returns>Resized image</returns>
+        ImageSource CreateResizedImage(ImageSource source, int width, int height)
+        {
+            // Target Rect for the resize operation
+            Rect rect = new Rect(0, 0, width, height);
+
+            // Create a DrawingVisual/Context to render with
+            DrawingVisual drawingVisual = new DrawingVisual();
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            {
+                drawingContext.DrawImage(source, rect);
+            }
+
+            // Use RenderTargetBitmap to resize the original image
+            RenderTargetBitmap resizedImage = new RenderTargetBitmap(
+                (int)rect.Width, (int)rect.Height,  // Resized dimensions
+                96, 96,                             // Default DPI values
+                PixelFormats.Default);              // Default pixel format
+            resizedImage.Render(drawingVisual);
+
+            // Return the resized image
+            return resizedImage;
         }
 
         private void ShowError(string message, Exception? ex = null)
