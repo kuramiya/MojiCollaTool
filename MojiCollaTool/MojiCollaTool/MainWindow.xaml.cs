@@ -37,6 +37,8 @@ namespace MojiCollaTool
 
             Title = $"MojiCollaTool ver{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
 
+            MojiListView.ItemsSource = mojiPanels;
+
             ResetScale();
         }
 
@@ -50,7 +52,24 @@ namespace MojiCollaTool
 
             try
             {
-                var imageSource = ImageUtil.LoadImageSource(openFileDialog.FileName);
+                LoadImage(openFileDialog.FileName);
+                DataIO.CopyImageToWorkingDirectory(openFileDialog.FileName);
+            }
+            catch (Exception ex)
+            {
+                ShowError("画像読み出しエラー", ex);
+            }
+        }
+
+        /// <summary>
+        /// 画像を読み出し登録する
+        /// </summary>
+        /// <param name="filePath"></param>
+        private void LoadImage(string filePath)
+        {
+            try
+            {
+                var imageSource = ImageUtil.LoadImageSource(filePath);
 
                 MainImage.Source = imageSource;
 
@@ -58,15 +77,18 @@ namespace MojiCollaTool
                 MainCanvas.Height = imageSource.Height;
 
                 ResetScale();
-
-                DataIO.CopyImageToWorkingDirectory(openFileDialog.FileName);
             }
             catch (Exception ex)
             {
-                ShowError("Image load error.", ex);
+                throw new InvalidOperationException("画像読み出し、表示エラー", ex);
             }
         }
 
+        /// <summary>
+        /// エラーメッセージを表示する
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="ex"></param>
         private void ShowError(string message, Exception? ex = null)
         {
             StringBuilder logMessage = new StringBuilder();
@@ -83,12 +105,34 @@ namespace MojiCollaTool
             {
                 dialogMessage.Append(ex.Message);
             }
-            MessageBox.Show(dialogMessage.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            MessageBox.Show(dialogMessage.ToString(), "エラー", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
 
+        /// <summary>
+        /// 情報通知ダイアログを表示する
+        /// </summary>
+        /// <param name="message"></param>
         private void ShowInfoDialog(string message)
         {
-            MessageBox.Show(message, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(message, "インフォメーション", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        /// <summary>
+        /// 確認ダイアログを表示する
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        private bool ShowYesNoCancelDialog(string message)
+        {
+            var dialogResult = MessageBox.Show(message, "確認", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+            switch (dialogResult)
+            {
+                case MessageBoxResult.OK:
+                case MessageBoxResult.Yes:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         private void AddTextButton_Click(object sender, RoutedEventArgs e)
@@ -96,11 +140,13 @@ namespace MojiCollaTool
             var mojiPanel = new MojiPanel(nextMojiId, this);
             ++nextMojiId;
 
-            mojiPanels.Add(mojiPanel);
-
-            MainCanvas.Children.Add(mojiPanel);
+            AddMojiPanel(mojiPanel);
         }
 
+        /// <summary>
+        /// 文字を複製する
+        /// </summary>
+        /// <param name="mojiPanel"></param>
         public void ReproductionMoji(MojiPanel mojiPanel)
         {
             var reproductedMojiData = mojiPanel.MojiData.Reproduct(nextMojiId);
@@ -108,12 +154,25 @@ namespace MojiCollaTool
 
             var reproductedMojiPanel = new MojiPanel(reproductedMojiData, this);
 
-            mojiPanels.Add(reproductedMojiPanel);
-
-            MainCanvas.Children.Add(reproductedMojiPanel);
+            AddMojiPanel(reproductedMojiPanel);
         }
 
-        public void RemoveMoji(MojiPanel mojiPanel)
+        /// <summary>
+        /// 文字パネルを追加する
+        /// </summary>
+        /// <param name="mojiPanel"></param>
+        private void AddMojiPanel(MojiPanel mojiPanel)
+        {
+            mojiPanels.Add(mojiPanel);
+
+            MainCanvas.Children.Add(mojiPanel);
+        }
+
+        /// <summary>
+        /// 文字パネルを削除する
+        /// </summary>
+        /// <param name="mojiPanel"></param>
+        public void RemoveMojiPanel(MojiPanel mojiPanel)
         {
             mojiPanels.Remove(mojiPanel);
 
@@ -149,11 +208,11 @@ namespace MojiCollaTool
                     MainCanvas.ToImage(saveFileDialog.FileName, new PngBitmapEncoder());
                 }
 
-                ShowInfoDialog($"{saveFileDialog.FileName} image exported.");
+                ShowInfoDialog($"{saveFileDialog.FileName} 画像出力完了");
             }
             catch (Exception ex)
             {
-                ShowError("Image create, output error.", ex);
+                ShowError("画像出力エラー", ex);
             }
             finally
             {
@@ -202,6 +261,8 @@ namespace MojiCollaTool
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "MCTool File|*.mctool";
+            saveFileDialog.FileName = $"MCToolProject{DateTime.Now:yyyyMMdd-HHmmss}.mctool";
+
 
             var dialogResult = saveFileDialog.ShowDialog();
 
@@ -209,18 +270,24 @@ namespace MojiCollaTool
 
             try
             {
-                DataIO.WriteMCToolData(saveFileDialog.FileName, mojiPanels.Select(x => x.MojiData));
+                DataIO.WriteProjectData(saveFileDialog.FileName, mojiPanels.Select(x => x.MojiData));
 
-                ShowInfoDialog($"{saveFileDialog.FileName} project saved.");
+                ShowInfoDialog($"{saveFileDialog.FileName} プロジェクト保存完了");
             }
             catch (Exception ex)
             {
-                ShowError(ex.Message, ex);
+                ShowError("mctoolプロジェクト保存エラー", ex);
             }
         }
 
         private void LoadProjectButton_Click(object sender, RoutedEventArgs e)
         {
+            if(mojiPanels.Count > 0)
+            {
+                var checkDialogResult = ShowYesNoCancelDialog("文字データが存在しています。置き換えても問題ありませんか？");
+                if (checkDialogResult == false) return;
+            }
+
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "mctool File|*.mctool";
             var dialogResult = openFileDialog.ShowDialog();
@@ -229,12 +296,39 @@ namespace MojiCollaTool
 
             try
             {
+                //  今ある文字を削除する
+                while (mojiPanels.Count > 0)
+                {
+                    RemoveMojiPanel(mojiPanels.First());
+                }
 
+                //  プロジェクトを読み出す
+                var mojiDatas = DataIO.ReadProjectData(openFileDialog.FileName);
+
+                //  画像を読み出す
+                var workingDirImagePath = DataIO.GetWorkingDirImagePath();
+                if (string.IsNullOrEmpty(workingDirImagePath))
+                {
+                    //  画像がない場合、画像のソースを削除する
+                    MainImage.Source = null;
+                }
+                else
+                {
+                    //  画像がある場合、表示する
+                    LoadImage(workingDirImagePath);
+                }
+
+                //  文字データを表示する
+                foreach (var mojiData in mojiDatas)
+                {
+                    AddMojiPanel(new MojiPanel(mojiData, this));
+                }
+
+                ShowInfoDialog($"{openFileDialog.FileName} プロジェクト読み出し完了");
             }
             catch (Exception ex)
             {
-
-                throw;
+                ShowError($"{openFileDialog.FileName} プロジェクト読み出しエラー", ex);
             }
         }
     }

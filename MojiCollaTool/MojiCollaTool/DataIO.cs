@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 
@@ -66,12 +67,57 @@ namespace MojiCollaTool
         }
 
         /// <summary>
+        /// ディレクトリ内の最初の画像を返す
+        /// </summary>
+        /// <param name="dirPath"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static string GetImagePath(string dirPath)
+        {
+            try
+            {
+                foreach (var filePath in Directory.GetFiles(dirPath))
+                {
+                    var extension = Path.GetExtension(filePath);
+                    if (extension == ".jpg" || extension == ".png") return filePath;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("GetWorkingDirImagePath error.", ex);
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
         /// Workingディレクトリにある画像のパスを返す
         /// </summary>
         /// <returns></returns>
-        public static string GetWorkingDirImagePath(string extensionWithDot)
+        /// <exception cref="InvalidOperationException"></exception>
+        public static string GetWorkingDirImagePath()
         {
-            return Path.Combine(GetWorkingDirPath(), $"Image{extensionWithDot}");
+            return GetImagePath(GetWorkingDirPath());
+        }
+
+        /// <summary>
+        /// 作業フォルダ内の画像を削除する
+        /// </summary>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static void DeleteWorkingDirImage()
+        {
+            try
+            {
+                foreach (var filePath in Directory.GetFiles(GetWorkingDirPath()))
+                {
+                    var extension = Path.GetExtension(filePath);
+                    if (extension == ".jpg" || extension == ".png") File.Delete(filePath);
+                }
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException("DeleteWorkingDirImage error.");
+            }
         }
 
         /// <summary>
@@ -81,19 +127,20 @@ namespace MojiCollaTool
         {
             try
             {
-                if (Directory.Exists(GetWorkingDirPath()))
+                var workingDirPath = GetWorkingDirPath();
+
+                if (Directory.Exists(workingDirPath))
                 {
-                    //  作業ディレクトリがある場合、中の画像を削除する
-                    foreach (var extensionWithDot in new string[] { ".jpg", ".png" })
+                    //  作業ディレクトリがある場合、中のファイルを削除する
+                    foreach (var filePath in Directory.GetFiles(workingDirPath))
                     {
-                        var imagePath = GetWorkingDirImagePath(extensionWithDot);
-                        if (File.Exists(imagePath)) File.Delete(imagePath);
+                        File.Delete(filePath);
                     }
                 }
                 else
                 {
                     //  作業ディレクトリがない場合、作業ディレクトリを作成する
-                    Directory.CreateDirectory(GetWorkingDirPath());
+                    Directory.CreateDirectory(workingDirPath);
                 }
             }
             catch (Exception ex)
@@ -111,11 +158,10 @@ namespace MojiCollaTool
         {
             try
             {
-                var extension = Path.GetExtension(sourceImageFilePath);
+                //  作業フォルダ内の画像を先に削除する
+                DeleteWorkingDirImage();
 
-                InitWorkingDirectory();
-
-                var destImageFilePath = GetWorkingDirImagePath(extension);
+                var destImageFilePath = Path.Combine(GetWorkingDirPath(), Path.GetFileName(sourceImageFilePath));
 
                 File.Copy(sourceImageFilePath, destImageFilePath, true);
             }
@@ -135,8 +181,11 @@ namespace MojiCollaTool
             try
             {
                 var filePath = Path.Combine(directoryPath, $"MojiID{mojiData.Id}.xml");
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(MojiData));
-                xmlSerializer.Serialize(File.OpenWrite(filePath), mojiData);
+                using(var stream = File.OpenWrite(filePath))
+                {
+                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(MojiData));
+                    xmlSerializer.Serialize(stream, mojiData);
+                }
             }
             catch (Exception ex)
             {
@@ -146,18 +195,27 @@ namespace MojiCollaTool
             }
         }
 
+        /// <summary>
+        /// 文字データを読み出す
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public static MojiData ReadMojiData(string filePath)
         {
             MojiData mojiData;
 
             try
             {
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(MojiData));
-                var mojiDataObj = xmlSerializer.Deserialize(File.OpenWrite(filePath));
+                using(var stream = File.OpenRead(filePath))
+                {
+                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(MojiData));
+                    var mojiDataObj = xmlSerializer.Deserialize(File.OpenRead(filePath));
 
-                if (mojiDataObj == null) throw new InvalidOperationException("ReadMojiData xml convert null error.");
+                    if (mojiDataObj == null) throw new InvalidOperationException("ReadMojiData xml convert null error.");
 
-                mojiData = (MojiData)mojiDataObj;
+                    mojiData = (MojiData)mojiDataObj;
+                }
             }
             catch (Exception ex)
             {
@@ -168,30 +226,27 @@ namespace MojiCollaTool
         }
 
         /// <summary>
-        /// 作業データを出力する
+        /// プロジェクトデータを出力する
         /// </summary>
-        /// <param name="mcToolDirPath"></param>
+        /// <param name="projectDirPath"></param>
         /// <param name="mojiDatas"></param>
         /// <exception cref="InvalidOperationException"></exception>
-        public static void WriteMCToolData(string mcToolDirPath, IEnumerable<MojiData> mojiDatas)
+        public static void WriteProjectData(string projectDirPath, IEnumerable<MojiData> mojiDatas)
         {
             try
             {
                 //  保存ディレクトリを作成する
-                Directory.CreateDirectory(mcToolDirPath);
+                Directory.CreateDirectory(projectDirPath);
 
                 //  画像をコピーする
-                foreach (var extensionWithDot in new string[] { ".jpg", ".png" })
+                var workingDirImagePath = GetWorkingDirImagePath();
+                if (File.Exists(workingDirImagePath))
                 {
-                    var imagePath = GetWorkingDirImagePath(extensionWithDot);
-                    if (File.Exists(imagePath))
-                    {
-                        File.Copy(imagePath, Path.Combine(mcToolDirPath, Path.GetFileName(imagePath)));
-                    }
+                    File.Copy(workingDirImagePath, Path.Combine(projectDirPath, Path.GetFileName(workingDirImagePath)));
                 }
 
-                //  .mctoolファイルを作成、保存する
-                var mcToolFilePath = Path.Combine(mcToolDirPath, Path.GetFileName(mcToolDirPath));
+                //  .mctoolファイルを作成、出力する
+                var mcToolFilePath = Path.Combine(projectDirPath, Path.GetFileName(projectDirPath));
 
                 StringBuilder mcToolFileText = new StringBuilder();
 
@@ -200,10 +255,10 @@ namespace MojiCollaTool
 
                 File.WriteAllText(mcToolFilePath, mcToolFileText.ToString());
 
-                //  文字データを保存する
+                //  文字データを出力する
                 foreach (var mojiData in mojiDatas)
                 {
-                    WriteMojiData(mojiData, mcToolDirPath);
+                    WriteMojiData(mojiData, projectDirPath);
                 }
             }
             catch (Exception ex)
@@ -212,18 +267,37 @@ namespace MojiCollaTool
             }
         }
 
-        public static List<MojiData> ReadMCToolData(string mcToolFilePath)
+        /// <summary>
+        /// mctoolデータを読み出す
+        /// </summary>
+        /// <param name="mcToolFilePath"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static List<MojiData> ReadProjectData(string mcToolFilePath)
         {
             List<MojiData> mojiDatas = new List<MojiData>();
 
             try
             {
                 //  読み出し対象のディレクトリパスを取得する
-                var mcToolDirPath = Path.GetDirectoryName(mcToolFilePath);
+                var projectDirPath = Path.GetDirectoryName(mcToolFilePath);
 
-                if (string.IsNullOrEmpty(mcToolDirPath)) throw new InvalidOperationException("mcToolDirPath error.");
+                if (string.IsNullOrEmpty(projectDirPath)) throw new InvalidOperationException("projectDirPath error.");
 
-                foreach (var filePath in Directory.GetFiles(mcToolDirPath, "*.xml", SearchOption.TopDirectoryOnly))
+                //  画像を作業フォルダにコピーする
+                var imagePath = GetImagePath(projectDirPath);
+                if(string.IsNullOrEmpty(imagePath))
+                {
+                    //  画像がない場合、作業フォルダの画像を削除する
+                    DeleteWorkingDirImage();
+                }
+                else
+                {
+                    CopyImageToWorkingDirectory(imagePath);
+                }
+
+                //  文字データを読み出す
+                foreach (var filePath in Directory.GetFiles(projectDirPath, "*.xml", SearchOption.TopDirectoryOnly))
                 {
                     mojiDatas.Add(ReadMojiData(filePath)); 
                 }

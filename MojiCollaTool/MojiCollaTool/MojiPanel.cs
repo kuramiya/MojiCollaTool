@@ -40,6 +40,11 @@ namespace MojiCollaTool
 
         private Nullable<Point> dragStart = null;
 
+        /// <summary>
+        /// パネルがダブルクリックされたことを示すフラグ
+        /// </summary>
+        private bool panelDoubleClicked = false;
+
         public MojiPanel(int id, MainWindow mainWindow)
         {
             this.mainWindow = mainWindow;
@@ -88,12 +93,15 @@ namespace MojiCollaTool
         /// </summary>
         public void Remove()
         {
-            mainWindow.RemoveMoji(this);
+            mainWindow.RemoveMojiPanel(this);
         }
 
         private void MojiPanel_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             MojiWindow?.Show();
+
+            //  フォーカスを設定する処理は別の処理で奪われるため、フラグだけ立てて後で処理させる
+            panelDoubleClicked = true;
         }
 
         private void MojiPanel_MouseMove(object sender, MouseEventArgs e)
@@ -122,6 +130,20 @@ namespace MojiCollaTool
             }
             dragStart = null;
             element.ReleaseMouseCapture();
+
+            //  パネルがダブルクリックされた場合の後処理
+            //  文字画面へのフォーカスを設定する処理を行う
+            if(panelDoubleClicked)
+            {
+                if(MojiWindow != null)
+                {
+                    MojiWindow.Topmost = true;
+                    MojiWindow.Topmost = false;
+                    MojiWindow.Activate();
+                }
+
+                panelDoubleClicked = false;
+            }
         }
 
         private void MojiPanel_MouseDown(object sender, MouseButtonEventArgs e)
@@ -136,7 +158,7 @@ namespace MojiCollaTool
             if (MojiWindow != null)
             {
                 //  パネルがアンロード（削除？）されるタイミングで、内部保持のウィンドウに終了フラグを立て、クローズする
-                //  これにより、ウィンドウ保持によるアプリが終わらない問題を回避している
+                //  これにより、ウィンドウ保持によるアプリが終わらない問題を回避する
                 MojiWindow.IsHideOnly = false;
                 MojiWindow.Close();
                 MojiWindow = null;

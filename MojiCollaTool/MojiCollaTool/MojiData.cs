@@ -93,6 +93,7 @@ namespace MojiCollaTool
             ForeColor = source.ForeColor;
             BorderColor = source.BorderColor;
             BorderThickness = source.BorderThickness;
+            BorderBlurrRadius = source.BorderBlurrRadius;
             IsBackgroundBoxExists = source.IsBackgroundBoxExists;
             BackgroundBoxColor = source.BackgroundBoxColor;
             BackgoundBoxPadding = source.BackgoundBoxPadding;
