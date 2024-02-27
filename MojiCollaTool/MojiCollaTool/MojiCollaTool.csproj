@@ -9,7 +9,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\folder.png" />
+    <None Remove="Images\image.png" />
+    <None Remove="Images\moji.png" />
+    <None Remove="Images\mojiimage.png" />
+    <None Remove="Images\save.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="mctool-icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\folder.png" />
+    <Resource Include="Images\image.png" />
+    <Resource Include="Images\moji.png" />
+    <Resource Include="Images\mojiimage.png" />
+    <Resource Include="Images\save.png" />
   </ItemGroup>
 
 </Project>

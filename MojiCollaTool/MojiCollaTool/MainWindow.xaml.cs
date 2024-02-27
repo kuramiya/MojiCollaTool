@@ -193,10 +193,12 @@ namespace MojiCollaTool
 
             if (dialogResult.HasValue == false || dialogResult.Value == false) return;
 
+            //  画像出力前の拡大縮小率を保管しておく
             double preScale_Perect = ScalingTextBox.Value;
 
             try
             {
+                //  画像出力前に、100%サイズに戻す（あとで戻す）                
                 UpdateScale(100);
 
                 if(saveFileDialog.FileName.EndsWith("jpg"))
