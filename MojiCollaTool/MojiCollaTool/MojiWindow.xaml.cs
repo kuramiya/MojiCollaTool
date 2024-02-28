@@ -69,11 +69,18 @@ namespace MojiCollaTool
             }
             BoldCheckBox.IsChecked = mojiData.IsBold;
             ItalicCheckBox.IsChecked = mojiData.IsItalic;
+
             CharacterMarginTextBox.SetValue((int)mojiData.CharacterMargin);
             LineMarginTextBox.SetValue((int)mojiData.LineMargin);
+
             ForeColorButton.Background = new SolidColorBrush(mojiData.ForeColor);
+
             BorderThicknessTextBox.SetValue((int)mojiData.BorderThickness);
             BorderColorButton.Background = new SolidColorBrush(mojiData.BorderColor);
+
+            BackgroundBoxCheckBox.IsChecked = mojiData.IsBackgroundBoxExists;
+            BackgroundBoxColorButton.Background = new SolidColorBrush(mojiData.BackgroundBoxColor);
+            BackgroundBoxPaddingTextBox.SetValue((int)mojiData.BackgoundBoxPadding);
 
             runEvent = true;
         }
@@ -113,7 +120,7 @@ namespace MojiCollaTool
             mojiPanel.MojiData.FontFamilyName = (string)FontFamilyComboBox.SelectedValue;
             mojiPanel.MojiData.BorderThickness = BorderThicknessTextBox.Value;
             mojiPanel.MojiData.BorderBlurrRadius = BorderBlurrRadiusTextBox.Value;
-            mojiPanel.MojiData.IsBackgroundBoxExists = (BackgroundCheckBox.IsChecked == true);
+            mojiPanel.MojiData.IsBackgroundBoxExists = (BackgroundBoxCheckBox.IsChecked == true);
             mojiPanel.MojiData.BackgoundBoxPadding = BackgroundBoxPaddingTextBox.Value;
 
             mojiPanel.UpdateMojiView();
@@ -187,7 +194,7 @@ namespace MojiCollaTool
             });
         }
 
-        private void BackgroundColorButton_Click(object sender, RoutedEventArgs e)
+        private void BackgroundBoxColorButton_Click(object sender, RoutedEventArgs e)
         {
             ColorButton_Click(mojiPanel.MojiData.BackgroundBoxColor, (color) =>
             {

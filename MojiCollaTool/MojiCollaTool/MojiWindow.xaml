@@ -73,9 +73,9 @@
             </GroupBox>
             <GroupBox Header="Background Box">
                 <StackPanel Orientation="Horizontal">
-                    <CheckBox x:Name="BackgroundCheckBox" Content="Show Background Box" VerticalAlignment="Center" Checked="CheckBox_CheckChanged" Unchecked="CheckBox_CheckChanged"/>
+                    <CheckBox x:Name="BackgroundBoxCheckBox" Content="Show Background Box" VerticalAlignment="Center" Checked="CheckBox_CheckChanged" Unchecked="CheckBox_CheckChanged"/>
                     <Label Content="Backgournd Box Color:"/>
-                    <Button Style="{DynamicResource ColorButtonStyle}" x:Name="BackgroundColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="BackgroundColorButton_Click"/>
+                    <Button Style="{DynamicResource ColorButtonStyle}" x:Name="BackgroundBoxColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="BackgroundBoxColorButton_Click"/>
                     <Label Content="Backgournd Box Padding:"/>
                     <local:UpDownTextBox x:Name="BackgroundBoxPaddingTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
 

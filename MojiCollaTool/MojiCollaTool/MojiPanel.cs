@@ -31,6 +31,8 @@ namespace MojiCollaTool
 
         public MojiWindow? MojiWindow { get; set; }
 
+        private Grid grid = new Grid();
+
         /// <summary>
         /// 文字列を配置するパネル
         /// </summary>
@@ -67,9 +69,11 @@ namespace MojiCollaTool
         {
             MojiWindow = new MojiWindow(this);
 
+            AddChild(grid);
+
             stackPanel.VerticalAlignment = VerticalAlignment.Center;
             stackPanel.HorizontalAlignment = HorizontalAlignment.Center;
-            AddChild(stackPanel);
+            grid.Children.Add(stackPanel);
 
             MouseDown += MojiPanel_MouseDown;
             MouseUp += MojiPanel_MouseUp;
@@ -259,17 +263,23 @@ namespace MojiCollaTool
                 stackPanel.Children.Add(linePanel);
             }
 
-            //  背景色を設定する
+            //  背景の箱を設定する
             if(MojiData.IsBackgroundBoxExists)
             {
-                stackPanel.Background = new SolidColorBrush(MojiData.BackgroundBoxColor);
+                stackPanel.Background = Brushes.Transparent;
+                grid.Background = new SolidColorBrush(MojiData.BackgroundBoxColor);
                 //  todo    背景の幅の付け方を考える必要あり
+
+                stackPanel.Margin = new Thickness(MojiData.BackgoundBoxPadding);
             }
             else
             {
                 //  透明色を設定しておく
                 //  これによりマウスのヒットボックスが背景にも及ぶようになる
+                grid.Background = Brushes.Transparent;
                 stackPanel.Background = Brushes.Transparent;
+
+                stackPanel.Margin = new Thickness(0);
             }
         }
     }

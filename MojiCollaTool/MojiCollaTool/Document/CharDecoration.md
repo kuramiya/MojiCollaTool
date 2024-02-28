@@ -58,7 +58,7 @@ https://stackoverflow.com/questions/78032415/how-to-apply-effect-inside-wpf-uiel
 
 OnRenderメソッドのオーバーラードではなく、DrawingVisualをChildrenに追加する方法でエフェクトを追加することに成功した。
 
-## 文字の背景描画
+## 文字の箱
 
 ### 参考リンク集
 
@@ -69,7 +69,17 @@ StackPanelのサイズはFormattedTextのサイズに依存しており、文字
 それとは別に、任意のサイズ指定機能が欲しい。
 別途パラメータを追加して対応する。Paddingを指定することで幅を広げる。
 StackPanelにはPaddingがなかった。Gridに入れることで対処する。Gridもなかった。
-要検討。
+Gridに入れて、StackPanelのMarginを操作することで対応する。
+
+
+## 文字の箱の縁取り
+
+### 参考リンク集
+
+### 実装メモ
+上記文字の箱の親に、さらにBorderクラスを使用する。
+色設定、太さのパラメータが必要。
+
 
 ## 懸念点メモ
 - ネット上のサンプルでは縁取りと縁取りのぼかしは別々の項目となっている
