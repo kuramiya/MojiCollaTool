@@ -31,7 +31,15 @@ namespace MojiCollaTool
 
         public MojiWindow? MojiWindow { get; set; }
 
-        private Grid grid = new Grid();
+        /// <summary>
+        /// 背景の箱の縁取り
+        /// </summary>
+        private Border backgroundBoxBorder = new Border();
+
+        /// <summary>
+        /// 背景の箱となるグリッド
+        /// </summary>
+        private Grid backgroundGrid = new Grid();
 
         /// <summary>
         /// 文字列を配置するパネル
@@ -69,11 +77,13 @@ namespace MojiCollaTool
         {
             MojiWindow = new MojiWindow(this);
 
-            AddChild(grid);
+            AddChild(backgroundBoxBorder);
+
+            backgroundBoxBorder.Child = backgroundGrid;
 
             stackPanel.VerticalAlignment = VerticalAlignment.Center;
             stackPanel.HorizontalAlignment = HorizontalAlignment.Center;
-            grid.Children.Add(stackPanel);
+            backgroundGrid.Children.Add(stackPanel);
 
             MouseDown += MojiPanel_MouseDown;
             MouseUp += MojiPanel_MouseUp;
@@ -267,19 +277,24 @@ namespace MojiCollaTool
             if(MojiData.IsBackgroundBoxExists)
             {
                 stackPanel.Background = Brushes.Transparent;
-                grid.Background = new SolidColorBrush(MojiData.BackgroundBoxColor);
+                backgroundGrid.Background = new SolidColorBrush(MojiData.BackgroundBoxColor);
                 //  todo    背景の幅の付け方を考える必要あり
 
                 stackPanel.Margin = new Thickness(MojiData.BackgoundBoxPadding);
+
+                backgroundBoxBorder.BorderThickness = new Thickness(MojiData.BackgroundBoxBorderThickness);
+                backgroundBoxBorder.BorderBrush = new SolidColorBrush(MojiData.BackgroundBoxBorderColor);
             }
             else
             {
                 //  透明色を設定しておく
                 //  これによりマウスのヒットボックスが背景にも及ぶようになる
-                grid.Background = Brushes.Transparent;
+                backgroundGrid.Background = Brushes.Transparent;
                 stackPanel.Background = Brushes.Transparent;
 
                 stackPanel.Margin = new Thickness(0);
+
+                backgroundBoxBorder.BorderThickness = new Thickness(0);
             }
         }
     }

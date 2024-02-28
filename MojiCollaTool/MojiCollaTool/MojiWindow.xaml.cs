@@ -62,6 +62,7 @@ namespace MojiCollaTool
             TextTextBox.Text = mojiData.FullText;
             LocationXTextBox.SetValue((int)mojiData.X, false);
             LocationYTextBox.SetValue((int)mojiData.Y, false);
+            DirectionComboBox.SelectedIndex = (int)mojiData.TextDirection;
             FontSizeTextBox.SetValue(mojiData.FontSize, false);
             if (FontUtil.GetFontFamilies().ContainsKey(mojiData.FontFamilyName))
             {
@@ -81,6 +82,9 @@ namespace MojiCollaTool
             BackgroundBoxCheckBox.IsChecked = mojiData.IsBackgroundBoxExists;
             BackgroundBoxColorButton.Background = new SolidColorBrush(mojiData.BackgroundBoxColor);
             BackgroundBoxPaddingTextBox.SetValue((int)mojiData.BackgoundBoxPadding);
+
+            BackgroundBoxBorderColorButton.Background = new SolidColorBrush(mojiData.BackgroundBoxBorderColor);
+            BackgroundBoxBorderThicknessTextBox.SetValue((int)mojiData.BackgroundBoxBorderThickness);
 
             runEvent = true;
         }
@@ -122,6 +126,7 @@ namespace MojiCollaTool
             mojiPanel.MojiData.BorderBlurrRadius = BorderBlurrRadiusTextBox.Value;
             mojiPanel.MojiData.IsBackgroundBoxExists = (BackgroundBoxCheckBox.IsChecked == true);
             mojiPanel.MojiData.BackgoundBoxPadding = BackgroundBoxPaddingTextBox.Value;
+            mojiPanel.MojiData.BackgroundBoxBorderThickness = BackgroundBoxBorderThicknessTextBox.Value;
 
             mojiPanel.UpdateMojiView();
         }
@@ -199,6 +204,16 @@ namespace MojiCollaTool
             ColorButton_Click(mojiPanel.MojiData.BackgroundBoxColor, (color) =>
             {
                 mojiPanel.MojiData.BackgroundBoxColor = color;
+                ((Button)sender).Background = new SolidColorBrush(color);
+                mojiPanel.UpdateMojiView();
+            });
+        }
+
+        private void BackgroundBoxBorderColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            ColorButton_Click(mojiPanel.MojiData.BackgroundBoxBorderColor, (color) =>
+            {
+                mojiPanel.MojiData.BackgroundBoxBorderColor = color;
                 ((Button)sender).Background = new SolidColorBrush(color);
                 mojiPanel.UpdateMojiView();
             });

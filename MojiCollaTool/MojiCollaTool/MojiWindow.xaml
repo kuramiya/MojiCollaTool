@@ -72,13 +72,20 @@
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Background Box">
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical">
                     <CheckBox x:Name="BackgroundBoxCheckBox" Content="Show Background Box" VerticalAlignment="Center" Checked="CheckBox_CheckChanged" Unchecked="CheckBox_CheckChanged"/>
-                    <Label Content="Backgournd Box Color:"/>
-                    <Button Style="{DynamicResource ColorButtonStyle}" x:Name="BackgroundBoxColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="BackgroundBoxColorButton_Click"/>
-                    <Label Content="Backgournd Box Padding:"/>
-                    <local:UpDownTextBox x:Name="BackgroundBoxPaddingTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
-
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Background Box Color:"/>
+                        <Button Style="{DynamicResource ColorButtonStyle}" x:Name="BackgroundBoxColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="BackgroundBoxColorButton_Click"/>
+                        <Label Content="Background Box Padding:"/>
+                        <local:UpDownTextBox x:Name="BackgroundBoxPaddingTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Background Box Border Thickness:"/>
+                        <local:UpDownTextBox x:Name="BackgroundBoxBorderThicknessTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
+                        <Label Content="Background Box Border Color:"/>
+                        <Button Style="{DynamicResource ColorButtonStyle}" x:Name="BackgroundBoxBorderColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="BackgroundBoxBorderColorButton_Click"/>
+                    </StackPanel>
                 </StackPanel>
             </GroupBox>
         </StackPanel>

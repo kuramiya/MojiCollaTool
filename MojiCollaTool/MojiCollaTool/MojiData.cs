@@ -67,6 +67,10 @@ namespace MojiCollaTool
 
         public double BackgoundBoxPadding { get; set; } = 0;
 
+        public double BackgroundBoxBorderThickness { get; set; } = 0;
+
+        public Color BackgroundBoxBorderColor { get; set; } = Colors.Black;
+
         public MojiData()
         {
             //  何もしない
@@ -97,6 +101,8 @@ namespace MojiCollaTool
             IsBackgroundBoxExists = source.IsBackgroundBoxExists;
             BackgroundBoxColor = source.BackgroundBoxColor;
             BackgoundBoxPadding = source.BackgoundBoxPadding;
+            BackgroundBoxBorderThickness = source.BackgroundBoxBorderThickness;
+            BackgroundBoxBorderColor = source.BackgroundBoxBorderColor;
         }
 
         /// <summary>
