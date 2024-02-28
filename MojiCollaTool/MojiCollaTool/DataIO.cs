@@ -215,6 +215,8 @@ namespace MojiCollaTool
                     if (mojiDataObj == null) throw new InvalidOperationException("ReadMojiData xml convert null error.");
 
                     mojiData = (MojiData)mojiDataObj;
+
+                    mojiData.RestoreFullTextNewLine();
                 }
             }
             catch (Exception ex)

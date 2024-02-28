@@ -165,6 +165,8 @@ namespace MojiCollaTool
             if (runEvent == false) return;
 
             ColorSelector.ColorSelectorWindow colorSelectorWindow = new ColorSelector.ColorSelectorWindow(currentColor, action);
+            colorSelectorWindow.Top = Top;
+            colorSelectorWindow.Left = Left;
             var dialogResult = colorSelectorWindow.ShowDialog();
 
             if (dialogResult.HasValue == false)

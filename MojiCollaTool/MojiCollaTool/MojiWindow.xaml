@@ -5,85 +5,99 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MojiCollaTool"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
         ContentRendered="Window_ContentRendered"
         Closing="Window_Closing"
-        Title="MojiWindow" Height="600" Width="800">
-    <Grid>
+        Title="MojiWindow" Height="800" Width="800">
+    <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Label x:Name="IDLabel" Content="Moji ID:X"/>
-            <Button x:Name="ReproductionButton" Content="Reproduction" Click="ReproductionButton_Click"/>
-            <Button x:Name="DeleteButton" Content="Delete" Click="DeleteButton_Click"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
+            <Label x:Name="IDLabel" Content="Moji ID:X" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1"/>
+            <Button x:Name="ReproductionButton" Margin="5" Click="ReproductionButton_Click">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Image Source="/Images/copy.png"/>
+                    <TextBlock Text="文字を複製する"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="DeleteButton" Margin="5" Click="DeleteButton_Click">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Image Source="/Images/delete.png"/>
+                    <TextBlock Text="文字を削除する"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
-        <GroupBox Header="Text" Grid.Row="1">
+        <GroupBox Header="テキスト" Grid.Row="1">
             <TextBox x:Name="TextTextBox" Text="サンプル" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" TextChanged="TextBox_TextChanged"/>
         </GroupBox>
         <StackPanel Orientation="Vertical" Grid.Row="2">
-            <GroupBox Header="Location">
+            <GroupBox Header="座標">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="X:"/>
-                    <local:UpDownTextBox x:Name="LocationXTextBox" ValueMinLimit="-1000" ValueChanged="TextBox_ValueChanged"/>
+                    <local:UpDownTextBox x:Name="LocationXTextBox" ValueMinLimit="-1000" ValueChanged="TextBox_ValueChanged" Margin="0, 0, 20, 0"/>
                     <Label Content="Y:"/>
                     <local:UpDownTextBox x:Name="LocationYTextBox" ValueMinLimit="-1000" ValueChanged="TextBox_ValueChanged"/>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Direction">
-                <ComboBox x:Name="DirectionComboBox" SelectedIndex="0" SelectionChanged="ComboBox_SelectionChanged">
-                    <ComboBoxItem Content="Yokogaki"/>
-                    <ComboBoxItem Content="Tategaki"/>
-                </ComboBox>
+            <GroupBox Header="縦書き/横書き">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <ComboBox x:Name="DirectionComboBox" SelectedIndex="0" FontSize="15" SelectionChanged="ComboBox_SelectionChanged" Width="100">
+                        <ComboBoxItem Content="横書き"/>
+                        <ComboBoxItem Content="縦書き"/>
+                    </ComboBox>
+                </StackPanel>
             </GroupBox>
-            <GroupBox Header="Font">
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Font Size:"/>
+            <GroupBox Header="フォント">
+                <StackPanel Orientation="Vertical" Margin="5">
+                    <ComboBox x:Name="FontFamilyComboBox" FontSize="20" VerticalContentAlignment="Center" SelectedValuePath="Text" SelectionChanged="ComboBox_SelectionChanged"/>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox x:Name="BoldCheckBox" Content="太字" VerticalAlignment="Center" Checked="CheckBox_CheckChanged" Unchecked="CheckBox_CheckChanged" Margin="5"/>
+                        <CheckBox x:Name="ItalicCheckBox" Content="イタリック" VerticalAlignment="Center" Checked="CheckBox_CheckChanged" Unchecked="CheckBox_CheckChanged" Margin="5"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="文字">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Label Content="文字サイズ:"/>
                     <local:UpDownTextBox x:Name="FontSizeTextBox" ValueMinLimit="1" ValueChanged="TextBox_ValueChanged"/>
-                    <Label Content="Font:"/>
-                    <ComboBox x:Name="FontFamilyComboBox" Width="300" VerticalContentAlignment="Center" SelectedValuePath="Text" SelectionChanged="ComboBox_SelectionChanged"/>
-                    <CheckBox x:Name="BoldCheckBox" Content="Bold" VerticalAlignment="Center" Checked="CheckBox_CheckChanged" Unchecked="CheckBox_CheckChanged"/>
-                    <CheckBox x:Name="ItalicCheckBox" Content="Italic" VerticalAlignment="Center" Checked="CheckBox_CheckChanged" Unchecked="CheckBox_CheckChanged"/>
-                </StackPanel>
-            </GroupBox>
-            <GroupBox Header="Margin">
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Character Margin:"/>
-                    <local:UpDownTextBox x:Name="CharacterMarginTextBox" ValueMinLimit="-1000" ValueChanged="TextBox_ValueChanged"/>
-                    <Label Content="Line Margin:"/>
-                    <local:UpDownTextBox x:Name="LineMarginTextBox" ValueMinLimit="-1000" ValueChanged="TextBox_ValueChanged"/>
-                </StackPanel>
-            </GroupBox>
-            <GroupBox Header="Fore">
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Fore Color:"/>
+                    <Label Content="文字色:"/>
                     <Button Style="{DynamicResource ColorButtonStyle}" x:Name="ForeColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="ForeColorButton_Click"/>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Border">
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Border Thickness:"/>
+            <GroupBox Header="間隔">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Label Content="文字間隔:"/>
+                    <local:UpDownTextBox x:Name="CharacterMarginTextBox" ValueMinLimit="-1000" ValueChanged="TextBox_ValueChanged"/>
+                    <Label Content="行間隔:"/>
+                    <local:UpDownTextBox x:Name="LineMarginTextBox" ValueMinLimit="-1000" ValueChanged="TextBox_ValueChanged"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="文字の縁取り">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Label Content="縁取り幅:"/>
                     <local:UpDownTextBox x:Name="BorderThicknessTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
-                    <Label Content="Border Color:"/>
+                    <Label Content="縁取り色:"/>
                     <Button Style="{DynamicResource ColorButtonStyle}" x:Name="BorderColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="BorderColorButton_Click"/>
-                    <Label Content="Border Blurr Radius:"/>
+                    <Label Content="縁取りぼかし値:"/>
                     <local:UpDownTextBox x:Name="BorderBlurrRadiusTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Background Box">
-                <StackPanel Orientation="Vertical">
-                    <CheckBox x:Name="BackgroundBoxCheckBox" Content="Show Background Box" VerticalAlignment="Center" Checked="CheckBox_CheckChanged" Unchecked="CheckBox_CheckChanged"/>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Background Box Color:"/>
-                        <Button Style="{DynamicResource ColorButtonStyle}" x:Name="BackgroundBoxColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="BackgroundBoxColorButton_Click"/>
-                        <Label Content="Background Box Padding:"/>
+            <GroupBox Header="背景ボックス">
+                <StackPanel Orientation="Vertical" Margin="5">
+                    <CheckBox x:Name="BackgroundBoxCheckBox" Content="背景ボックスを表示する" VerticalAlignment="Center" HorizontalAlignment="Left" Checked="CheckBox_CheckChanged" Unchecked="CheckBox_CheckChanged" Margin="5"/>
+                    <StackPanel Orientation="Horizontal"  Margin="0, 5, 0, 0">
+                        <Label Content="背景ボックスのパディング:"/>
                         <local:UpDownTextBox x:Name="BackgroundBoxPaddingTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
+                        <Label Content="背景ボックスの色:"/>
+                        <Button Style="{DynamicResource ColorButtonStyle}" x:Name="BackgroundBoxColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="BackgroundBoxColorButton_Click"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Background Box Border Thickness:"/>
+                    <StackPanel Orientation="Horizontal" Margin="0, 5, 0, 0">
+                        <Label Content="背景ボックスの縁取り幅:"/>
                         <local:UpDownTextBox x:Name="BackgroundBoxBorderThicknessTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
-                        <Label Content="Background Box Border Color:"/>
+                        <Label Content="背景ボックスの縁取り色:"/>
                         <Button Style="{DynamicResource ColorButtonStyle}" x:Name="BackgroundBoxBorderColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="BackgroundBoxBorderColorButton_Click"/>
                     </StackPanel>
                 </StackPanel>

@@ -122,5 +122,16 @@ namespace MojiCollaTool
 
             return reproductionMojiData;
         }
+
+        /// <summary>
+        /// 改行コードがLFだけの場合、CR+LFに復元する
+        /// </summary>
+        public void RestoreFullTextNewLine()
+        {
+            if(FullText.Contains("\r") == false)
+            {
+                FullText = FullText.Replace("\n", Environment.NewLine);
+            }
+        }
     }
 }
