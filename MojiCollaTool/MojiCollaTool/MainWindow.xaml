@@ -40,9 +40,11 @@
                     <TextBlock Text="文字コラ画像を出力する" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
-            <Label Content="拡大・縮小:" VerticalAlignment="Center"/>
-            <local:UpDownTextBox x:Name="ScalingTextBox" ValueMinLimit="10" Step="10" Margin="0, 5" ValueChanged="ScalingTextBox_ValueChanged"/>
-            <Label Content="%" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <Label Content="拡大・縮小:" VerticalAlignment="Center"/>
+                <local:UpDownTextBox x:Name="ScalingTextBox" ValueMinLimit="10" Step="10" ValueChanged="ScalingTextBox_ValueChanged"/>
+                <Label Content="%" VerticalAlignment="Center"/>
+            </StackPanel>
         </StackPanel>
         <Button x:Name="AddTextButton" Grid.Row="0" Grid.Column="1" Margin="5" Click="AddTextButton_Click">
             <StackPanel Orientation="Horizontal" Margin="5">

@@ -114,9 +114,9 @@ namespace MojiCollaTool
                     if (extension == ".jpg" || extension == ".png") File.Delete(filePath);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new InvalidOperationException("DeleteWorkingDirImage error.");
+                throw new InvalidOperationException("DeleteWorkingDirImage error.", ex);
             }
         }
 
@@ -180,7 +180,7 @@ namespace MojiCollaTool
         {
             try
             {
-                var filePath = Path.Combine(directoryPath, $"MojiID{mojiData.Id}.xml");
+                var filePath = Path.Combine(directoryPath, $"MojiData{mojiData.Id}.xml");
                 using(var stream = File.OpenWrite(filePath))
                 {
                     XmlSerializer xmlSerializer = new XmlSerializer(typeof(MojiData));
@@ -263,7 +263,7 @@ namespace MojiCollaTool
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("WriteMCToolData error.", ex);
+                throw new InvalidOperationException("WriteProjectData error.", ex);
             }
         }
 
@@ -299,12 +299,21 @@ namespace MojiCollaTool
                 //  文字データを読み出す
                 foreach (var filePath in Directory.GetFiles(projectDirPath, "*.xml", SearchOption.TopDirectoryOnly))
                 {
-                    mojiDatas.Add(ReadMojiData(filePath)); 
+                    var mojiData = ReadMojiData(filePath);
+
+                    //  ID重複チェック
+                    //  重複している場合、存在する最大のID+1の値に設定する
+                    if (mojiDatas.Exists(x => x.Id == mojiData.Id))
+                    {
+                        mojiData.Id = mojiDatas.Max(x => x.Id) + 1;
+                    }
+
+                    mojiDatas.Add(mojiData);
                 }
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("ReadMCToolData error.", ex);
+                throw new InvalidOperationException("ReadProjectData error.", ex);
             }
 
             return mojiDatas;
