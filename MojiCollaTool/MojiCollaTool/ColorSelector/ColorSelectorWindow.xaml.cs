@@ -38,17 +38,16 @@ namespace MojiCollaTool.ColorSelector
         private List<Button> colorHistoryButtons = new List<Button>();
 
         /// <summary>
-        /// 前面or背面
+        /// 現在の選択色
         /// </summary>
-        public ForeBack ForeBackSelection { get; set; } = ForeBack.Back;
+        public SolidColorBrush CurrentBrush => ManualColorPicker.BeforeBrush;
 
-        public SolidColorBrush CurrentForeBrush { get; set; } = new SolidColorBrush();
+        /// <summary>
+        /// 次の選択色
+        /// </summary>
+        public SolidColorBrush NextBrush => ManualColorPicker.AfterBrush;
 
-        public SolidColorBrush CurrentBackBrush { get; set; } = new SolidColorBrush();
-
-        public SolidColorBrush NextForeBrush { get; set; } = new SolidColorBrush();
-
-        public SolidColorBrush NextBackBrush { get; set; } = new SolidColorBrush();
+        private Action<Color>? updateAction;
 
         static ColorSelectorWindow()
         {
@@ -64,27 +63,25 @@ namespace MojiCollaTool.ColorSelector
             InitializeComponent();
         }
 
-        public ColorSelectorWindow(ForeBack foreBackSelection, Color currentForeColor, Color currentBackColor)
+        public ColorSelectorWindow(Color currentColor, Action<Color>? updateAction = null)
         {
-            ForeBackSelection = foreBackSelection;
+            this.updateAction = updateAction;
 
             InitializeComponent();
 
-            CurrentForeBrush = new SolidColorBrush(currentForeColor);
-            CurrentBackBrush = new SolidColorBrush(currentBackColor);
-            NextForeBrush = new SolidColorBrush(currentForeColor);
-            NextBackBrush = new SolidColorBrush(currentBackColor);
-
-            CurrentColorButton.Foreground = CurrentForeBrush;
-            CurrentColorButton.Background = CurrentBackBrush;
-            NextColorButton.Foreground = NextForeBrush;
-            NextColorButton.Background = NextBackBrush;
-
-            ManualColorPicker.BeforeBrush = CurrentForeBrush;
-            ManualColorPicker.AfterBrush = NextForeBrush;
+            ManualColorPicker.BeforeBrush = new SolidColorBrush(currentColor);
+            ManualColorPicker.AfterBrush = new SolidColorBrush(currentColor);
 
             InitColorListButtons();
 
+            InitHistoryButtons();
+        }
+
+        /// <summary>
+        /// 色選択履歴ボタンを初期化する
+        /// </summary>
+        private void InitHistoryButtons()
+        {
             colorHistoryButtons.Add(History1);
             colorHistoryButtons.Add(History2);
             colorHistoryButtons.Add(History3);
@@ -105,6 +102,12 @@ namespace MojiCollaTool.ColorSelector
             colorHistoryButtons.Add(History18);
             colorHistoryButtons.Add(History19);
             colorHistoryButtons.Add(History20);
+
+            //  色履歴をロードしておく
+            for (int i = 0; i < COLOR_HISTORY_MAX_COUNT; i++)
+            {
+                colorHistoryButtons[i].Background = new SolidColorBrush(colorHistory[i]);
+            }
         }
 
         /// <summary>
@@ -137,7 +140,7 @@ namespace MojiCollaTool.ColorSelector
             button.Margin = new Thickness(1);
             Grid.SetColumn(button, colIndex);
             Grid.SetRow(button, rowIndex);
-            button.Click += RepColorButton_Click;
+            button.Click += ColorListButton_Click;
 
             ColorListGrid.Children.Add(button);
         }
@@ -148,40 +151,16 @@ namespace MojiCollaTool.ColorSelector
         /// <param name="color"></param>
         public void UpdateNextColor(Color color)
         {
-            switch (ForeBackSelection)
-            {
-                case ForeBack.Fore:
-                    NextForeBrush = new SolidColorBrush(color);
-                    NextColorButton.Foreground = NextForeBrush;
-                    break;
-                case ForeBack.Back:
-                    NextBackBrush = new SolidColorBrush(color);
-                    NextColorButton.Foreground = NextBackBrush;
-                    break;
-                default:
-                    break;
-            }
+            ManualColorPicker.Red = color.R;
+            ManualColorPicker.Green = color.G;
+            ManualColorPicker.Blue = color.B;
+            ManualColorPicker.Alpha = (color.A / 255.0) * 100.0;
 
-            ManualColorPicker.AfterBrush = new SolidColorBrush(color);
+            //ManualColorPicker.AfterBrush = new SolidColorBrush(color);
 
             UpdateColorHistory(color);
-        }
 
-        /// <summary>
-        /// 次の色を取得する
-        /// </summary>
-        /// <returns></returns>
-        public Color GetNextColor()
-        {
-            switch (ForeBackSelection)
-            {
-                case ForeBack.Fore:
-                    return NextForeBrush.Color;
-                case ForeBack.Back:
-                    return NextBackBrush.Color;
-                default:
-                    return Colors.Black;
-            }
+            if (updateAction != null) updateAction(ManualColorPicker.AfterBrush.Color);
         }
 
         /// <summary>
@@ -209,30 +188,22 @@ namespace MojiCollaTool.ColorSelector
             UpdateNextColor(color);
         }
 
-        private void RepColorButton_Click(object sender, RoutedEventArgs e)
+        private void ColorListButton_Click(object sender, RoutedEventArgs e)
         {
             Color color = ((SolidColorBrush)((Button)sender).Background).Color;
 
             UpdateNextColor(color);
         }
 
-        private void CurrentColorButton_Click(object sender, RoutedEventArgs e)
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
-            switch (ForeBackSelection)
-            {
-                case ForeBack.Fore:
-                    UpdateNextColor(CurrentForeBrush.Color);
-                    break;
-                case ForeBack.Back:
-                    UpdateNextColor(CurrentBackBrush.Color);
-                    break;
-                default:
-                    break;
-            }
+            if (updateAction != null) updateAction(ManualColorPicker.AfterBrush.Color);
         }
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
+            if (updateAction != null) updateAction(ManualColorPicker.AfterBrush.Color);
+
             DialogResult = true;
             Close();
         }

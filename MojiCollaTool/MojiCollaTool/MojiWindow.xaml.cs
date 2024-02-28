@@ -101,7 +101,7 @@ namespace MojiCollaTool
         public void UpdateMojiView()
         {
             mojiPanel.MojiData.FullText = TextTextBox.Text;
-            Title = $"ID:{mojiPanel.MojiData.Id} {mojiPanel.MojiData.ExampleText}";
+            Title = $"[{mojiPanel.MojiData.Id}] {mojiPanel.MojiData.ExampleText}";
             mojiPanel.MojiData.FontSize = FontSizeTextBox.Value;
             mojiPanel.MojiData.X = LocationXTextBox.Value;
             mojiPanel.MojiData.Y = LocationYTextBox.Value;
@@ -147,49 +147,54 @@ namespace MojiCollaTool
             UpdateMojiView();
         }
 
-        private void ForeColorButton_Click(object sender, RoutedEventArgs e)
+
+        private void ColorButton_Click(Color currentColor, Action<Color> action)
         {
             if (runEvent == false) return;
 
-            ColorSelector.ColorSelectorWindow colorSelectorWindow = new ColorSelector.ColorSelectorWindow(ForeBack.Fore, mojiPanel.MojiData.ForeColor, mojiPanel.MojiData.BackgroundBoxColor);
+            ColorSelector.ColorSelectorWindow colorSelectorWindow = new ColorSelector.ColorSelectorWindow(currentColor, action);
             var dialogResult = colorSelectorWindow.ShowDialog();
 
-            if(dialogResult.HasValue && dialogResult.Value) 
+            if (dialogResult.HasValue == false)
             {
-                mojiPanel.MojiData.ForeColor = colorSelectorWindow.GetNextColor();
-                ForeColorButton.Background = new SolidColorBrush(mojiPanel.MojiData.ForeColor);
-                mojiPanel.UpdateMojiView();
+                //  色を元に戻す
+                action(currentColor);
             }
+            else if(dialogResult.Value == false)
+            {
+                //  色を元に戻す
+                action(currentColor);
+            }
+        }
+
+        private void ForeColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            ColorButton_Click(mojiPanel.MojiData.ForeColor, (color) =>
+            {
+                mojiPanel.MojiData.ForeColor = color;
+                ((Button)sender).Background = new SolidColorBrush(color);
+                mojiPanel.UpdateMojiView();
+            });
         }
 
         private void BorderColorButton_Click(object sender, RoutedEventArgs e)
         {
-            if (runEvent == false) return;
-
-            ColorSelector.ColorSelectorWindow colorSelectorWindow = new ColorSelector.ColorSelectorWindow(ForeBack.Back, mojiPanel.MojiData.ForeColor, mojiPanel.MojiData.BorderColor);
-            var dialogResult = colorSelectorWindow.ShowDialog();
-
-            if (dialogResult.HasValue && dialogResult.Value)
+            ColorButton_Click(mojiPanel.MojiData.BorderColor, (color) =>
             {
-                mojiPanel.MojiData.BorderColor = colorSelectorWindow.GetNextColor();
-                BorderColorButton.Background = new SolidColorBrush(mojiPanel.MojiData.BorderColor);
+                mojiPanel.MojiData.BorderColor = color;
+                ((Button)sender).Background = new SolidColorBrush(color);
                 mojiPanel.UpdateMojiView();
-            }
+            });
         }
 
         private void BackgroundColorButton_Click(object sender, RoutedEventArgs e)
         {
-            if (runEvent == false) return;
-
-            ColorSelector.ColorSelectorWindow colorSelectorWindow = new ColorSelector.ColorSelectorWindow(ForeBack.Back, mojiPanel.MojiData.ForeColor, mojiPanel.MojiData.BackgroundBoxColor);
-            var dialogResult = colorSelectorWindow.ShowDialog();
-
-            if (dialogResult.HasValue && dialogResult.Value)
+            ColorButton_Click(mojiPanel.MojiData.BackgroundBoxColor, (color) =>
             {
-                mojiPanel.MojiData.BackgroundBoxColor = colorSelectorWindow.GetNextColor();
-                BackgroundColorButton.Background = new SolidColorBrush(mojiPanel.MojiData.BackgroundBoxColor);
+                mojiPanel.MojiData.BackgroundBoxColor = color;
+                ((Button)sender).Background = new SolidColorBrush(color);
                 mojiPanel.UpdateMojiView();
-            }
+            });
         }
     }
 }

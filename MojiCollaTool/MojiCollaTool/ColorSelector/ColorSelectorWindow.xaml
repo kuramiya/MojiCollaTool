@@ -6,10 +6,9 @@
         xmlns:local="clr-namespace:MojiCollaTool.ColorSelector"
         xmlns:cp="clr-namespace:WpfColorPicker"
         mc:Ignorable="d"
-        Title="ColorSelectorWindow" Height="400" Width="800">
+        Title="カラーセレクター" Height="400" Width="800">
     <Grid Margin="5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
@@ -17,17 +16,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <GroupBox Header="Current -> Next" Grid.Row="0" Grid.Column="0">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Button x:Name="CurrentColorButton" Style="{StaticResource ColorButtonStyle}" Content="文字コラ MojiColla" FontWeight="Bold" Height="30" Foreground="Black" Background="White" Grid.Column="0" Click="CurrentColorButton_Click"/>
-                <Button x:Name="NextColorButton" Style="{StaticResource ColorButtonStyle}" Content="文字コラ MojiColla" FontWeight="Bold" Height="30" Foreground="White" Background="Black" Grid.Column="1"/>
-            </Grid>
-        </GroupBox>
-        <GroupBox Header="Color List" Grid.Row="1" Grid.Column="0">
+        <GroupBox Header="カラーリスト" Grid.Row="0" Grid.Column="0">
             <Grid x:Name="ColorListGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -69,7 +58,7 @@
                 <!--コードビハインドで追加される-->
             </Grid>
         </GroupBox>
-        <GroupBox Header="Color History" Grid.Row="2" Grid.Column="0">
+        <GroupBox Header="選択履歴" Grid.Row="1" Grid.Column="0">
             <StackPanel Orientation="Horizontal">
                 <Button Style="{StaticResource ColorButtonStyle}" x:Name="History1" Width="20" Height="20" Margin="1" Background="Black" Click="History_Click"/>
                 <Button Style="{StaticResource ColorButtonStyle}" x:Name="History2" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
@@ -93,7 +82,14 @@
                 <Button Style="{StaticResource ColorButtonStyle}" x:Name="History20" Width="20" Height="20" Margin="1" Background="White" Click="History_Click"/>
             </StackPanel>
         </GroupBox>
-        <cp:ColorPicker x:Name="ManualColorPicker" Width="300" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"/>
-        <Button x:Name="OKButton" Content="OK" Width="100" FontSize="20" Margin="5" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Click="OKButton_Click"/>
+        <cp:ColorPicker x:Name="ManualColorPicker" Width="300" Grid.Row="0" Grid.Column="1"/>
+        <Grid Grid.Row="1" Grid.Column="1" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="UpdateButton" Content="適用" Width="100" FontSize="20" Grid.Column="0" Click="UpdateButton_Click"/>
+            <Button x:Name="OKButton" Content="OK" Width="100" FontSize="20" Grid.Column="1" Click="OKButton_Click"/>
+        </Grid>
     </Grid>
 </Window>

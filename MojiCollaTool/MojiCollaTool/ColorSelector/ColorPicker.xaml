@@ -191,15 +191,21 @@
                 <!-- Color and HSV -->
                 <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0,0,4,0">
                     <Grid Margin="0,0,0,8" Height="40">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0" Margin="0,0,4,0" SnapsToDevicePixels="True">
+                        <Label Grid.Row="0" Grid.Column="0" Content="Before" Width="auto" FontSize="8" HorizontalAlignment="Center"/>
+                        <Label Grid.Row="0" Grid.Column="1" Content="After" Width="auto" FontSize="8" HorizontalAlignment="Center"/>
+                        <Grid Grid.Row="1" Grid.Column="0" Margin="0,0,4,0" SnapsToDevicePixels="True">
                             <Rectangle Fill="{StaticResource TransparentBrush}"/>
                             <Rectangle Fill="{Binding BeforeBrush}"/>
                         </Grid>
-                        <Grid Grid.Column="1" Margin="4,0,0,0" SnapsToDevicePixels="True">
+                        <Grid Grid.Row="1" Grid.Column="1" Margin="4,0,0,0" SnapsToDevicePixels="True">
                             <Rectangle Fill="{StaticResource TransparentBrush}"/>
                             <Rectangle Fill="{Binding AfterBrush}"/>
                         </Grid>
