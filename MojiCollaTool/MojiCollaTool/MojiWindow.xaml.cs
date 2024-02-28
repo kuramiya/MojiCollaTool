@@ -31,7 +31,9 @@ namespace MojiCollaTool
 
             InitializeComponent();
 
-            FontFamilyComboBox.ItemsSource = FontUtil.FontTextBlocks;
+            FontFamilyComboBox.ItemsSource = FontUtil.GetFontTextBlocks();
+
+            ShowTopMostCheckBox.IsChecked = mojiPanel.ShowTopmost;
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -159,7 +161,6 @@ namespace MojiCollaTool
             UpdateMojiView();
         }
 
-
         private void ColorButton_Click(Color currentColor, Action<Color> action)
         {
             if (runEvent == false) return;
@@ -167,6 +168,7 @@ namespace MojiCollaTool
             ColorSelector.ColorSelectorWindow colorSelectorWindow = new ColorSelector.ColorSelectorWindow(currentColor, action);
             colorSelectorWindow.Top = Top;
             colorSelectorWindow.Left = Left;
+            colorSelectorWindow.Topmost = Topmost;
             var dialogResult = colorSelectorWindow.ShowDialog();
 
             if (dialogResult.HasValue == false)
@@ -219,6 +221,14 @@ namespace MojiCollaTool
                 ((Button)sender).Background = new SolidColorBrush(color);
                 mojiPanel.UpdateMojiView();
             });
+        }
+
+        private void ShowTopMostCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            if (ShowTopMostCheckBox.IsChecked.HasValue == false) return;
+
+            mojiPanel.ShowTopmost = ShowTopMostCheckBox.IsChecked.Value;
+            Topmost = mojiPanel.ShowTopmost;
         }
     }
 }

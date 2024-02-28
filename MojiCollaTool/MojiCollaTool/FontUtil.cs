@@ -18,15 +18,28 @@ namespace MojiCollaTool
 
         static FontUtil()
         {
+            FontTextBlocks.AddRange(GetFontTextBlocks());
+        }
+
+        /// <summary>
+        /// フォント一覧のテキストボックスリストを返す
+        /// </summary>
+        /// <returns></returns>
+        public static List<TextBlock> GetFontTextBlocks()
+        {
+            List<TextBlock> fontTextBlocks = new List<TextBlock>();
+
             foreach (var key in GetFontFamilies().Keys)
             {
-                FontTextBlocks.Add(new TextBlock()
+                fontTextBlocks.Add(new TextBlock()
                 {
                     Text = key,
                     FontFamily = new FontFamily(key),
                     VerticalAlignment = System.Windows.VerticalAlignment.Center,
                 });
             }
+
+            return fontTextBlocks;
         }
 
         /// <summary>

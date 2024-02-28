@@ -32,6 +32,11 @@ namespace MojiCollaTool
         public MojiWindow? MojiWindow { get; set; }
 
         /// <summary>
+        /// 常に前面に表示するかどうかのフラグ
+        /// </summary>
+        public bool ShowTopmost { get; set; } = false;
+
+        /// <summary>
         /// 背景の箱の縁取り
         /// </summary>
         private Border backgroundBoxBorder = new Border();
@@ -151,8 +156,7 @@ namespace MojiCollaTool
             {
                 if(MojiWindow != null)
                 {
-                    MojiWindow.Topmost = true;
-                    MojiWindow.Topmost = false;
+                    MojiWindow.Topmost = ShowTopmost;
                     MojiWindow.Activate();
                 }
 

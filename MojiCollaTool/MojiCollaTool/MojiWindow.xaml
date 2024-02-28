@@ -29,9 +29,10 @@
                     <TextBlock Text="文字を削除する"/>
                 </StackPanel>
             </Button>
+            <CheckBox x:Name="ShowTopMostCheckBox" Content="画面を常に前面に表示する" VerticalAlignment="Center" Margin="5" Checked="ShowTopMostCheckBox_Checked" Unchecked="ShowTopMostCheckBox_Checked"/>
         </StackPanel>
         <GroupBox Header="テキスト" Grid.Row="1">
-            <TextBox x:Name="TextTextBox" Text="サンプル" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" TextChanged="TextBox_TextChanged"/>
+            <TextBox x:Name="TextTextBox" Text="サンプル" AcceptsReturn="True" FontSize="20" TextWrapping="Wrap" FontFamily="{Binding ElementName=FontFamilyComboBox, Path=SelectedValue}" VerticalScrollBarVisibility="Visible" Margin="5" TextChanged="TextBox_TextChanged"/>
         </GroupBox>
         <StackPanel Orientation="Vertical" Grid.Row="2">
             <GroupBox Header="座標">
