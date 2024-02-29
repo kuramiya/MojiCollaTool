@@ -45,7 +45,7 @@ namespace MojiCollaTool
         private void LoadImageButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files|*.jpg;*.png;";
+            openFileDialog.Filter = "image files|*.jpg;*.png;";
             var dialogResult = openFileDialog.ShowDialog();
 
             if (dialogResult.HasValue == false || dialogResult.Value == false) return;
@@ -187,7 +187,7 @@ namespace MojiCollaTool
         private void OutputImageButton_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "PNG File|*.png|JPG File|*.jpg";
+            saveFileDialog.Filter = "png file|*.png|jpg file|*.jpg";
             saveFileDialog.FileName = $"MojiColla{DateTime.Now:yyyyMMdd-HHmmss}.png";
             var dialogResult = saveFileDialog.ShowDialog();
 
@@ -262,9 +262,8 @@ namespace MojiCollaTool
         private void SaveProjectButton_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "MCTool File|*.mctool";
-            saveFileDialog.FileName = $"MCToolProject{DateTime.Now:yyyyMMdd-HHmmss}.mctool";
-
+            saveFileDialog.Filter = "mctzip project file|*.mctzip";
+            saveFileDialog.FileName = $"MCToolProject{DateTime.Now:yyyyMMdd-HHmmss}.mctzip";
 
             var dialogResult = saveFileDialog.ShowDialog();
 
@@ -272,13 +271,13 @@ namespace MojiCollaTool
 
             try
             {
-                DataIO.WriteProjectData(saveFileDialog.FileName, mojiPanels.Select(x => x.MojiData));
+                DataIO.WriteWorkingDirToProjectDataFile(saveFileDialog.FileName, mojiPanels.Select(x => x.MojiData));
 
                 ShowInfoDialog($"{saveFileDialog.FileName} プロジェクト保存完了");
             }
             catch (Exception ex)
             {
-                ShowError("mctoolプロジェクト保存エラー", ex);
+                ShowError("プロジェクト保存エラー", ex);
             }
         }
 
@@ -291,7 +290,7 @@ namespace MojiCollaTool
             }
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "mctool File|*.mctool";
+            openFileDialog.Filter = "mctzip project file|*.mctzip";
             var dialogResult = openFileDialog.ShowDialog();
 
             if (dialogResult.HasValue == false || dialogResult.Value == false) return;
@@ -304,10 +303,10 @@ namespace MojiCollaTool
                     RemoveMojiPanel(mojiPanels.First());
                 }
 
-                //  プロジェクトを読み出す
-                var mojiDatas = DataIO.ReadProjectData(openFileDialog.FileName);
+                //  プロジェクトファイルを作業ディレクトリに展開する
+                DataIO.ReadProjectDataToWorkingDir(openFileDialog.FileName);
 
-                //  画像を読み出す
+                //  作業ディレクトリから画像を読み出す
                 var workingDirImagePath = DataIO.GetWorkingDirImagePath();
                 if (string.IsNullOrEmpty(workingDirImagePath))
                 {
@@ -319,6 +318,9 @@ namespace MojiCollaTool
                     //  画像がある場合、表示する
                     LoadImage(workingDirImagePath);
                 }
+
+                //  作業ディレクトリから文字データを読み出す
+                var mojiDatas = DataIO.ReadMojiDatasFromWorkingDir();
 
                 //  文字データを表示する
                 foreach (var mojiData in mojiDatas)

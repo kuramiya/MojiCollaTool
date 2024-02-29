@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -175,12 +176,12 @@ namespace MojiCollaTool
         /// 文字データをファイルに出力する
         /// </summary>
         /// <param name="mojiData"></param>
-        /// <param name="directoryPath"></param>
-        public static void WriteMojiData(MojiData mojiData, string directoryPath)
+        /// <param name="dirPath"></param>
+        public static void WriteMojiData(MojiData mojiData, string dirPath)
         {
             try
             {
-                var filePath = Path.Combine(directoryPath, $"MojiData{mojiData.Id}.xml");
+                var filePath = Path.Combine(dirPath, $"MojiData{mojiData.Id}.xml");
                 using(var stream = File.OpenWrite(filePath))
                 {
                     XmlSerializer xmlSerializer = new XmlSerializer(typeof(MojiData));
@@ -192,6 +193,27 @@ namespace MojiCollaTool
                 var ioex = new InvalidOperationException("WriteMojiData error.", ex);
                 ioex.Data.Add("MojiData", mojiData);
                 throw ioex;
+            }
+        }
+
+        /// <summary>
+        /// 文字データをファイルに出力する
+        /// </summary>
+        /// <param name="mojiDatas"></param>
+        /// <param name="dirPath"></param>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static void WriteMojiDatas(IEnumerable<MojiData> mojiDatas, string dirPath)
+        {
+            try
+            {
+                foreach (var mojiData in mojiDatas)
+                {
+                    WriteMojiData(mojiData, dirPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("WriteMojiDatasToWorkingDir error.", ex);
             }
         }
 
@@ -228,78 +250,19 @@ namespace MojiCollaTool
         }
 
         /// <summary>
-        /// プロジェクトデータを出力する
+        /// 文字データをディレクトリから読み出す
         /// </summary>
-        /// <param name="projectDirPath"></param>
-        /// <param name="mojiDatas"></param>
-        /// <exception cref="InvalidOperationException"></exception>
-        public static void WriteProjectData(string projectDirPath, IEnumerable<MojiData> mojiDatas)
-        {
-            try
-            {
-                //  保存ディレクトリを作成する
-                Directory.CreateDirectory(projectDirPath);
-
-                //  画像をコピーする
-                var workingDirImagePath = GetWorkingDirImagePath();
-                if (File.Exists(workingDirImagePath))
-                {
-                    File.Copy(workingDirImagePath, Path.Combine(projectDirPath, Path.GetFileName(workingDirImagePath)));
-                }
-
-                //  .mctoolファイルを作成、出力する
-                var mcToolFilePath = Path.Combine(projectDirPath, Path.GetFileName(projectDirPath));
-
-                StringBuilder mcToolFileText = new StringBuilder();
-
-                mcToolFileText.AppendLine($"MojiCollaTool ver{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}");
-                mcToolFileText.AppendLine($"SaveDateTime:{DateTime.Now}");
-
-                File.WriteAllText(mcToolFilePath, mcToolFileText.ToString());
-
-                //  文字データを出力する
-                foreach (var mojiData in mojiDatas)
-                {
-                    WriteMojiData(mojiData, projectDirPath);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("WriteProjectData error.", ex);
-            }
-        }
-
-        /// <summary>
-        /// mctoolデータを読み出す
-        /// </summary>
-        /// <param name="mcToolFilePath"></param>
+        /// <param name="dirPath"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public static List<MojiData> ReadProjectData(string mcToolFilePath)
+        public static List<MojiData> ReadMojiDatas(string dirPath)
         {
             List<MojiData> mojiDatas = new List<MojiData>();
 
             try
             {
-                //  読み出し対象のディレクトリパスを取得する
-                var projectDirPath = Path.GetDirectoryName(mcToolFilePath);
-
-                if (string.IsNullOrEmpty(projectDirPath)) throw new InvalidOperationException("projectDirPath error.");
-
-                //  画像を作業フォルダにコピーする
-                var imagePath = GetImagePath(projectDirPath);
-                if(string.IsNullOrEmpty(imagePath))
-                {
-                    //  画像がない場合、作業フォルダの画像を削除する
-                    DeleteWorkingDirImage();
-                }
-                else
-                {
-                    CopyImageToWorkingDirectory(imagePath);
-                }
-
                 //  文字データを読み出す
-                foreach (var filePath in Directory.GetFiles(projectDirPath, "*.xml", SearchOption.TopDirectoryOnly))
+                foreach (var filePath in Directory.GetFiles(dirPath, "*.xml", SearchOption.TopDirectoryOnly))
                 {
                     var mojiData = ReadMojiData(filePath);
 
@@ -315,10 +278,90 @@ namespace MojiCollaTool
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("ReadProjectData error.", ex);
+                throw new InvalidOperationException("ReadMojiDatas error.", ex);
             }
 
             return mojiDatas;
+        }
+
+        /// <summary>
+        /// 文字データを作業ディレクトリから読み出す
+        /// </summary>
+        /// <returns></returns>
+        public static List<MojiData> ReadMojiDatasFromWorkingDir()
+        {
+            return ReadMojiDatas(GetWorkingDirPath());
+        }
+
+        /// <summary>
+        /// 情報テキストファイルを書き込む
+        /// </summary>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static void WriteInfoTextToWorkingDir(string filePath)
+        {
+            try
+            {
+                StringBuilder infoText = new StringBuilder();
+
+                infoText.AppendLine($"SoftwareName:MojiCollaTool");
+                infoText.AppendLine($"SoftwareVersion:{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}");
+                infoText.AppendLine($"TimeStamp:{DateTime.Now}");
+
+                File.WriteAllText(filePath, infoText.ToString());
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("WriteInfoTextToWorkingDir error.", ex);
+            }
+        }
+
+        /// <summary>
+        /// 作業ディレクトリをプロジェクトファイルとして書き込む
+        /// </summary>
+        /// <param name="projectFilePath"></param>
+        /// <param name="mojiDatas"></param>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static void WriteWorkingDirToProjectDataFile(string projectFilePath, IEnumerable<MojiData> mojiDatas)
+        {
+            try
+            {
+                var workingDirPath = GetWorkingDirPath();
+
+                WriteInfoTextToWorkingDir(Path.Combine(workingDirPath, "Info.txt"));
+
+                WriteMojiDatas(mojiDatas, workingDirPath);
+
+                //  zipファイル処理は上書きオプションがないため、同じファイルがある場合は削除してから書き込む
+                if(File.Exists(projectFilePath))
+                {
+                    File.Delete(projectFilePath);
+                }
+
+                ZipFile.CreateFromDirectory(workingDirPath, projectFilePath);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("CompressWorkingDirToProjectDataFile error.", ex);
+            }
+        }
+
+        /// <summary>
+        /// プロジェクトファイルを読み出し作業ファイルに展開する
+        /// </summary>
+        /// <param name="projectFilePath"></param>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static void ReadProjectDataToWorkingDir(string projectFilePath)
+        {
+            try
+            {
+                InitWorkingDirectory();
+
+                ZipFile.ExtractToDirectory(projectFilePath, GetWorkingDirPath(), true);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("ReadProjectData error.", ex);
+            }
         }
     }
 }
