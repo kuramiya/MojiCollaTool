@@ -61,10 +61,15 @@ namespace MojiCollaTool
 
             Title = $"[{mojiData.Id}] {mojiData.ExampleText}";
             IDLabel.Content = $"Moji ID:{mojiData.Id}";
+
             TextTextBox.Text = mojiData.FullText;
+
             LocationXTextBox.SetValue((int)mojiData.X, false);
             LocationYTextBox.SetValue((int)mojiData.Y, false);
+
             DirectionComboBox.SelectedIndex = (int)mojiData.TextDirection;
+            RotateTextBox.SetValue((int)mojiData.RotateAngle);
+
             FontSizeTextBox.SetValue(mojiData.FontSize, false);
             if (FontUtil.GetFontFamilies().ContainsKey(mojiData.FontFamilyName))
             {
@@ -129,6 +134,7 @@ namespace MojiCollaTool
             mojiPanel.MojiData.IsBackgroundBoxExists = (BackgroundBoxCheckBox.IsChecked == true);
             mojiPanel.MojiData.BackgoundBoxPadding = BackgroundBoxPaddingTextBox.Value;
             mojiPanel.MojiData.BackgroundBoxBorderThickness = BackgroundBoxBorderThicknessTextBox.Value;
+            mojiPanel.MojiData.RotateAngle = RotateTextBox.Value;
 
             mojiPanel.UpdateMojiView();
         }

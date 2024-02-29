@@ -43,12 +43,15 @@
                     <local:UpDownTextBox x:Name="LocationYTextBox" ValueMinLimit="-1000" ValueChanged="TextBox_ValueChanged"/>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="縦書き/横書き">
+            <GroupBox Header="配置">
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <ComboBox x:Name="DirectionComboBox" SelectedIndex="0" FontSize="15" SelectionChanged="ComboBox_SelectionChanged" Width="100">
+                    <Label Content="縦書き/横書き:"/>
+                    <ComboBox x:Name="DirectionComboBox" SelectedIndex="0" VerticalContentAlignment="Center" SelectionChanged="ComboBox_SelectionChanged" Width="100">
                         <ComboBoxItem Content="横書き"/>
                         <ComboBoxItem Content="縦書き"/>
                     </ComboBox>
+                    <Label Content="回転:"/>
+                    <local:UpDownTextBox x:Name="RotateTextBox" ValueMinLimit="-180" ValueMaxLimit="180" ValueChanged="TextBox_ValueChanged"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="フォント">

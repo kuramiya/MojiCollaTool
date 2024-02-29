@@ -25,7 +25,9 @@ namespace MojiCollaTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ObservableCollection<MojiPanel> mojiPanels = new ObservableCollection<MojiPanel>();
+        private List<MojiPanel> mojiPanels = new List<MojiPanel>();
+
+        private ObservableCollection<MojiPanel> viewMojiPanels = new ObservableCollection<MojiPanel>();
 
         private int nextMojiId = 1;
 
@@ -37,9 +39,19 @@ namespace MojiCollaTool
 
             Title = $"MojiCollaTool ver{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
 
-            MojiListView.ItemsSource = mojiPanels;
+            MojiListView.ItemsSource = viewMojiPanels;
 
             ResetScale();
+        }
+
+        private void UpdateMojiList()
+        {
+            viewMojiPanels.Clear();
+
+            foreach (var mojiPanel in mojiPanels)
+            {
+                viewMojiPanels.Add(mojiPanel);
+            }
         }
 
         private void LoadImageButton_Click(object sender, RoutedEventArgs e)
@@ -165,6 +177,8 @@ namespace MojiCollaTool
         {
             mojiPanels.Add(mojiPanel);
 
+            UpdateMojiList();
+
             MainCanvas.Children.Add(mojiPanel);
         }
 
@@ -175,6 +189,8 @@ namespace MojiCollaTool
         public void RemoveMojiPanel(MojiPanel mojiPanel)
         {
             mojiPanels.Remove(mojiPanel);
+
+            UpdateMojiList();
 
             MainCanvas.Children.Remove(mojiPanel);
         }
@@ -271,7 +287,7 @@ namespace MojiCollaTool
 
             try
             {
-                DataIO.WriteWorkingDirToProjectDataFile(saveFileDialog.FileName, mojiPanels.Select(x => x.MojiData));
+                DataIO.WriteWorkingDirToProjectDataFile(saveFileDialog.FileName, viewMojiPanels.Select(x => x.MojiData));
 
                 ShowInfoDialog($"{saveFileDialog.FileName} プロジェクト保存完了");
             }
@@ -283,7 +299,7 @@ namespace MojiCollaTool
 
         private void LoadProjectButton_Click(object sender, RoutedEventArgs e)
         {
-            if(mojiPanels.Count > 0)
+            if(viewMojiPanels.Count > 0)
             {
                 var checkDialogResult = ShowYesNoCancelDialog("文字データが存在しています。置き換えても問題ありませんか？");
                 if (checkDialogResult == false) return;
@@ -298,9 +314,9 @@ namespace MojiCollaTool
             try
             {
                 //  今ある文字を削除する
-                while (mojiPanels.Count > 0)
+                while (viewMojiPanels.Count > 0)
                 {
-                    RemoveMojiPanel(mojiPanels.First());
+                    RemoveMojiPanel(viewMojiPanels.First());
                 }
 
                 //  プロジェクトファイルを作業ディレクトリに展開する
@@ -334,6 +350,20 @@ namespace MojiCollaTool
             {
                 ShowError($"{openFileDialog.FileName} プロジェクト読み出しエラー", ex);
             }
+        }
+
+        private void Window_Activated(object sender, EventArgs e)
+        {
+            UpdateMojiList();
+        }
+
+        private void MojiListView_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender == null) return;
+
+            var mojiPanel = ((ListView)sender).SelectedItem;
+
+            ((MojiPanel)mojiPanel)?.ShowMojiWindow();
         }
     }
 }

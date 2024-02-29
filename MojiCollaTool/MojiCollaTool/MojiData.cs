@@ -71,6 +71,10 @@ namespace MojiCollaTool
 
         public Color BackgroundBoxBorderColor { get; set; } = Colors.Black;
 
+        public bool IsRotateActive { get => RotateAngle != 0; }
+
+        public double RotateAngle { get; set; } = 0;
+
         public MojiData()
         {
             //  何もしない
@@ -103,6 +107,7 @@ namespace MojiCollaTool
             BackgoundBoxPadding = source.BackgoundBoxPadding;
             BackgroundBoxBorderThickness = source.BackgroundBoxBorderThickness;
             BackgroundBoxBorderColor = source.BackgroundBoxBorderColor;
+            RotateAngle = source.RotateAngle;
         }
 
         /// <summary>

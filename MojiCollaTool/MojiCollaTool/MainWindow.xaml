@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MojiCollaTool"
         mc:Ignorable="d"
+        Activated="Window_Activated"
         Title="MojiCollaTool ver1.0.0.0" Height="675" Width="1200">
     <Grid>
         <Grid.RowDefinitions>
@@ -54,7 +55,7 @@
         </Button>
         <Grid x:Name="CanvasGrid" Grid.Row="1" Grid.Column="0" Background="Gray" PreviewMouseWheel="CanvasGrid_PreviewMouseWheel">
             <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-                <Canvas x:Name="MainCanvas" Background="Gray" Grid.Column="0">
+                <Canvas x:Name="MainCanvas" Background="Gray" Width="500" Height="500" Grid.Column="0">
                     <Canvas.LayoutTransform>
                         <ScaleTransform x:Name="CanvasScaleTransform" ScaleX="1" ScaleY="1"/>
                     </Canvas.LayoutTransform>
@@ -62,17 +63,19 @@
                 </Canvas>
             </ScrollViewer>
         </Grid>
-        <GroupBox Header="Moji List" Grid.Row="1" Grid.Column="1">
-            <ListView x:Name="MojiListView" Grid.Row="1" Grid.Column="1">
+        <GroupBox Header="文字リスト" Grid.Row="1" Grid.Column="1">
+            <ListView x:Name="MojiListView" Grid.Row="1" Grid.Column="1" HorizontalContentAlignment="Stretch" PreviewMouseLeftButtonUp="MojiListView_PreviewMouseLeftButtonUp">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="ID:"/>
-                                <TextBlock Text="{Binding Id}"/>
+                        <Border BorderBrush="Gray" BorderThickness="1" Padding="5">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                    <TextBlock Text="ID:"/>
+                                    <TextBlock Text="{Binding Id}"/>
+                                </StackPanel>
+                                <TextBlock Text="{Binding ExampleText}" Grid.Row="1"/>
                             </StackPanel>
-                            <TextBlock Text="{Binding ExampleText}"/>
-                        </StackPanel>
+                        </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

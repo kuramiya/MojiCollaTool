@@ -117,8 +117,6 @@ namespace MojiCollaTool
 
         private void MojiPanel_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            MojiWindow?.Show();
-
             //  フォーカスを設定する処理は別の処理で奪われるため、フラグだけ立てて後で処理させる
             panelDoubleClicked = true;
         }
@@ -154,13 +152,22 @@ namespace MojiCollaTool
             //  文字画面へのフォーカスを設定する処理を行う
             if(panelDoubleClicked)
             {
-                if(MojiWindow != null)
-                {
-                    MojiWindow.Topmost = ShowTopmost;
-                    MojiWindow.Activate();
-                }
+                ShowMojiWindow();
 
                 panelDoubleClicked = false;
+            }
+        }
+
+        /// <summary>
+        /// 文字画面を表示する
+        /// </summary>
+        public void ShowMojiWindow()
+        {
+            if(MojiWindow != null)
+            {
+                MojiWindow.Topmost = ShowTopmost;
+                MojiWindow.Show();
+                MojiWindow.Activate();
             }
         }
 
@@ -299,6 +306,18 @@ namespace MojiCollaTool
                 stackPanel.Margin = new Thickness(0);
 
                 backgroundBoxBorder.BorderThickness = new Thickness(0);
+            }
+
+            //  文字の回転を行う
+            if(MojiData.IsRotateActive)
+            {
+                backgroundBoxBorder.RenderTransformOrigin = new Point(0.5, 0.5);
+                backgroundBoxBorder.RenderTransform = new RotateTransform(MojiData.RotateAngle);
+            }
+            else
+            {
+                backgroundBoxBorder.RenderTransformOrigin = new Point(0, 0);
+                backgroundBoxBorder.RenderTransform = null;
             }
         }
     }
