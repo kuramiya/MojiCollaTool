@@ -17,28 +17,46 @@
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+            <Button x:Name="InitButton" Margin="5" Click="InitButton_Click">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Image Source="/Images/new.png" Margin="0"/>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="初期化する" VerticalAlignment="Center"/>
+                        <TextBlock Text="（画像・文字を削除する）" FontSize="9" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </Button>
             <Button x:Name="LoadImageButton" Margin="5" Click="LoadImageButton_Click">
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <Image Source="/Images/image.png" Margin="0"/>
-                    <TextBlock Text="画像をロードする" VerticalAlignment="Center"/>
+                    <TextBlock Text="画像を読み出す" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
             <Button x:Name="LoadProjectButton" Margin="5" Click="LoadProjectButton_Click">
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <Image Source="/Images/folder.png" Margin="5"/>
-                    <TextBlock Text="プロジェクトをロードする" VerticalAlignment="Center"/>
+                    <TextBlock VerticalAlignment="Center">
+                        プロジェクトを<LineBreak/>
+                        読み出す
+                    </TextBlock>
                 </StackPanel>
             </Button>
             <Button x:Name="SaveProjectButton" Margin="5" Click="SaveProjectButton_Click">
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <Image Source="/Images/save.png" Margin="5"/>
-                    <TextBlock Text="プロジェクトを保存する" VerticalAlignment="Center"/>
+                    <TextBlock VerticalAlignment="Center">
+                        プロジェクトを<LineBreak/>
+                        保存する
+                    </TextBlock>
                 </StackPanel>
             </Button>
             <Button x:Name="OutputImageButton" Margin="5" Click="OutputImageButton_Click">
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <Image Source="/Images/mojiimage.png" Margin="5"/>
-                    <TextBlock Text="文字コラ画像を出力する" VerticalAlignment="Center"/>
+                    <TextBlock VerticalAlignment="Center">
+                        文字コラ画像を<LineBreak/>
+                        出力する
+                    </TextBlock>
                 </StackPanel>
             </Button>
             <StackPanel Orientation="Horizontal" Margin="5">

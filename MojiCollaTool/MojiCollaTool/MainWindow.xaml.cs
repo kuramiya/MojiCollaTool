@@ -44,6 +44,9 @@ namespace MojiCollaTool
             ResetScale();
         }
 
+        /// <summary>
+        /// 文字リストを更新する
+        /// </summary>
         private void UpdateMojiList()
         {
             viewMojiPanels.Clear();
@@ -51,6 +54,38 @@ namespace MojiCollaTool
             foreach (var mojiPanel in mojiPanels)
             {
                 viewMojiPanels.Add(mojiPanel);
+            }
+        }
+
+        private void Window_Activated(object sender, EventArgs e)
+        {
+            //  文字リスト更新処理の都合の良いタイミングが思いつかなかったので、画面がアクティブになるたびに更新するようにしている
+            UpdateMojiList();
+        }
+
+        private void InitButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (mojiPanels.Count > 0)
+            {
+                var checkDialogResult = ShowYesNoCancelDialog("文字データが存在しています。削除しても問題ありませんか？");
+                if (checkDialogResult == false) return;
+
+                RemoveAllMojiPanel();
+            }
+
+            try
+            {
+                //  作業ディレクトリを初期化する
+                DataIO.InitWorkingDirectory();
+
+                //  画像表示を消す
+                MainImage.Source = null;
+
+                ShowInfoDialog("新規作成完了");
+            }
+            catch (Exception ex)
+            {
+                ShowError("新規作成エラー", ex);
             }
         }
 
@@ -65,7 +100,10 @@ namespace MojiCollaTool
             try
             {
                 LoadImage(openFileDialog.FileName);
+
                 DataIO.CopyImageToWorkingDirectory(openFileDialog.FileName);
+
+                ShowInfoDialog($"{openFileDialog.FileName} 画像読み出し完了");
             }
             catch (Exception ex)
             {
@@ -195,6 +233,17 @@ namespace MojiCollaTool
             MainCanvas.Children.Remove(mojiPanel);
         }
 
+        /// <summary>
+        /// すべての文字パネルを削除する
+        /// </summary>
+        public void RemoveAllMojiPanel()
+        {
+            while (mojiPanels.Count > 0)
+            {
+                RemoveMojiPanel(mojiPanels.First());
+            }
+        }
+
         private void MainImage_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Point p = e.GetPosition(this);
@@ -287,7 +336,7 @@ namespace MojiCollaTool
 
             try
             {
-                DataIO.WriteWorkingDirToProjectDataFile(saveFileDialog.FileName, viewMojiPanels.Select(x => x.MojiData));
+                DataIO.WriteWorkingDirToProjectDataFile(saveFileDialog.FileName, mojiPanels.Select(x => x.MojiData));
 
                 ShowInfoDialog($"{saveFileDialog.FileName} プロジェクト保存完了");
             }
@@ -299,7 +348,7 @@ namespace MojiCollaTool
 
         private void LoadProjectButton_Click(object sender, RoutedEventArgs e)
         {
-            if(viewMojiPanels.Count > 0)
+            if(mojiPanels.Count > 0)
             {
                 var checkDialogResult = ShowYesNoCancelDialog("文字データが存在しています。置き換えても問題ありませんか？");
                 if (checkDialogResult == false) return;
@@ -314,10 +363,7 @@ namespace MojiCollaTool
             try
             {
                 //  今ある文字を削除する
-                while (viewMojiPanels.Count > 0)
-                {
-                    RemoveMojiPanel(viewMojiPanels.First());
-                }
+                RemoveAllMojiPanel();
 
                 //  プロジェクトファイルを作業ディレクトリに展開する
                 DataIO.ReadProjectDataToWorkingDir(openFileDialog.FileName);
@@ -350,11 +396,6 @@ namespace MojiCollaTool
             {
                 ShowError($"{openFileDialog.FileName} プロジェクト読み出しエラー", ex);
             }
-        }
-
-        private void Window_Activated(object sender, EventArgs e)
-        {
-            UpdateMojiList();
         }
 
         private void MojiListView_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
