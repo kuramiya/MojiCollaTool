@@ -81,11 +81,11 @@ namespace MojiCollaTool
                 //  画像表示を消す
                 MainImage.Source = null;
 
-                ShowInfoDialog("新規作成完了");
+                ShowInfoDialog("初期化完了");
             }
             catch (Exception ex)
             {
-                ShowError("新規作成エラー", ex);
+                ShowError("初期化エラー", ex);
             }
         }
 

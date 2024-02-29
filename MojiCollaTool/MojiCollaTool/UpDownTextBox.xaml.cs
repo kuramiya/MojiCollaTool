@@ -125,20 +125,26 @@ namespace MojiCollaTool
 
             if(e.Key == Key.Up)
             {
-                Value += Step;
-
-                LimitValueMaximum();
-
-                ValueTextBox.Text = Value.ToString();
+                UpButton_Click(this, new RoutedEventArgs());
             }
             else if(e.Key == Key.Down)
             {
-                Value -= Step;
-
-                LimitValueMinimum();
-
-                ValueTextBox.Text = Value.ToString();
+                DownButton_Click(this, new RoutedEventArgs());
             }
+        }
+
+        private void Common_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                UpButton_Click(this, new RoutedEventArgs());
+            }
+
+            if (e.Delta < 0)
+            {
+                DownButton_Click(this, new RoutedEventArgs());
+            }
+
         }
     }
 
