@@ -11,6 +11,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -71,12 +72,13 @@
                 <TextBlock Text="文字を追加する" VerticalAlignment="Center"/>
             </StackPanel>
         </Button>
-        <Grid x:Name="CanvasGrid" Grid.Row="1" Grid.Column="0" Background="Gray" PreviewMouseWheel="CanvasGrid_PreviewMouseWheel">
+        <Grid x:Name="CanvasGrid" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" Background="Gray" PreviewMouseWheel="CanvasGrid_PreviewMouseWheel">
             <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
                 <Canvas x:Name="MainCanvas" Background="Gray" Width="500" Height="500" Grid.Column="0">
                     <Canvas.LayoutTransform>
                         <ScaleTransform x:Name="CanvasScaleTransform" ScaleX="1" ScaleY="1"/>
                     </Canvas.LayoutTransform>
+                    <Rectangle x:Name="CanvasBackgroundRect"/>
                     <Image x:Name="MainImage" PreviewMouseLeftButtonDown="MainImage_PreviewMouseLeftButtonDown"/>
                 </Canvas>
             </ScrollViewer>
@@ -98,5 +100,14 @@
                 </ListView.ItemTemplate>
             </ListView>
         </GroupBox>
+        <Button x:Name="CanvasEditButton" Grid.Row="2" Grid.Column="1" Margin="5" Click="CanvasEditButton_Click">
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <Image Source="/Images/canvas.png" Margin="5"/>
+                <TextBlock VerticalAlignment="Center">
+                    キャンバスを<LineBreak/>
+                    広げる
+                </TextBlock>
+            </StackPanel>
+        </Button>
     </Grid>
 </Window>

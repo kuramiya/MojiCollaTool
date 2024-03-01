@@ -143,12 +143,16 @@
 、。などは、縦書き時は右上にずらす。幅と高さからずらし幅を算出する。
 
 ### 文字の装飾処理
-CharDecoration.mdを参照すること。
+CharDecoration.mdを参照。
 [CharDecoration.md](/CharDecoration.md)
 
 ### カラーピッカーの実装
-ColorPicker.mdを参照すること。
+ColorPicker.mdを参照。
 [ColorPicker.md](/ColorPicker.md)
+
+### 画像エディタの実装
+ImageEditor.mdを参照。
+[ImageEditor.md](/ImageEditor.md)
 
 ### 画面の拡大、縮小機能
 

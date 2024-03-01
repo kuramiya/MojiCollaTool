@@ -25,11 +25,25 @@ namespace MojiCollaTool
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// 文字リスト
+        /// </summary>
         private List<MojiPanel> mojiPanels = new List<MojiPanel>();
 
+        /// <summary>
+        /// 文字リストに表示するためのリスト
+        /// </summary>
         private ObservableCollection<MojiPanel> viewMojiPanels = new ObservableCollection<MojiPanel>();
 
+        /// <summary>
+        /// 次に使用する文字ID
+        /// </summary>
         private int nextMojiId = 1;
+
+        /// <summary>
+        /// キャンバスに関する設定データ
+        /// </summary>
+        public CanvasData CanvasData { get; set; } = new CanvasData();
 
         private bool runEvent = false;
 
@@ -80,6 +94,9 @@ namespace MojiCollaTool
 
                 //  画像表示を消す
                 MainImage.Source = null;
+
+                //  キャンバス情報を初期化する
+                CanvasData.Init();
 
                 ShowInfoDialog("初期化完了");
             }
@@ -405,6 +422,12 @@ namespace MojiCollaTool
             var mojiPanel = ((ListView)sender).SelectedItem;
 
             ((MojiPanel)mojiPanel)?.ShowMojiWindow();
+        }
+
+        private void CanvasEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            CanvasEditWindow imageEditWindow = new CanvasEditWindow(this);
+            imageEditWindow.Show();
         }
     }
 }
