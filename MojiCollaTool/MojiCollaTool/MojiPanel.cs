@@ -326,14 +326,17 @@ namespace MojiCollaTool
             }
             
             //  レイアウトを計算し直すために呼んでいる
-            UpdateLayout();
+           UpdateLayout();
 
             if(MojiData.TextDirection == TextDirection.Tategaki)
             {
                 //  縦書きで前回より位置がずれた場合、X座標を元の位置に戻す
-                Margin = new Thickness(Margin.Left - (backgroundBoxBorder.DesiredSize.Width - previousWidth), Margin.Top, Margin.Right, Margin.Bottom);
-                MojiData.X = Margin.Left;
-                MojiWindow?.UpdateXY(MojiData.X, MojiData.Y);
+                if(previousWidth > 0)
+                {
+                    Margin = new Thickness(Math.Round(Margin.Left - (backgroundBoxBorder.DesiredSize.Width - previousWidth)), Margin.Top, Margin.Right, Margin.Bottom);
+                    MojiData.X = Margin.Left;
+                    MojiWindow?.UpdateXY(MojiData.X, MojiData.Y);
+                }
             }
 
             //  この時点でのパネルの幅を保存しておく

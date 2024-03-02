@@ -36,11 +36,6 @@ namespace MojiCollaTool
         private ObservableCollection<MojiPanel> viewMojiPanels = new ObservableCollection<MojiPanel>();
 
         /// <summary>
-        /// 次に使用する文字ID
-        /// </summary>
-        private int nextMojiId = 1;
-
-        /// <summary>
         /// キャンバスに関する設定データ
         /// </summary>
         public CanvasData CanvasData { get; set; } = new CanvasData();
@@ -202,10 +197,25 @@ namespace MojiCollaTool
             }
         }
 
+        /// <summary>
+        /// 次に使用する文字のIDを返す
+        /// </summary>
+        /// <returns></returns>
+        private int GetNextMojiId()
+        {
+            if (mojiPanels.Count <= 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return mojiPanels.Max(x => x.Id + 1);
+            }
+        }
+
         private void AddTextButton_Click(object sender, RoutedEventArgs e)
         {
-            var mojiPanel = new MojiPanel(nextMojiId, this);
-            ++nextMojiId;
+            var mojiPanel = new MojiPanel(GetNextMojiId(), this);
 
             AddMojiPanel(mojiPanel);
         }
@@ -216,8 +226,7 @@ namespace MojiCollaTool
         /// <param name="mojiPanel"></param>
         public void ReproductionMoji(MojiPanel mojiPanel)
         {
-            var reproductedMojiData = mojiPanel.MojiData.Reproduct(nextMojiId);
-            ++nextMojiId;
+            var reproductedMojiData = mojiPanel.MojiData.Reproduct(GetNextMojiId());
 
             var reproductedMojiPanel = new MojiPanel(reproductedMojiData, this);
 
