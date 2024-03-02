@@ -177,12 +177,7 @@ namespace MojiCollaTool
             colorSelectorWindow.Topmost = Topmost;
             var dialogResult = colorSelectorWindow.ShowDialog();
 
-            if (dialogResult.HasValue == false)
-            {
-                //  色を元に戻す
-                action(currentColor);
-            }
-            else if(dialogResult.Value == false)
+            if (dialogResult.HasValue == false || dialogResult.Value == false)
             {
                 //  色を元に戻す
                 action(currentColor);

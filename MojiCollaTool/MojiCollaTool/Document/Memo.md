@@ -150,9 +150,9 @@ CharDecoration.mdを参照。
 ColorPicker.mdを参照。
 [ColorPicker.md](/ColorPicker.md)
 
-### 画像エディタの実装
-ImageEditor.mdを参照。
-[ImageEditor.md](/ImageEditor.md)
+### キャンバスエディタの実装
+CanvasEditor.mdを参照。
+[CanvasEditor.md](/CanvasEditor.md)
 
 ### 画面の拡大、縮小機能
 
@@ -199,6 +199,7 @@ mctzipという拡張子にする。
 ### バグ
 - 縦書きで行を追加した場合、右にずれる
 - システムにあるフォントが正しく表示されない
+- プロジェクト読み出し時に古いデータが残っている
 
 ## 追加したい機能
 - 画像サイズ変更、背景を単色で塗り拡げる

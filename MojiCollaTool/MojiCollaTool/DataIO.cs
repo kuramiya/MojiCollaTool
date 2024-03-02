@@ -173,6 +173,42 @@ namespace MojiCollaTool
         }
 
         /// <summary>
+        /// XML形式でファイルを書き出す
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="filePath"></param>
+        public static void WriteXMLData<T>(T data, string filePath)
+        {
+            using (var stream = File.OpenWrite(filePath))
+            {
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+                xmlSerializer.Serialize(stream, data);
+            }
+        }
+
+        /// <summary>
+        /// XML形式のファイルを読み出す
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static T ReadXMLData<T>(string filePath)
+        {
+            using (var stream = File.OpenRead(filePath))
+            {
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+                var obj = xmlSerializer.Deserialize(File.OpenRead(filePath));
+
+                if (obj == null) throw new InvalidOperationException("XML convert null error.");
+
+                return (T)obj;
+            }
+
+        }
+
+        /// <summary>
         /// 文字データをファイルに出力する
         /// </summary>
         /// <param name="mojiData"></param>
@@ -182,11 +218,7 @@ namespace MojiCollaTool
             try
             {
                 var filePath = Path.Combine(dirPath, $"MojiData{mojiData.Id}.xml");
-                using(var stream = File.OpenWrite(filePath))
-                {
-                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(MojiData));
-                    xmlSerializer.Serialize(stream, mojiData);
-                }
+                WriteXMLData(mojiData, filePath);
             }
             catch (Exception ex)
             {
@@ -229,17 +261,9 @@ namespace MojiCollaTool
 
             try
             {
-                using(var stream = File.OpenRead(filePath))
-                {
-                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(MojiData));
-                    var mojiDataObj = xmlSerializer.Deserialize(File.OpenRead(filePath));
+                mojiData = ReadXMLData<MojiData>(filePath);
 
-                    if (mojiDataObj == null) throw new InvalidOperationException("ReadMojiData xml convert null error.");
-
-                    mojiData = (MojiData)mojiDataObj;
-
-                    mojiData.RestoreFullTextNewLine();
-                }
+                mojiData.RestoreFullTextNewLine();
             }
             catch (Exception ex)
             {
@@ -361,6 +385,44 @@ namespace MojiCollaTool
             catch (Exception ex)
             {
                 throw new InvalidOperationException("ReadProjectData error.", ex);
+            }
+        }
+
+        /// <summary>
+        /// キャンバスデータを書き込む
+        /// </summary>
+        /// <param name="canvasData"></param>
+        /// <param name="dirPath"></param>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static void WriteCanvasData(CanvasData canvasData, string dirPath)
+        {
+            try
+            {
+                var filePath = Path.Combine(dirPath, $"CanvasData.xml");
+                WriteXMLData(canvasData, filePath);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("WriteCanvasData error.", ex);
+            }
+        }
+
+        /// <summary>
+        /// キャンバスデータを読み出す
+        /// </summary>
+        /// <param name="dirPath"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static CanvasData ReadCanvasData(string dirPath)
+        {
+            try
+            {
+                var filePath = Path.Combine(dirPath, $"CanvasData.xml");
+                return ReadXMLData<CanvasData>(filePath);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("ReadCanvasData error.", ex);
             }
         }
     }

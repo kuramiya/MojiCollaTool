@@ -31,38 +31,38 @@
                 <TextBlock Text="画像" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30"/>
             </Border>
             <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1">
-                <Button Content="↑" VerticalAlignment="Top" FontSize="20"/>
-                <local:UpDownTextBox ValueMinLimit="0" Height="28"/>
+                <Button x:Name="TopButton" Content="▲" VerticalAlignment="Top" FontSize="20" Click="DirectionButton_Click"/>
+                <local:UpDownTextBox x:Name="TopTextBox" ValueMinLimit="0" Height="28" ValueChanged="DirectionTextBox_ValueChanged"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1">
-                <local:UpDownTextBox ValueMinLimit="0" Height="28"/>
-                <Button Content="↓" VerticalAlignment="Top" FontSize="20"/>
+                <local:UpDownTextBox x:Name="BottomTextBox" ValueMinLimit="0" Height="28" ValueChanged="DirectionTextBox_ValueChanged"/>
+                <Button x:Name="BottomButton" Content="▼" VerticalAlignment="Top" FontSize="20" Click="DirectionButton_Click"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0">
-                <Button Content="←" VerticalAlignment="Top" FontSize="20"/>
-                <local:UpDownTextBox ValueMinLimit="0" Height="28"/>
+                <Button x:Name="LeftButton" Content="◀" VerticalAlignment="Top" FontSize="20" Click="DirectionButton_Click"/>
+                <local:UpDownTextBox x:Name="LeftTextBox" ValueMinLimit="0" Height="28" ValueChanged="DirectionTextBox_ValueChanged"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2">
-                <Button Content="→" VerticalAlignment="Top" FontSize="20"/>
-                <local:UpDownTextBox ValueMinLimit="0" Height="28"/>
+                <Button x:Name="RightButton" Content="▶" VerticalAlignment="Top" FontSize="20" Click="DirectionButton_Click"/>
+                <local:UpDownTextBox x:Name="RightTextBox" ValueMinLimit="0" Height="28" ValueChanged="DirectionTextBox_ValueChanged"/>
             </StackPanel>
         </Grid>
         <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" Margin="5">
             <GroupBox Header="画像情報">
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <Label Content="横幅:"/>
-                    <TextBox Width="100" IsReadOnly="True" Margin="0, 0, 20. 0"/>
+                    <TextBox x:Name="ImageWidthTextBox" Width="100" IsReadOnly="True" Margin="0, 0, 20. 0"/>
                     <Label Content="縦幅:"/>
-                    <TextBox Width="100" IsReadOnly="True"/>
+                    <TextBox x:Name="ImageHeightTextBox" Width="100" IsReadOnly="True"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="キャンバス設定">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <Label Content="横幅:"/>
-                        <TextBox Width="100" Margin="0, 0, 20. 0"/>
+                        <TextBox x:Name="CanvasWidthTextBox" Width="100" TextChanged="CanvasSizeTextBox_TextChanged" Margin="0, 0, 20. 0"/>
                         <Label Content="縦幅:"/>
-                        <TextBox Width="100"/>
+                        <TextBox x:Name="CanvasHeightTextBox" Width="100" TextChanged="CanvasSizeTextBox_TextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <Label Content="背景色:"/>
@@ -72,7 +72,6 @@
             </GroupBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5">
-            <Button x:Name="UpdateButton" Content="適用" Width="100" FontSize="20" Margin="0, 0, 20, 0" Click="UpdateButton_Click"/>
             <Button x:Name="OKButton" Content="OK" Width="100" FontSize="20" Click="OKButton_Click"/>
         </StackPanel>
     </Grid>

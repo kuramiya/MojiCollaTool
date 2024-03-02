@@ -426,8 +426,31 @@ namespace MojiCollaTool
 
         private void CanvasEditButton_Click(object sender, RoutedEventArgs e)
         {
-            CanvasEditWindow imageEditWindow = new CanvasEditWindow(this);
-            imageEditWindow.Show();
+            CanvasEditWindow imageEditWindow = new CanvasEditWindow((int)MainImage.ActualWidth, (int)MainImage.ActualHeight, CanvasData.Clone());
+            var dialogResult = imageEditWindow.ShowDialog();
+
+            if (dialogResult.HasValue == false || dialogResult.Value == false) return;
+
+            UpdateCanvas(imageEditWindow.CanvasData);
+        }
+
+        /// <summary>
+        /// キャンバスを更新する
+        /// </summary>
+        /// <param name="canvasData"></param>
+        public void UpdateCanvas(CanvasData canvasData)
+        {
+            CanvasData = canvasData;
+
+            MainCanvas.Width = canvasData.Width;
+            MainCanvas.Height = canvasData.Height;
+
+            CanvasBackgroundRect.Fill = new SolidColorBrush(canvasData.Background);
+
+            CanvasBackgroundRect.Width = canvasData.Width;
+            CanvasBackgroundRect.Height = canvasData.Height;
+
+            MainImage.Margin = new Thickness(canvasData.ImageLeftMargin, canvasData.ImageTopMargin, canvasData.ImageRightMargin, canvasData.ImageBottomMargin);
         }
     }
 }
