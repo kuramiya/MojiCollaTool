@@ -159,8 +159,8 @@ namespace MojiCollaTool
         {
             try
             {
-                //  作業フォルダ内の画像を先に削除する
-                DeleteWorkingDirImage();
+                //  作業ディレクトリを初期化しておく
+                InitWorkingDirectory();
 
                 var destImageFilePath = Path.Combine(GetWorkingDirPath(), Path.GetFileName(sourceImageFilePath));
 

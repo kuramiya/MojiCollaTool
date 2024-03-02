@@ -452,5 +452,14 @@ namespace MojiCollaTool
 
             MainImage.Margin = new Thickness(canvasData.ImageLeftMargin, canvasData.ImageTopMargin, canvasData.ImageRightMargin, canvasData.ImageBottomMargin);
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if(mojiPanels.Count > 0)
+            {
+                var dialogResult = ShowYesNoCancelDialog("文字データが存在しています。終了しても問題ありませんか？");
+                if(dialogResult == false) e.Cancel = true;
+            }
+        }
     }
 }

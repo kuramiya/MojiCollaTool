@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:MojiCollaTool"
         mc:Ignorable="d"
         Activated="Window_Activated"
+        Closing="Window_Closing"
         Title="MojiCollaTool ver1.0.0.0" Height="675" Width="1200">
     <Grid>
         <Grid.RowDefinitions>

@@ -51,6 +51,12 @@ namespace MojiCollaTool
         /// </summary>
         private StackPanel stackPanel = new StackPanel();
 
+        /// <summary>
+        /// 前回のパネルの幅
+        /// 縦書きで開業が起きた際に、元の場所に戻すために使用する
+        /// </summary>
+        private double previousWidth;
+
         private MainWindow mainWindow;
 
         private Nullable<Point> dragStart = null;
@@ -191,7 +197,7 @@ namespace MojiCollaTool
         }
 
         /// <summary>
-        /// 文字パネルの位置を更新sる
+        /// 文字パネルの位置を更新する
         /// </summary>
         public void UpdateXYView()
         {
@@ -289,7 +295,6 @@ namespace MojiCollaTool
             {
                 stackPanel.Background = Brushes.Transparent;
                 backgroundGrid.Background = new SolidColorBrush(MojiData.BackgroundBoxColor);
-                //  todo    背景の幅の付け方を考える必要あり
 
                 stackPanel.Margin = new Thickness(MojiData.BackgoundBoxPadding);
 
@@ -319,6 +324,21 @@ namespace MojiCollaTool
                 backgroundBoxBorder.RenderTransformOrigin = new Point(0, 0);
                 backgroundBoxBorder.RenderTransform = null;
             }
+            
+            //  レイアウトを計算し直すために呼んでいる
+            UpdateLayout();
+
+            if(MojiData.TextDirection == TextDirection.Tategaki)
+            {
+                //  縦書きで前回より位置がずれた場合、X座標を元の位置に戻す
+                Margin = new Thickness(Margin.Left - (backgroundBoxBorder.DesiredSize.Width - previousWidth), Margin.Top, Margin.Right, Margin.Bottom);
+                MojiData.X = Margin.Left;
+                MojiWindow?.UpdateXY(MojiData.X, MojiData.Y);
+            }
+
+            //  この時点でのパネルの幅を保存しておく
+            //  縦書きで元の位置に戻すため
+            previousWidth = backgroundBoxBorder.DesiredSize.Width;
         }
     }
 }
