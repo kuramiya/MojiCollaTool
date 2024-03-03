@@ -101,6 +101,12 @@ namespace MojiCollaTool
             ImageLeftMargin = Width - imageWidth - margin;
         }
 
+        public void UpdateCanvasWidthHeight(int imageWidth, int imageHeight)
+        {
+            Width = ImageLeftMargin + imageWidth + ImageRightMargin;
+            Height = ImageTopMargin + imageHeight + ImageBottomMargin;
+        }
+
         /// <summary>
         /// 初期化する
         /// </summary>

@@ -75,7 +75,7 @@
         </Button>
         <Grid x:Name="CanvasGrid" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" Background="Gray" PreviewMouseWheel="CanvasGrid_PreviewMouseWheel">
             <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-                <Canvas x:Name="MainCanvas" Background="Gray" Width="500" Height="500" Grid.Column="0">
+                <Canvas x:Name="MainCanvas" Background="Gray" Grid.Column="0">
                     <Canvas.LayoutTransform>
                         <ScaleTransform x:Name="CanvasScaleTransform" ScaleX="1" ScaleY="1"/>
                     </Canvas.LayoutTransform>

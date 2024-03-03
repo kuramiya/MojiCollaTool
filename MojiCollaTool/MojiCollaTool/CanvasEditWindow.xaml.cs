@@ -34,6 +34,8 @@ namespace MojiCollaTool
         /// </summary>
         public CanvasData CanvasData { get; set; }
 
+        private MainWindow _mainWindow;
+
         private bool _runEvent = true;
 
         public CanvasEditWindow()
@@ -43,16 +45,16 @@ namespace MojiCollaTool
             InitializeComponent();
         }
 
-        public CanvasEditWindow(int imageWidth, int imageHeight, CanvasData canvasData)
+        public CanvasEditWindow(int imageWidth, int imageHeight, CanvasData canvasData, MainWindow mainWindow)
         {
             _imageWidth = imageWidth;
             _imageHeight = imageHeight;
             CanvasData = canvasData;
+            _mainWindow = mainWindow;
 
             InitializeComponent();
 
-            ImageWidthTextBox.Text = imageWidth.ToString();
-            ImageHeightTextBox.Text = imageHeight.ToString();
+            ImageWidthHeighTextBlock.Text = $"←横→:{imageWidth}px\r\n↑縦↓:{imageHeight}px";
 
             LoadCanvasDataToView(canvasData);
         }
@@ -105,16 +107,23 @@ namespace MojiCollaTool
         {
             ColorSelector.ColorSelectorWindow colorSelectorWindow = new ColorSelector.ColorSelectorWindow(GetCanvasColorButtonColor(), (color) =>
             {
-                //  何もしない
+                CanvasData.Background = color;
+                _mainWindow.UpdateCanvas(CanvasData);
             });
             colorSelectorWindow.Top = Top;
             colorSelectorWindow.Left = Left;
             colorSelectorWindow.Topmost = Topmost;
             var dialogResult = colorSelectorWindow.ShowDialog();
 
-            if (dialogResult.HasValue == false || dialogResult.Value == false) return;
-
-            CanvasColorButton.Background = new SolidColorBrush(colorSelectorWindow.NextBrush.Color);
+            if (dialogResult.HasValue && dialogResult.Value)
+            {
+                CanvasColorButton.Background = new SolidColorBrush(colorSelectorWindow.NextBrush.Color);
+            }
+            else
+            {
+                CanvasData.Background = ((SolidColorBrush)CanvasColorButton.Background).Color;
+                _mainWindow.UpdateCanvas(CanvasData);
+            }
         }
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
@@ -130,67 +139,27 @@ namespace MojiCollaTool
 
             if(sender == TopTextBox)
             {
-                CanvasData.UpdateImageTopMargin(TopTextBox.Value, _imageHeight);
+                CanvasData.ImageTopMargin = TopTextBox.Value;
             }
             else if (sender == BottomTextBox)
             {
-                CanvasData.UpdateImageBottomMargin(BottomTextBox.Value, _imageHeight);
+                CanvasData.ImageBottomMargin = BottomTextBox.Value;
             }
             else if (sender == LeftTextBox)
             {
-                CanvasData.UpdateImageLeftMargin(LeftTextBox.Value, _imageWidth);
+                CanvasData.ImageLeftMargin = LeftTextBox.Value;
             }
             else if(sender == RightTextBox)
             {
-                CanvasData.UpdateImageRightMargin(RightTextBox.Value, _imageWidth);
+                CanvasData.ImageRightMargin = RightTextBox.Value;
             }
+
+            CanvasData.UpdateCanvasWidthHeight(_imageWidth, _imageHeight);
 
             //  画面に設定を反映させる
             LoadCanvasDataToView(CanvasData);
-        }
 
-        private void DirectionButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_runEvent == false) return;
-
-            if (sender == TopButton)
-            {
-                CanvasData.UpdateImageTopMargin(0, _imageHeight);
-            }
-            else if (sender == BottomButton)
-            {
-                CanvasData.UpdateImageBottomMargin(0, _imageHeight);
-            }
-            else if (sender == LeftButton) 
-            {
-                CanvasData.UpdateImageLeftMargin(0, _imageWidth);
-            }
-            else if(sender == RightButton) 
-            {
-                CanvasData.UpdateImageRightMargin(0, _imageWidth);
-            }
-
-            //  画面に設定を反映させる
-            LoadCanvasDataToView(CanvasData);
-        }
-
-        private void CanvasSizeTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (_runEvent == false) return;
-
-            int width, height;
-
-            if (int.TryParse(CanvasWidthTextBox.Text, out width) == false) return;
-            if (int.TryParse(CanvasHeightTextBox.Text, out height) == false) return;
-
-            //  画像より小さいサイズは処理をしない
-            if (width < _imageWidth || height < _imageHeight) return;
-
-            //  設定値を更新する
-            CanvasData.Update(_imageWidth, _imageHeight, width, height);
-
-            //  画面に設定を反映させる
-            LoadCanvasDataToView(CanvasData);
+            _mainWindow.UpdateCanvas(CanvasData);
         }
     }
 }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MojiCollaTool"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title="キャンバス拡大画面" Height="320" Width="700">
+        Title="キャンバス拡大画面" Height="350" Width="700">
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -23,46 +23,48 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <Border BorderBrush="Black" BorderThickness="1" Background="LightBlue" Width="120" Height="120" Grid.Row="1" Grid.Column="1">
-                <TextBlock Text="画像" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30"/>
+            <Border BorderBrush="Black" BorderThickness="1" Background="LightBlue" Width="200" Height="200" Grid.Row="1" Grid.Column="1">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                    <TextBlock Text="画像" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="50"/>
+                    <TextBlock x:Name="ImageWidthHeighTextBlock" HorizontalAlignment="Center" FontSize="20">
+                        ←横→:1000px<LineBreak/>
+                        ↑縦↓:1000px
+                    </TextBlock>
+                </StackPanel>
             </Border>
-            <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1">
-                <Button x:Name="TopButton" Content="▲" VerticalAlignment="Top" FontSize="20" Click="DirectionButton_Click"/>
+            <StackPanel Orientation="Vertical" Width="120" Grid.Row="0" Grid.Column="1">
+                <!--<Button x:Name="TopButton" Content="▲" VerticalAlignment="Top" FontSize="20" Click="DirectionButton_Click"/>-->
                 <local:UpDownTextBox x:Name="TopTextBox" ValueMinLimit="0" Height="28" ValueChanged="DirectionTextBox_ValueChanged"/>
             </StackPanel>
-            <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1">
+            <StackPanel Orientation="Vertical" Width="120" Grid.Row="2" Grid.Column="1">
                 <local:UpDownTextBox x:Name="BottomTextBox" ValueMinLimit="0" Height="28" ValueChanged="DirectionTextBox_ValueChanged"/>
-                <Button x:Name="BottomButton" Content="▼" VerticalAlignment="Top" FontSize="20" Click="DirectionButton_Click"/>
+                <!--<Button x:Name="BottomButton" Content="▼" VerticalAlignment="Top" FontSize="20" Click="DirectionButton_Click"/>-->
             </StackPanel>
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0">
-                <Button x:Name="LeftButton" Content="◀" VerticalAlignment="Top" FontSize="20" Click="DirectionButton_Click"/>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Width="120" Grid.Row="1" Grid.Column="0">
+                <!--<Button x:Name="LeftButton" Content="◀" VerticalAlignment="Top" FontSize="20" Click="DirectionButton_Click"/>-->
                 <local:UpDownTextBox x:Name="LeftTextBox" ValueMinLimit="0" Height="28" ValueChanged="DirectionTextBox_ValueChanged"/>
             </StackPanel>
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2">
-                <Button x:Name="RightButton" Content="▶" VerticalAlignment="Top" FontSize="20" Click="DirectionButton_Click"/>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Width="120" Grid.Row="1" Grid.Column="2">
+                <!--<Button x:Name="RightButton" Content="▶" VerticalAlignment="Top" FontSize="20" Click="DirectionButton_Click"/>-->
                 <local:UpDownTextBox x:Name="RightTextBox" ValueMinLimit="0" Height="28" ValueChanged="DirectionTextBox_ValueChanged"/>
             </StackPanel>
         </Grid>
         <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" Margin="5">
-            <GroupBox Header="画像情報">
-                <StackPanel Orientation="Horizontal" Margin="5">
-                    <Label Content="横幅:"/>
-                    <TextBox x:Name="ImageWidthTextBox" Width="100" IsReadOnly="True" Margin="0, 0, 20. 0"/>
-                    <Label Content="縦幅:"/>
-                    <TextBox x:Name="ImageHeightTextBox" Width="100" IsReadOnly="True"/>
-                </StackPanel>
-            </GroupBox>
             <GroupBox Header="キャンバス設定">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal" Margin="5">
-                        <Label Content="横幅:"/>
-                        <TextBox x:Name="CanvasWidthTextBox" Width="100" TextChanged="CanvasSizeTextBox_TextChanged" Margin="0, 0, 20. 0"/>
-                        <Label Content="縦幅:"/>
-                        <TextBox x:Name="CanvasHeightTextBox" Width="100" TextChanged="CanvasSizeTextBox_TextChanged"/>
+                        <Label Content="←横→:"/>
+                        <TextBox x:Name="CanvasWidthTextBox" Width="100" IsReadOnly="True"/>
+                        <Label Content="px"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <Label Content="↑縦↓:"/>
+                        <TextBox x:Name="CanvasHeightTextBox" Width="100" IsReadOnly="True"/>
+                        <Label Content="px"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <Label Content="背景色:"/>

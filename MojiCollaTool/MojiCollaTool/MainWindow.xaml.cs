@@ -138,6 +138,9 @@ namespace MojiCollaTool
                 MainCanvas.Width = imageSource.Width;
                 MainCanvas.Height = imageSource.Height;
 
+                CanvasData.Width = (int)imageSource.Width;
+                CanvasData.Height = (int)imageSource.Height;
+
                 ResetScale();
             }
             catch (Exception ex)
@@ -435,12 +438,12 @@ namespace MojiCollaTool
 
         private void CanvasEditButton_Click(object sender, RoutedEventArgs e)
         {
-            CanvasEditWindow imageEditWindow = new CanvasEditWindow((int)MainImage.ActualWidth, (int)MainImage.ActualHeight, CanvasData.Clone());
-            var dialogResult = imageEditWindow.ShowDialog();
+            CanvasEditWindow canvasEditWindow = new CanvasEditWindow((int)MainImage.ActualWidth, (int)MainImage.ActualHeight, CanvasData.Clone(), this);
+            var dialogResult = canvasEditWindow.ShowDialog();
 
             if (dialogResult.HasValue == false || dialogResult.Value == false) return;
 
-            UpdateCanvas(imageEditWindow.CanvasData);
+            CanvasData.Copy(canvasEditWindow.CanvasData);
         }
 
         /// <summary>
@@ -449,8 +452,6 @@ namespace MojiCollaTool
         /// <param name="canvasData"></param>
         public void UpdateCanvas(CanvasData canvasData)
         {
-            CanvasData = canvasData;
-
             MainCanvas.Width = canvasData.Width;
             MainCanvas.Height = canvasData.Height;
 

@@ -24,7 +24,9 @@ namespace MojiCollaTool
         /// 縦書き対応のために右上にずらす必要のある文字
         /// 主にかっこなど
         /// </summary>
-        private const string TATEGAKI_SHIFT_TARGET_CHARS = "｡。､、.．,，";
+        private const string TATEGAKI_SHIFT_TARGET_CHARS ="｡。､、.．,，";
+
+        private const string TATEGAKI_SHIFT_TARGET_CHARS_SMALL = "ぁぃぅぇぉっゃゅょゎゕゖァィゥェォヵㇰヶㇱㇲッㇳㇴㇵㇶㇷㇷ゚ㇸㇹㇺャュョㇻㇼㇽㇾㇿヮ";
 
         // Create a collection of child visual objects.
         private readonly VisualCollection _children = null!;
