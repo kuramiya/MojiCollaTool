@@ -7,7 +7,7 @@
 [moji build](https://archive.md/2015.02.04-215832/http://www.geocities.jp/moji564/)
 
 ## ダウンロード
-Releasesからどうぞ。
+Releasesからどうぞ。  
 実行バイナリ(exeファイル、dllファイル)を含むzip形式で配布しています。  
 [最新版](https://github.com/kuramiya/MojiCollaTool/releases/latest)
 
