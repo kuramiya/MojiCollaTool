@@ -61,7 +61,7 @@ namespace MojiCollaTool
 
         public double BorderBlurrRadius { get; set; } = 0;
 
-        public bool IsBackgroundBoxExists { get; set; } = false;
+        public bool IsBackgroundBoxExists { get; set; } = true;
 
         public Color BackgroundBoxColor { get; set; } = Colors.White;
 
