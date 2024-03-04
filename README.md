@@ -12,5 +12,5 @@ Releasesからどうぞ。
 [最新版](https://github.com/kuramiya/MojiCollaTool/releases/latest)
 
 ## インストール方法、使い方、注意事項など
-Wikiを参照してください。
+Wikiを参照してください。  
 [Wiki](https://github.com/kuramiya/MojiCollaTool/wiki)
