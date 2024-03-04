@@ -180,7 +180,7 @@ namespace MojiCollaTool
         /// <param name="filePath"></param>
         public static void WriteXMLData<T>(T data, string filePath)
         {
-            using (var stream = File.OpenWrite(filePath))
+            using (var stream = new StreamWriter(filePath, false, new UTF8Encoding(false)))
             {
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
                 xmlSerializer.Serialize(stream, data);
@@ -196,16 +196,15 @@ namespace MojiCollaTool
         /// <exception cref="InvalidOperationException"></exception>
         public static T ReadXMLData<T>(string filePath)
         {
-            using (var stream = File.OpenRead(filePath))
+            using (var stream = new StreamReader(filePath, new UTF8Encoding(false)))
             {
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
-                var obj = xmlSerializer.Deserialize(File.OpenRead(filePath));
+                var obj = xmlSerializer.Deserialize(stream);
 
                 if (obj == null) throw new InvalidOperationException("XML convert null error.");
 
                 return (T)obj;
             }
-
         }
 
         /// <summary>
@@ -286,7 +285,7 @@ namespace MojiCollaTool
             try
             {
                 //  文字データを読み出す
-                foreach (var filePath in Directory.GetFiles(dirPath, "*.xml", SearchOption.TopDirectoryOnly))
+                foreach (var filePath in Directory.GetFiles(dirPath, "MojiData*.xml", SearchOption.TopDirectoryOnly))
                 {
                     var mojiData = ReadMojiData(filePath);
 
@@ -345,7 +344,7 @@ namespace MojiCollaTool
         /// <param name="projectFilePath"></param>
         /// <param name="mojiDatas"></param>
         /// <exception cref="InvalidOperationException"></exception>
-        public static void WriteWorkingDirToProjectDataFile(string projectFilePath, IEnumerable<MojiData> mojiDatas)
+        public static void WriteWorkingDirToProjectDataFile(string projectFilePath, IEnumerable<MojiData> mojiDatas, CanvasData canvasData)
         {
             try
             {
@@ -354,6 +353,8 @@ namespace MojiCollaTool
                 WriteInfoTextToWorkingDir(Path.Combine(workingDirPath, "Info.txt"));
 
                 WriteMojiDatas(mojiDatas, workingDirPath);
+
+                WriteCanvasData(canvasData, workingDirPath);
 
                 //  zipファイル処理は上書きオプションがないため、同じファイルがある場合は削除してから書き込む
                 if(File.Exists(projectFilePath))
@@ -423,6 +424,23 @@ namespace MojiCollaTool
             catch (Exception ex)
             {
                 throw new InvalidOperationException("ReadCanvasData error.", ex);
+            }
+        }
+
+        /// <summary>
+        /// 作業ディレクトリからキャンバスデータを読み出す
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static CanvasData ReadCanvasDataFromWorkingDir()
+        {
+            try
+            {
+                return ReadCanvasData(GetWorkingDirPath());
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("ReadCanvasDataFromWorkingDir error.", ex);
             }
         }
     }

@@ -95,6 +95,7 @@ namespace MojiCollaTool
 
                 //  キャンバス情報を初期化する
                 CanvasData.Init();
+                UpdateCanvas(CanvasData);
 
                 ShowInfoDialog("初期化完了");
             }
@@ -141,6 +142,7 @@ namespace MojiCollaTool
                 MainCanvas.Width = imageSource.Width;
                 MainCanvas.Height = imageSource.Height;
 
+                CanvasData.Init();
                 CanvasData.Width = (int)imageSource.Width;
                 CanvasData.Height = (int)imageSource.Height;
 
@@ -367,7 +369,7 @@ namespace MojiCollaTool
 
             try
             {
-                DataIO.WriteWorkingDirToProjectDataFile(saveFileDialog.FileName, _mojiPanels.Select(x => x.MojiData));
+                DataIO.WriteWorkingDirToProjectDataFile(saveFileDialog.FileName, _mojiPanels.Select(x => x.MojiData), CanvasData);
 
                 ShowInfoDialog($"{saveFileDialog.FileName} プロジェクト保存完了");
             }
@@ -420,6 +422,11 @@ namespace MojiCollaTool
                 {
                     AddMojiPanel(new MojiPanel(mojiData, this));
                 }
+
+                //  作業ディレクトリからキャンバスデータを読み出す
+                var canvasData = DataIO.ReadCanvasDataFromWorkingDir();
+
+                UpdateCanvas(canvasData);
 
                 ShowInfoDialog($"{openFileDialog.FileName} プロジェクト読み出し完了");
             }
