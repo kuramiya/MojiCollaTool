@@ -34,7 +34,7 @@ namespace MojiCollaTool
         /// </summary>
         public CanvasData CanvasData { get; set; }
 
-        private MainWindow _mainWindow;
+        private MainWindow? _mainWindow;
 
         private bool _runEvent = true;
 
@@ -108,7 +108,7 @@ namespace MojiCollaTool
             ColorSelector.ColorSelectorWindow colorSelectorWindow = new ColorSelector.ColorSelectorWindow(GetCanvasColorButtonColor(), (color) =>
             {
                 CanvasData.Background = color;
-                _mainWindow.UpdateCanvas(CanvasData);
+                _mainWindow?.UpdateCanvas(CanvasData);
             });
             colorSelectorWindow.Top = Top;
             colorSelectorWindow.Left = Left;
@@ -121,16 +121,10 @@ namespace MojiCollaTool
             }
             else
             {
+                //  元の色に戻す
                 CanvasData.Background = ((SolidColorBrush)CanvasColorButton.Background).Color;
-                _mainWindow.UpdateCanvas(CanvasData);
+                _mainWindow?.UpdateCanvas(CanvasData);
             }
-        }
-
-        private void OKButton_Click(object sender, RoutedEventArgs e)
-        {
-            CanvasData = CreateCanvasData();
-            DialogResult = true;
-            Close();
         }
 
         private void DirectionTextBox_ValueChanged(object sender, UpDownTextBoxEvent e)
@@ -159,7 +153,19 @@ namespace MojiCollaTool
             //  画面に設定を反映させる
             LoadCanvasDataToView(CanvasData);
 
-            _mainWindow.UpdateCanvas(CanvasData);
+            _mainWindow?.UpdateCanvas(CanvasData);
+        }
+
+        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            //  設定を初期化する
+            CanvasData.InitMargin();
+            CanvasData.UpdateCanvasWidthHeight(_imageWidth, _imageHeight);
+
+            //  画面に設定を反映させる
+            LoadCanvasDataToView(CanvasData);
+
+            _mainWindow?.UpdateCanvas(CanvasData);
         }
     }
 }

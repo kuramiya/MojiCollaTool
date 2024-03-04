@@ -113,6 +113,8 @@ namespace MojiCollaTool
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
+            if (MainWindow.ShowOKCancelDialog("文字を削除してよろしいですか？") == false) return;
+
             mojiPanel.Remove();
         }
 

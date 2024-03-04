@@ -114,11 +114,19 @@ namespace MojiCollaTool
         {
             Width = 0;
             Height = 0;
+            InitMargin();
+            Background = Colors.White;
+        }
+
+        /// <summary>
+        /// マージン地を初期化する
+        /// </summary>
+        public void InitMargin()
+        {
             ImageTopMargin = 0;
             ImageBottomMargin = 0;
             ImageRightMargin = 0;
             ImageLeftMargin = 0;
-            Background = Colors.White;
         }
 
         public void Copy(CanvasData copySource)

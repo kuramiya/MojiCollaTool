@@ -6,12 +6,8 @@
         xmlns:local="clr-namespace:MojiCollaTool"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title="キャンバス拡大画面" Height="350" Width="700">
+        Title="キャンバス拡大画面" Height="320" Width="700">
     <Grid Margin="5">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
@@ -54,7 +50,7 @@
             </StackPanel>
         </Grid>
         <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" Margin="5">
-            <GroupBox Header="キャンバス設定">
+            <GroupBox Header="キャンバス（背景）">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <Label Content="←横→:"/>
@@ -70,11 +66,9 @@
                         <Label Content="背景色:"/>
                         <Button Style="{DynamicResource ColorButtonStyle}" x:Name="CanvasColorButton" Width="100" Height="28" Background="White" BorderThickness="1" BorderBrush="Black" Click="CanvasColorButton_Click" />
                     </StackPanel>
+                    <Button x:Name="ResetButton" Content="リセット" FontSize="15" Width="100" Margin="5" Click="ResetButton_Click"/>
                 </StackPanel>
             </GroupBox>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5">
-            <Button x:Name="OKButton" Content="OK" Width="100" FontSize="20" Click="OKButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>
