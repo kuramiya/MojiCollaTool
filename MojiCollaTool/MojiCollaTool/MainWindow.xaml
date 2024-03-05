@@ -22,16 +22,18 @@
             <Button x:Name="InitButton" Margin="5" Click="InitButton_Click">
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <Image Source="/Images/new.png" Margin="0"/>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="初期化する" VerticalAlignment="Center"/>
-                        <TextBlock Text="（画像・文字を削除する）" FontSize="9" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock Text="新規作成する"/>
                     </StackPanel>
                 </StackPanel>
             </Button>
-            <Button x:Name="LoadImageButton" Margin="5" Click="LoadImageButton_Click">
+            <Button x:Name="SwapImageButton" Margin="5" Click="SwapImageButton_Click">
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <Image Source="/Images/image.png" Margin="0"/>
-                    <TextBlock Text="画像を読み出す" VerticalAlignment="Center"/>
+                    <TextBlock VerticalAlignment="Center">
+                        画像のみ<LineBreak/>
+                        入れ替える
+                    </TextBlock>
                 </StackPanel>
             </Button>
             <Button x:Name="LoadProjectButton" Margin="5" Click="LoadProjectButton_Click">

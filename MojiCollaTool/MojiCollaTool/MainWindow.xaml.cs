@@ -18,6 +18,7 @@ using System.Collections.ObjectModel;
 using System.Net.NetworkInformation;
 using System.Security.AccessControl;
 using System.Security.RightsManagement;
+using System.IO.Enumeration;
 
 namespace MojiCollaTool
 {
@@ -85,27 +86,31 @@ namespace MojiCollaTool
                 RemoveAllMojiPanel();
             }
 
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "image files|*.jpg;*.png;";
+            var dialogResult = openFileDialog.ShowDialog();
+
+            if (dialogResult.HasValue == false || dialogResult.Value == false) return;
+
             try
             {
                 //  作業ディレクトリを初期化する
                 DataIO.InitWorkingDirectory();
 
-                //  画像表示を消す
-                MainImage.Source = null;
+                //  画像を画面に表示する
+                LoadImageToView(openFileDialog.FileName);
 
-                //  キャンバス情報を初期化する
-                CanvasData.Init();
-                UpdateCanvas(CanvasData);
-
-                ShowInfoDialog("初期化完了");
+                //  画像を作業ディレクトリにコピーする
+                DataIO.CopyImageToWorkingDirectory(openFileDialog.FileName);
             }
             catch (Exception ex)
             {
                 ShowError("初期化エラー", ex);
+                return;
             }
         }
 
-        private void LoadImageButton_Click(object sender, RoutedEventArgs e)
+        private void SwapImageButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "image files|*.jpg;*.png;";
@@ -113,26 +118,36 @@ namespace MojiCollaTool
 
             if (dialogResult.HasValue == false || dialogResult.Value == false) return;
 
-            LoadNewImage(openFileDialog.FileName);
+            SwapImage(openFileDialog.FileName);
         }
 
-        /// <summary>
-        /// 新規画像を読み出す
-        /// </summary>
-        /// <param name="filePath"></param>
-        private void LoadNewImage(string filePath)
+        private void SwapImage(string filePath)
         {
             try
             {
-                LoadImage(filePath);
+                //  作業ディレクトリ内の画像パスを取得する
+                var workingDirImagePath = DataIO.GetWorkingDirImagePath();
+                if(string.IsNullOrEmpty(workingDirImagePath) == false)
+                {
+                    if (filePath != workingDirImagePath)
+                    {
+                        //  パスが違うときのみ
+                        //  作業ディレクトリ内の画像を削除する
+                        DataIO.DeleteWorkingDirImage();
+                    }
+                }
 
+                //  画像を画面に表示する
+                LoadImageToView(filePath);
+
+                //  画像を作業ディレクトリにコピーする
                 DataIO.CopyImageToWorkingDirectory(filePath);
 
-                ShowInfoDialog($"{filePath} 画像読み出し完了");
+                ShowInfoDialog($"{filePath} 画像入れ替え完了");
             }
             catch (Exception ex)
             {
-                ShowError("画像読み出しエラー", ex);
+                ShowError("画像入れ替えエラー", ex);
             }
         }
 
@@ -140,7 +155,7 @@ namespace MojiCollaTool
         /// 画像を読み出し登録する
         /// </summary>
         /// <param name="filePath"></param>
-        private void LoadImage(string filePath)
+        private void LoadImageToView(string filePath)
         {
             try
             {
@@ -154,12 +169,101 @@ namespace MojiCollaTool
                 CanvasData.Init();
                 CanvasData.Width = (int)imageSource.Width;
                 CanvasData.Height = (int)imageSource.Height;
+                UpdateCanvas(CanvasData);
 
                 ResetScale();
             }
             catch (Exception ex)
             {
                 throw new InvalidOperationException("画像読み出し、表示エラー", ex);
+            }
+        }
+
+        private void LoadProjectButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_mojiPanels.Count > 0)
+            {
+                var checkDialogResult = ShowOKCancelDialog("文字データが存在しています。置き換えても問題ありませんか？");
+                if (checkDialogResult == false) return;
+            }
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "mctzip project file|*.mctzip";
+            var dialogResult = openFileDialog.ShowDialog();
+
+            if (dialogResult.HasValue == false || dialogResult.Value == false) return;
+
+            LoadProject(openFileDialog.FileName);
+        }
+
+        private void LoadProject(string filePath)
+        {
+            try
+            {
+                //  今ある文字を削除する
+                RemoveAllMojiPanel();
+
+                //  作業ディレクトリを初期化する
+                DataIO.InitWorkingDirectory();
+
+                //  プロジェクトファイルを作業ディレクトリに展開する
+                DataIO.ReadProjectDataToWorkingDir(filePath);
+
+                //  作業ディレクトリから画像を読み出す
+                var workingDirImagePath = DataIO.GetWorkingDirImagePath();
+                if (string.IsNullOrEmpty(workingDirImagePath))
+                {
+                    //  画像がない場合、画像のソースを削除する
+                    MainImage.Source = null;
+                }
+                else
+                {
+                    //  画像がある場合、表示する
+                    LoadImageToView(workingDirImagePath);
+                }
+
+                //  作業ディレクトリからキャンバスデータを読み出す
+                var canvasData = DataIO.ReadCanvasDataFromWorkingDir();
+
+                //  キャンバスデータを画面に反映する
+                UpdateCanvas(canvasData);
+
+                //  作業ディレクトリから文字データを読み出す
+                var mojiDatas = DataIO.ReadMojiDatasFromWorkingDir();
+
+                //  文字データを表示する
+                foreach (var mojiData in mojiDatas)
+                {
+                    AddMojiPanel(new MojiPanel(mojiData, this));
+                }
+
+                ShowInfoDialog($"{filePath} プロジェクト読み出し完了");
+            }
+            catch (Exception ex)
+            {
+                ShowError($"{filePath} プロジェクト読み出しエラー", ex);
+            }
+        }
+
+        private void SaveProjectButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "mctzip project file|*.mctzip";
+            saveFileDialog.FileName = $"MCToolProject{DateTime.Now:yyyyMMdd-HHmmss}.mctzip";
+
+            var dialogResult = saveFileDialog.ShowDialog();
+
+            if (dialogResult.HasValue == false || dialogResult.Value == false) return;
+
+            try
+            {
+                DataIO.WriteWorkingDirToProjectDataFile(saveFileDialog.FileName, _mojiPanels.Select(x => x.MojiData), CanvasData);
+
+                ShowInfoDialog($"{saveFileDialog.FileName} プロジェクト保存完了");
+            }
+            catch (Exception ex)
+            {
+                ShowError("プロジェクト保存エラー", ex);
             }
         }
 
@@ -366,90 +470,6 @@ namespace MojiCollaTool
             }
         }
 
-        private void SaveProjectButton_Click(object sender, RoutedEventArgs e)
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "mctzip project file|*.mctzip";
-            saveFileDialog.FileName = $"MCToolProject{DateTime.Now:yyyyMMdd-HHmmss}.mctzip";
-
-            var dialogResult = saveFileDialog.ShowDialog();
-
-            if (dialogResult.HasValue == false || dialogResult.Value == false) return;
-
-            try
-            {
-                DataIO.WriteWorkingDirToProjectDataFile(saveFileDialog.FileName, _mojiPanels.Select(x => x.MojiData), CanvasData);
-
-                ShowInfoDialog($"{saveFileDialog.FileName} プロジェクト保存完了");
-            }
-            catch (Exception ex)
-            {
-                ShowError("プロジェクト保存エラー", ex);
-            }
-        }
-
-        private void LoadProjectButton_Click(object sender, RoutedEventArgs e)
-        {
-            if(_mojiPanels.Count > 0)
-            {
-                var checkDialogResult = ShowOKCancelDialog("文字データが存在しています。置き換えても問題ありませんか？");
-                if (checkDialogResult == false) return;
-            }
-
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "mctzip project file|*.mctzip";
-            var dialogResult = openFileDialog.ShowDialog();
-
-            if (dialogResult.HasValue == false || dialogResult.Value == false) return;
-
-            LoadProject(openFileDialog.FileName);
-        }
-
-        private void LoadProject(string filePath)
-        {
-            try
-            {
-                //  今ある文字を削除する
-                RemoveAllMojiPanel();
-
-                //  プロジェクトファイルを作業ディレクトリに展開する
-                DataIO.ReadProjectDataToWorkingDir(filePath);
-
-                //  作業ディレクトリから画像を読み出す
-                var workingDirImagePath = DataIO.GetWorkingDirImagePath();
-                if (string.IsNullOrEmpty(workingDirImagePath))
-                {
-                    //  画像がない場合、画像のソースを削除する
-                    MainImage.Source = null;
-                }
-                else
-                {
-                    //  画像がある場合、表示する
-                    LoadImage(workingDirImagePath);
-                }
-
-                //  作業ディレクトリから文字データを読み出す
-                var mojiDatas = DataIO.ReadMojiDatasFromWorkingDir();
-
-                //  文字データを表示する
-                foreach (var mojiData in mojiDatas)
-                {
-                    AddMojiPanel(new MojiPanel(mojiData, this));
-                }
-
-                //  作業ディレクトリからキャンバスデータを読み出す
-                var canvasData = DataIO.ReadCanvasDataFromWorkingDir();
-
-                UpdateCanvas(canvasData);
-
-                ShowInfoDialog($"{filePath} プロジェクト読み出し完了");
-            }
-            catch (Exception ex)
-            {
-                ShowError($"{filePath} プロジェクト読み出しエラー", ex);
-            }
-        }
-
         private void MojiListView_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (sender == null) return;
@@ -511,7 +531,7 @@ namespace MojiCollaTool
                 {
                     case ".jpg":
                     case ".png":
-                        LoadNewImage(filePath);
+                        SwapImage(filePath);
                         break;
                     case ".mctzip":
                         if (_mojiPanels.Count > 0)

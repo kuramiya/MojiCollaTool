@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Windows.Xps.Serialization;
 using System.Xml.Serialization;
 
 namespace MojiCollaTool
@@ -102,7 +103,7 @@ namespace MojiCollaTool
         }
 
         /// <summary>
-        /// 作業フォルダ内の画像を削除する
+        /// 作業ディレクトリ内の画像を削除する
         /// </summary>
         /// <exception cref="InvalidOperationException"></exception>
         public static void DeleteWorkingDirImage()
@@ -159,10 +160,10 @@ namespace MojiCollaTool
         {
             try
             {
-                //  作業ディレクトリを初期化しておく
-                InitWorkingDirectory();
-
                 var destImageFilePath = Path.Combine(GetWorkingDirPath(), Path.GetFileName(sourceImageFilePath));
+
+                //  同じファイルの場合は何もしない
+                if(sourceImageFilePath == destImageFilePath) return;
 
                 File.Copy(sourceImageFilePath, destImageFilePath, true);
             }
@@ -379,8 +380,6 @@ namespace MojiCollaTool
         {
             try
             {
-                InitWorkingDirectory();
-
                 ZipFile.ExtractToDirectory(projectFilePath, GetWorkingDirPath(), true);
             }
             catch (Exception ex)
