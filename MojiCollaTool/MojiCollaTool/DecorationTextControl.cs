@@ -26,6 +26,9 @@ namespace MojiCollaTool
         /// </summary>
         private const string TATEGAKI_SHIFT_TARGET_CHARS ="｡。､、.．,，";
 
+        /// <summary>
+        /// 小さい文字一覧（配置に大して特別な処理が必要かもしれないので置いてある
+        /// </summary>
         private const string TATEGAKI_SHIFT_TARGET_CHARS_SMALL = "ぁぃぅぇぉっゃゅょゎゕゖァィゥェォヵㇰヶㇱㇲッㇳㇴㇵㇶㇷㇷ゚ㇸㇹㇺャュョㇻㇼㇽㇾㇿヮ";
 
         // Create a collection of child visual objects.

@@ -113,13 +113,22 @@ namespace MojiCollaTool
 
             if (dialogResult.HasValue == false || dialogResult.Value == false) return;
 
+            LoadNewImage(openFileDialog.FileName);
+        }
+
+        /// <summary>
+        /// 新規画像を読み出す
+        /// </summary>
+        /// <param name="filePath"></param>
+        private void LoadNewImage(string filePath)
+        {
             try
             {
-                LoadImage(openFileDialog.FileName);
+                LoadImage(filePath);
 
-                DataIO.CopyImageToWorkingDirectory(openFileDialog.FileName);
+                DataIO.CopyImageToWorkingDirectory(filePath);
 
-                ShowInfoDialog($"{openFileDialog.FileName} 画像読み出し完了");
+                ShowInfoDialog($"{filePath} 画像読み出し完了");
             }
             catch (Exception ex)
             {
@@ -393,13 +402,18 @@ namespace MojiCollaTool
 
             if (dialogResult.HasValue == false || dialogResult.Value == false) return;
 
+            LoadProject(openFileDialog.FileName);
+        }
+
+        private void LoadProject(string filePath)
+        {
             try
             {
                 //  今ある文字を削除する
                 RemoveAllMojiPanel();
 
                 //  プロジェクトファイルを作業ディレクトリに展開する
-                DataIO.ReadProjectDataToWorkingDir(openFileDialog.FileName);
+                DataIO.ReadProjectDataToWorkingDir(filePath);
 
                 //  作業ディレクトリから画像を読み出す
                 var workingDirImagePath = DataIO.GetWorkingDirImagePath();
@@ -428,11 +442,11 @@ namespace MojiCollaTool
 
                 UpdateCanvas(canvasData);
 
-                ShowInfoDialog($"{openFileDialog.FileName} プロジェクト読み出し完了");
+                ShowInfoDialog($"{filePath} プロジェクト読み出し完了");
             }
             catch (Exception ex)
             {
-                ShowError($"{openFileDialog.FileName} プロジェクト読み出しエラー", ex);
+                ShowError($"{filePath} プロジェクト読み出しエラー", ex);
             }
         }
 
@@ -480,6 +494,68 @@ namespace MojiCollaTool
                 var dialogResult = ShowOKCancelDialog("文字データが存在しています。終了しても問題ありませんか？");
                 if(dialogResult == false) e.Cancel = true;
             }
+        }
+
+        private void CanvasGrid_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var filePaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                if (filePaths.Length <= 0) return;
+
+                //  最初のファイルのみ処理する
+                var filePath = filePaths[0];
+
+                switch(System.IO.Path.GetExtension(filePath))
+                {
+                    case ".jpg":
+                    case ".png":
+                        LoadNewImage(filePath);
+                        break;
+                    case ".mctzip":
+                        if (_mojiPanels.Count > 0)
+                        {
+                            var checkDialogResult = ShowOKCancelDialog("文字データが存在しています。置き換えても問題ありませんか？");
+                            if (checkDialogResult == false) return;
+                        }
+                        LoadProject(filePath);
+                        break;
+                    default:
+                        return;
+                }
+            }
+        }
+
+        private void CanvasGrid_DragOver(object sender, DragEventArgs e)
+        {
+            //  ファイルの場合、マウスのエフェクトを変更する
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var filePaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                if (filePaths.Length <= 0) return;
+
+                //  最初のファイルのみ処理する
+                var filePath = filePaths[0];
+
+                switch (System.IO.Path.GetExtension(filePath))
+                {
+                    case ".jpg":
+                    case ".png":
+                    case ".mctzip":
+                        e.Effects = DragDropEffects.All;
+                        break;
+                    default:
+                        e.Effects = DragDropEffects.None;
+                        return;
+                }
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+            e.Handled = true;
         }
     }
 }
