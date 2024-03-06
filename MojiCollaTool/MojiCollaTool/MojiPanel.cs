@@ -337,11 +337,18 @@ namespace MojiCollaTool
                     MojiData.X = Margin.Left;
                     MojiWindow?.UpdateXY(MojiData.X, MojiData.Y);
                 }
+
+                //  この時点でのパネルの幅を保存しておく
+                //  縦書きで元の位置に戻すため
+                previousWidth = backgroundBoxBorder.DesiredSize.Width;
+            }
+            else
+            {
+                //  横書きの際は使用しないため、0に戻しておく
+                //  縦横切り替えでウォーキングが際限なくずれるのが面倒なため
+                previousWidth = 0;
             }
 
-            //  この時点でのパネルの幅を保存しておく
-            //  縦書きで元の位置に戻すため
-            previousWidth = backgroundBoxBorder.DesiredSize.Width;
         }
     }
 }
