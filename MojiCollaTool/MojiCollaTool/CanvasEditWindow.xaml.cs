@@ -67,15 +67,15 @@ namespace MojiCollaTool
         {
             _runEvent = false;
 
-            CanvasWidthTextBox.Text = canvasData.Width.ToString();
-            CanvasHeightTextBox.Text = canvasData.Height.ToString();
+            CanvasWidthTextBox.Text = canvasData.CanvasWidth.ToString();
+            CanvasHeightTextBox.Text = canvasData.CanvasHeight.ToString();
 
-            TopTextBox.SetValue(canvasData.ImageTopMargin, false);
-            BottomTextBox.SetValue(canvasData.ImageBottomMargin, false);
-            LeftTextBox.SetValue(canvasData.ImageLeftMargin, false);
-            RightTextBox.SetValue(canvasData.ImageRightMargin, false);
+            TopTextBox.SetValue((int)canvasData.ImageTopMargin, false);
+            BottomTextBox.SetValue((int)canvasData.ImageBottomMargin, false);
+            LeftTextBox.SetValue((int)canvasData.ImageLeftMargin, false);
+            RightTextBox.SetValue((int)canvasData.ImageRightMargin, false);
 
-            CanvasColorButton.Background = new SolidColorBrush(canvasData.Background);
+            CanvasColorButton.Background = new SolidColorBrush(canvasData.CanvasColor);
 
             _runEvent = true;
         }
@@ -88,13 +88,13 @@ namespace MojiCollaTool
         {
             return new CanvasData()
             {
-                Width = int.Parse(CanvasWidthTextBox.Text),
-                Height = int.Parse(CanvasHeightTextBox.Text),
+                CanvasWidth = int.Parse(CanvasWidthTextBox.Text),
+                CanvasHeight = int.Parse(CanvasHeightTextBox.Text),
                 ImageTopMargin = TopTextBox.Value,
                 ImageBottomMargin = BottomTextBox.Value,
                 ImageLeftMargin = LeftTextBox.Value,
                 ImageRightMargin = RightTextBox.Value,
-                Background = GetCanvasColorButtonColor(),
+                CanvasColor = GetCanvasColorButtonColor(),
             };
         }
 
@@ -107,7 +107,7 @@ namespace MojiCollaTool
         {
             ColorSelector.ColorSelectorWindow colorSelectorWindow = new ColorSelector.ColorSelectorWindow(GetCanvasColorButtonColor(), (color) =>
             {
-                CanvasData.Background = color;
+                CanvasData.CanvasColor = color;
                 _mainWindow?.UpdateCanvas(CanvasData);
             });
             colorSelectorWindow.Top = Top;
@@ -122,7 +122,7 @@ namespace MojiCollaTool
             else
             {
                 //  元の色に戻す
-                CanvasData.Background = ((SolidColorBrush)CanvasColorButton.Background).Color;
+                CanvasData.CanvasColor = ((SolidColorBrush)CanvasColorButton.Background).Color;
                 _mainWindow?.UpdateCanvas(CanvasData);
             }
         }
@@ -148,7 +148,7 @@ namespace MojiCollaTool
                 CanvasData.ImageRightMargin = RightTextBox.Value;
             }
 
-            CanvasData.UpdateCanvasWidthHeight(_imageWidth, _imageHeight);
+            CanvasData.UpdateCanvasSize(_imageWidth, _imageHeight);
 
             //  画面に設定を反映させる
             LoadCanvasDataToView(CanvasData);
@@ -160,7 +160,7 @@ namespace MojiCollaTool
         {
             //  設定を初期化する
             CanvasData.InitMargin();
-            CanvasData.UpdateCanvasWidthHeight(_imageWidth, _imageHeight);
+            CanvasData.UpdateCanvasSize(_imageWidth, _imageHeight);
 
             //  画面に設定を反映させる
             LoadCanvasDataToView(CanvasData);

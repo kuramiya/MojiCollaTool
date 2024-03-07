@@ -8,103 +8,68 @@ using System.Windows.Media;
 
 namespace MojiCollaTool
 {
+    /// <summary>
+    /// 配置場所を示す列挙
+    /// </summary>
+    public enum LocatePosition
+    {
+        Left,
+        Right,
+        Top,
+        Bottom,
+    }
+
     [Serializable]
     public class CanvasData
     {
         /// <summary>
         /// キャンバスの横幅
         /// </summary>
-        public int Width { get; set; } = 0;
+        public double CanvasWidth { get; set; } = 0;
 
         /// <summary>
         /// キャンバスの縦幅
         /// </summary>
-        public int Height { get; set; } = 0;
+        public double CanvasHeight { get; set; } = 0;
 
-        public int ImageTopMargin { get; set; }
+        public ImageData FirstImageData { get; set; }
 
-        public int ImageLeftMargin { get; set; }
+        public ImageData SecondImageData { get; set; }
 
-        public int ImageBottomMargin { get; set; }
+        public LocatePosition SecondImageLocatePosition { get; set; } = LocatePosition.Left;
 
-        public int ImageRightMargin { get; set; }
+        public double ImageWidth
+        {
+            get => FirstImageData.ModifiedWidth + SecondImageData.ModifiedWidth;
+        }
+
+        public double ImageHeight
+        {
+            get => FirstImageData.ModifiedHeight + SecondImageData.ModifiedHeight;
+        }
+
+        public double ImageTopMargin { get; set; }
+
+        public double ImageLeftMargin { get; set; }
+
+        public double ImageBottomMargin { get; set; }
+
+        public double ImageRightMargin { get; set; }
 
         /// <summary>
         /// キャンバスの色
         /// </summary>
-        public Color Background { get; set; } = Colors.White;
+        public Color CanvasColor { get; set; } = Colors.White;
 
         /// <summary>
-        /// 設定値を更新する
+        /// キャンバスサイズを更新する
         /// </summary>
         /// <param name="imageWidth"></param>
         /// <param name="imageHeight"></param>
-        /// <param name="updatedCanvasWidth"></param>
-        /// <param name="updatedCanvasHeight"></param>
-        public void Update(int imageWidth, int imageHeight, int updatedCanvasWidth, int updatedCanvasHeight)
+        public void UpdateCanvasSize(int imageWidth, int imageHeight)
         {
-            //  まず最初に右から調整する
-            ImageRightMargin = updatedCanvasWidth - (imageWidth + ImageLeftMargin);
-
-            //  右側が0より小さくなった場合、左側を削る
-            if(ImageRightMargin < 0 )
-            {
-                ImageLeftMargin -= ImageRightMargin;
-
-                if (ImageLeftMargin < 0) ImageLeftMargin = 0;
-
-                ImageRightMargin = 0;
-            }
-
-            //  まず最初に下から調整する
-            ImageBottomMargin = updatedCanvasHeight - (imageHeight + ImageTopMargin);
-
-            //  下側が0より小さくなった場合、左側を削る
-            if (ImageBottomMargin < 0)
-            {
-                ImageTopMargin -= ImageBottomMargin;
-
-                if (ImageTopMargin < 0) ImageTopMargin = 0;
-
-                ImageBottomMargin = 0;
-            }
-
-            Width = updatedCanvasWidth;
-            Height = updatedCanvasHeight;
-        }
-
-        public void UpdateImageTopMargin(int margin, int imageHeight)
-        {
-            if (margin < 0) return;
-            ImageTopMargin = margin;
-            ImageBottomMargin = Height - imageHeight - margin;
-        }
-
-        public void UpdateImageBottomMargin(int margin, int imageHeight)
-        {
-            if (margin < 0) return;
-            ImageBottomMargin = margin;
-            ImageTopMargin = Height - imageHeight - margin;
-        }
-
-        public void UpdateImageLeftMargin(int margin, int imageWidth)
-        {
-            if (margin < 0) return;
-            ImageLeftMargin = margin;
-            ImageRightMargin = Width - imageWidth - margin;
-        }
-
-        public void UpdateImageRightMargin(int margin, int imageWidth)
-        {
-            if (margin < 0) return;
-            ImageRightMargin = margin;
-            ImageLeftMargin = Width - imageWidth - margin;
-        }
-
-        public void UpdateCanvasWidthHeight(int imageWidth, int imageHeight)
-        {
-            Width = ImageLeftMargin + imageWidth + ImageRightMargin;
-            Height = ImageTopMargin + imageHeight + ImageBottomMargin;
+            CanvasWidth = ImageLeftMargin + imageWidth + ImageRightMargin;
+            CanvasHeight = ImageTopMargin + imageHeight + ImageBottomMargin;
         }
 
         /// <summary>
@@ -112,10 +77,10 @@ namespace MojiCollaTool
         /// </summary>
         public void Init()
         {
-            Width = 0;
-            Height = 0;
+            CanvasWidth = 0;
+            CanvasHeight = 0;
             InitMargin();
-            Background = Colors.White;
+            CanvasColor = Colors.White;
         }
 
         /// <summary>
@@ -131,13 +96,13 @@ namespace MojiCollaTool
 
         public void Copy(CanvasData copySource)
         {
-            Width = copySource.Width;
-            Height = copySource.Height;
+            CanvasWidth = copySource.CanvasWidth;
+            CanvasHeight = copySource.CanvasHeight;
             ImageTopMargin = copySource.ImageTopMargin;
             ImageBottomMargin = copySource.ImageBottomMargin;
             ImageLeftMargin = copySource.ImageLeftMargin;
             ImageRightMargin = copySource.ImageRightMargin;
-            Background = copySource.Background;
+            CanvasColor = copySource.CanvasColor;
         }
 
         public CanvasData Clone()

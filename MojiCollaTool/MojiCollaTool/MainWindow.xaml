@@ -21,7 +21,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
             <Button x:Name="InitButton" Margin="5" Click="InitButton_Click">
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <Image Source="/Images/new.png" Margin="0"/>
+                    <Image Source="/Images/new.png" Margin="5"/>
                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                         <TextBlock Text="新規作成する"/>
                     </StackPanel>
@@ -29,10 +29,19 @@
             </Button>
             <Button x:Name="SwapImageButton" Margin="5" Click="SwapImageButton_Click">
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <Image Source="/Images/image.png" Margin="0"/>
+                    <Image Source="/Images/image.png" Margin="5"/>
                     <TextBlock VerticalAlignment="Center">
                         画像のみ<LineBreak/>
                         入れ替える
+                    </TextBlock>
+                </StackPanel>
+            </Button>
+            <Button x:Name="MultiImageButton" Margin="5" Click="SwapImageButton_Click" MinWidth="100">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Image Source="/Images/multi.png" Margin="5"/>
+                    <TextBlock VerticalAlignment="Center">
+                        画像を<LineBreak/>
+                        並べる
                     </TextBlock>
                 </StackPanel>
             </Button>
@@ -82,7 +91,8 @@
                         <ScaleTransform x:Name="CanvasScaleTransform" ScaleX="1" ScaleY="1"/>
                     </Canvas.LayoutTransform>
                     <Rectangle x:Name="CanvasBackgroundRect"/>
-                    <Image x:Name="MainImage" PreviewMouseLeftButtonDown="MainImage_PreviewMouseLeftButtonDown"/>
+                    <Image x:Name="FirstImage"/>
+                    <Image x:Name="SecondImage"/>
                 </Canvas>
             </ScrollViewer>
         </Grid>
@@ -108,7 +118,7 @@
                 <Image Source="/Images/canvas.png" Margin="5"/>
                 <TextBlock VerticalAlignment="Center">
                     キャンバスを<LineBreak/>
-                    広げる
+                    設定する
                 </TextBlock>
             </StackPanel>
         </Button>

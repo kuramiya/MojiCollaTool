@@ -161,14 +161,14 @@ namespace MojiCollaTool
             {
                 var imageSource = ImageUtil.LoadImageSource(filePath);
 
-                MainImage.Source = imageSource;
+                FirstImage.Source = imageSource;
 
                 MainCanvas.Width = imageSource.Width;
                 MainCanvas.Height = imageSource.Height;
 
                 CanvasData.Init();
-                CanvasData.Width = (int)imageSource.Width;
-                CanvasData.Height = (int)imageSource.Height;
+                CanvasData.CanvasWidth = (int)imageSource.Width;
+                CanvasData.CanvasHeight = (int)imageSource.Height;
                 UpdateCanvas(CanvasData);
 
                 ResetScale();
@@ -214,7 +214,7 @@ namespace MojiCollaTool
                 if (string.IsNullOrEmpty(workingDirImagePath))
                 {
                     //  画像がない場合、画像のソースを削除する
-                    MainImage.Source = null;
+                    FirstImage.Source = null;
                 }
                 else
                 {
@@ -390,11 +390,6 @@ namespace MojiCollaTool
             }
         }
 
-        private void MainImage_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            Point p = e.GetPosition(this);
-        }
-
         private void OutputImageButton_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -483,7 +478,7 @@ namespace MojiCollaTool
         {
             if(_canvasEditWindow == null || _canvasEditWindow.IsVisible == false)
             {
-                CanvasEditWindow canvasEditWindow = new CanvasEditWindow((int)MainImage.ActualWidth, (int)MainImage.ActualHeight, CanvasData.Clone(), this);
+                CanvasEditWindow canvasEditWindow = new CanvasEditWindow((int)FirstImage.ActualWidth, (int)FirstImage.ActualHeight, CanvasData.Clone(), this);
                 canvasEditWindow.Show();
             }
         }
@@ -496,15 +491,15 @@ namespace MojiCollaTool
         {
             CanvasData = canvasData;
 
-            MainCanvas.Width = canvasData.Width;
-            MainCanvas.Height = canvasData.Height;
+            MainCanvas.Width = canvasData.CanvasWidth;
+            MainCanvas.Height = canvasData.CanvasHeight;
 
-            CanvasBackgroundRect.Fill = new SolidColorBrush(canvasData.Background);
+            CanvasBackgroundRect.Fill = new SolidColorBrush(canvasData.CanvasColor);
 
-            CanvasBackgroundRect.Width = canvasData.Width;
-            CanvasBackgroundRect.Height = canvasData.Height;
+            CanvasBackgroundRect.Width = canvasData.CanvasWidth;
+            CanvasBackgroundRect.Height = canvasData.CanvasHeight;
 
-            MainImage.Margin = new Thickness(canvasData.ImageLeftMargin, canvasData.ImageTopMargin, canvasData.ImageRightMargin, canvasData.ImageBottomMargin);
+            FirstImage.Margin = new Thickness(canvasData.ImageLeftMargin, canvasData.ImageTopMargin, canvasData.ImageRightMargin, canvasData.ImageBottomMargin);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

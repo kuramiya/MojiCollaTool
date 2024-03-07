@@ -18,6 +18,7 @@
     <None Remove="Images\image.png" />
     <None Remove="Images\moji.png" />
     <None Remove="Images\mojiimage.png" />
+    <None Remove="Images\multi.png" />
     <None Remove="Images\new.png" />
     <None Remove="Images\save.png" />
   </ItemGroup>
@@ -34,6 +35,7 @@
     <Resource Include="Images\image.png" />
     <Resource Include="Images\moji.png" />
     <Resource Include="Images\mojiimage.png" />
+    <Resource Include="Images\multi.png" />
     <Resource Include="Images\new.png" />
     <Resource Include="Images\save.png" />
   </ItemGroup>
