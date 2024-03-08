@@ -32,44 +32,96 @@ namespace MojiCollaTool
         /// </summary>
         public double CanvasHeight { get; set; } = 0;
 
-        public ImageData FirstImageData { get; set; }
+        /// <summary>
+        /// 画像1のデータ
+        /// </summary>
+        public ImageData ImageData1 { get; set; } = new ImageData();
 
-        public ImageData SecondImageData { get; set; }
+        /// <summary>
+        /// 画像2のデータ
+        /// </summary>
+        public ImageData ImageData2 { get; set; } = new ImageData();
 
-        public LocatePosition SecondImageLocatePosition { get; set; } = LocatePosition.Left;
+        /// <summary>
+        /// 画像2の配置場所
+        /// </summary>
+        public LocatePosition Image2LocatePosition { get; set; } = LocatePosition.Left;
 
+        /// <summary>
+        /// 画像縦サイズ
+        /// </summary>
         public double ImageWidth
         {
-            get => FirstImageData.ModifiedWidth + SecondImageData.ModifiedWidth;
+            get
+            {
+                switch (Image2LocatePosition)
+                {
+                    case LocatePosition.Left:
+                    case LocatePosition.Right:
+                        return ImageData1.ModifiedWidth + ImageData2.ModifiedWidth;
+                    case LocatePosition.Top:
+                    case LocatePosition.Bottom:
+                    default:
+                        return ImageData1.ModifiedWidth;
+                }
+            }
         }
 
+        /// <summary>
+        /// 画像横サイズ
+        /// </summary>
         public double ImageHeight
         {
-            get => FirstImageData.ModifiedHeight + SecondImageData.ModifiedHeight;
+            get
+            {
+                switch (Image2LocatePosition)
+                {
+                    case LocatePosition.Left:
+                    case LocatePosition.Right:
+                        return ImageData1.ModifiedHeight;
+                    case LocatePosition.Top:
+                    case LocatePosition.Bottom:
+                    default:
+                        return ImageData1.ModifiedHeight + ImageData2.ModifiedHeight;
+                }
+            }
         }
 
-        public double ImageTopMargin { get; set; }
+        public double ImageMarginTop { get; set; }
 
-        public double ImageLeftMargin { get; set; }
+        public double ImageMarginLeft { get; set; }
 
-        public double ImageBottomMargin { get; set; }
+        public double ImageMarginBottom { get; set; }
 
-        public double ImageRightMargin { get; set; }
+        public double ImageMarginRight { get; set; }
 
         /// <summary>
         /// キャンバスの色
         /// </summary>
         public Color CanvasColor { get; set; } = Colors.White;
 
+        public CanvasData()
+        {
+            Init();
+        }
+
         /// <summary>
         /// キャンバスサイズを更新する
         /// </summary>
         /// <param name="imageWidth"></param>
         /// <param name="imageHeight"></param>
-        public void UpdateCanvasSize(int imageWidth, int imageHeight)
+        public void UpdateCanvasSize()
         {
-            CanvasWidth = ImageLeftMargin + imageWidth + ImageRightMargin;
-            CanvasHeight = ImageTopMargin + imageHeight + ImageBottomMargin;
+            CanvasWidth = ImageMarginLeft + ImageWidth + ImageMarginRight;
+            CanvasHeight = ImageMarginTop + ImageHeight + ImageMarginBottom;
+        }
+
+        /// <summary>
+        /// 画像サイズを調整する
+        /// </summary>
+        public void ModifyImageSize()
+        {
+            ImageData1.ModifySize(Image2LocatePosition, ImageData2);
         }
 
         /// <summary>
@@ -79,6 +131,9 @@ namespace MojiCollaTool
         {
             CanvasWidth = 0;
             CanvasHeight = 0;
+            ImageData1.Init();
+            ImageData2.Init();
+            Image2LocatePosition = LocatePosition.Left;
             InitMargin();
             CanvasColor = Colors.White;
         }
@@ -88,20 +143,86 @@ namespace MojiCollaTool
         /// </summary>
         public void InitMargin()
         {
-            ImageTopMargin = 0;
-            ImageBottomMargin = 0;
-            ImageRightMargin = 0;
-            ImageLeftMargin = 0;
+            ImageMarginTop = 0;
+            ImageMarginBottom = 0;
+            ImageMarginRight = 0;
+            ImageMarginLeft = 0;
+        }
+
+        /// <summary>
+        /// 画像1のマージンを返す
+        /// </summary>
+        /// <returns></returns>
+        public Thickness GetImage1Margin()
+        {
+            double left = ImageMarginLeft;
+            double right = ImageMarginRight;
+            double top = ImageMarginTop;
+            double bottom = ImageMarginBottom;
+
+            switch (Image2LocatePosition)
+            {
+                case LocatePosition.Left:
+                    left += ImageData2.ModifiedWidth;
+                    break;
+                case LocatePosition.Right:
+                    right += ImageData2.ModifiedWidth;
+                    break;
+                case LocatePosition.Top:
+                    top += ImageData2.ModifiedHeight;
+                    break;
+                case LocatePosition.Bottom:
+                    bottom += ImageData2.ModifiedHeight;
+                    break;
+                default:
+                    break;
+            }
+
+            return new Thickness(left, top, right, bottom);
+        }
+
+        /// <summary>
+        /// 画像2のマージンを返す
+        /// </summary>
+        /// <returns></returns>
+        public Thickness GetImage2Margin()
+        {
+            double left = ImageMarginLeft;
+            double right = ImageMarginRight;
+            double top = ImageMarginTop;
+            double bottom = ImageMarginBottom;
+
+            switch (Image2LocatePosition)
+            {
+                case LocatePosition.Left:
+                    right += ImageData1.ModifiedWidth;
+                    break;
+                case LocatePosition.Right:
+                    left += ImageData1.ModifiedWidth;
+                    break;
+                case LocatePosition.Top:
+                    bottom += ImageData1.ModifiedHeight;
+                    break;
+                case LocatePosition.Bottom:
+                    top += ImageData1.ModifiedHeight;
+                    break;
+                default:
+                    break;
+            }
+
+            return new Thickness(left, top, right, bottom);
         }
 
         public void Copy(CanvasData copySource)
         {
             CanvasWidth = copySource.CanvasWidth;
             CanvasHeight = copySource.CanvasHeight;
-            ImageTopMargin = copySource.ImageTopMargin;
-            ImageBottomMargin = copySource.ImageBottomMargin;
-            ImageLeftMargin = copySource.ImageLeftMargin;
-            ImageRightMargin = copySource.ImageRightMargin;
+            ImageData1.Copy(copySource.ImageData1);
+            ImageData2.Copy(copySource.ImageData2);
+            ImageMarginTop = copySource.ImageMarginTop;
+            ImageMarginBottom = copySource.ImageMarginBottom;
+            ImageMarginLeft = copySource.ImageMarginLeft;
+            ImageMarginRight = copySource.ImageMarginRight;
             CanvasColor = copySource.CanvasColor;
         }
 

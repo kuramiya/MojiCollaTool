@@ -69,24 +69,24 @@ namespace MojiCollaTool
         }
 
         /// <summary>
-        /// ディレクトリ内の最初の画像を返す
+        /// ディレクトリ内の画像ファイルパスを返す
         /// </summary>
         /// <param name="dirPath"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public static string GetImagePath(string dirPath)
+        public static string GetImagePath(int imageNo, string dirPath)
         {
             try
             {
+                var imageFilePath = Path.Combine(dirPath, $"Image{imageNo}");
                 foreach (var filePath in Directory.GetFiles(dirPath))
                 {
-                    var extension = Path.GetExtension(filePath);
-                    if (extension == ".jpg" || extension == ".png") return filePath;
+                    if(filePath.Contains(imageFilePath)) return filePath;
                 }
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("GetWorkingDirImagePath error.", ex);
+                throw new InvalidOperationException($"GetWorkingDirImagePath imageNo{imageNo} error.", ex);
             }
 
             return string.Empty;
@@ -97,29 +97,42 @@ namespace MojiCollaTool
         /// </summary>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public static string GetWorkingDirImagePath()
+        public static string GetWorkingDirImagePath(int imageNo)
         {
-            return GetImagePath(GetWorkingDirPath());
+            return GetImagePath(imageNo, GetWorkingDirPath());
         }
 
         /// <summary>
         /// 作業ディレクトリ内の画像を削除する
         /// </summary>
         /// <exception cref="InvalidOperationException"></exception>
-        public static void DeleteWorkingDirImage()
+        public static void DeleteWorkingDirImage(int imageNo, string? loadingTargetFilePath = null)
         {
             try
             {
-                foreach (var filePath in Directory.GetFiles(GetWorkingDirPath()))
+                var imagePath = GetWorkingDirImagePath(imageNo);
+
+                //  もしこれからロードする対象のファイルを消そうとしているのであれば、それを実行しない
+                if (loadingTargetFilePath != null)
                 {
-                    var extension = Path.GetExtension(filePath);
-                    if (extension == ".jpg" || extension == ".png") File.Delete(filePath);
+                    if (loadingTargetFilePath.Contains(imagePath)) return;
                 }
+
+                File.Delete(imagePath);
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("DeleteWorkingDirImage error.", ex);
+                throw new InvalidOperationException($"DeleteWorkingDirImage imageNo{imageNo} error.", ex);
             }
+        }
+
+        /// <summary>
+        /// 作業ディレクトリ内の画像を削除する
+        /// </summary>
+        public static void DeleteAllWorkingDirImage(string? loadingTargetFilePath = null)
+        {
+            DeleteWorkingDirImage(1, loadingTargetFilePath);
+            DeleteWorkingDirImage(2, loadingTargetFilePath);
         }
 
         /// <summary>
@@ -156,11 +169,13 @@ namespace MojiCollaTool
         /// </summary>
         /// <param name="sourceImageFilePath"></param>
         /// <exception cref="InvalidOperationException"></exception>
-        public static void CopyImageToWorkingDirectory(string sourceImageFilePath)
+        public static void CopyImageToWorkingDirectory(int imageNo, string sourceImageFilePath)
         {
             try
             {
-                var destImageFilePath = Path.Combine(GetWorkingDirPath(), Path.GetFileName(sourceImageFilePath));
+                var externsion = Path.GetExtension(sourceImageFilePath);
+
+                var destImageFilePath = Path.Combine(GetWorkingDirPath(), $"Image{imageNo}{externsion}");
 
                 //  同じファイルの場合は何もしない
                 if(sourceImageFilePath == destImageFilePath) return;

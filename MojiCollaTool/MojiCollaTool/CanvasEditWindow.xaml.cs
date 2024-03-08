@@ -20,16 +20,6 @@ namespace MojiCollaTool
     public partial class CanvasEditWindow : Window
     {
         /// <summary>
-        /// 画像の横幅
-        /// </summary>
-        private int _imageWidth;
-
-        /// <summary>
-        /// 画像の縦幅
-        /// </summary>
-        private int _imageHeight;
-
-        /// <summary>
         /// キャンバスデータ
         /// </summary>
         public CanvasData CanvasData { get; set; }
@@ -45,57 +35,82 @@ namespace MojiCollaTool
             InitializeComponent();
         }
 
-        public CanvasEditWindow(int imageWidth, int imageHeight, CanvasData canvasData, MainWindow mainWindow)
+        public CanvasEditWindow(CanvasData canvasData, MainWindow mainWindow)
         {
-            _imageWidth = imageWidth;
-            _imageHeight = imageHeight;
             CanvasData = canvasData;
             _mainWindow = mainWindow;
 
             InitializeComponent();
 
-            ImageWidthHeighTextBlock.Text = $"←横→:{imageWidth}px\r\n↑縦↓:{imageHeight}px";
-
-            LoadCanvasDataToView(canvasData);
+            UpdateView();
         }
 
         /// <summary>
         /// キャンバスデータを画面に反映する
         /// </summary>
         /// <param name="canvasData"></param>
-        private void LoadCanvasDataToView(CanvasData canvasData)
+        private void UpdateView()
         {
             _runEvent = false;
 
-            CanvasWidthTextBox.Text = canvasData.CanvasWidth.ToString();
-            CanvasHeightTextBox.Text = canvasData.CanvasHeight.ToString();
+            if (CanvasData.ImageData2.IsNullData())
+            {
+                MultiImageLocateGroupBox.IsEnabled = false;
+                Image2Rect.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                MultiImageLocateGroupBox.IsEnabled = true;
+                Image2Rect.Visibility = Visibility.Visible;
+                switch (CanvasData.Image2LocatePosition)
+                {
+                    case LocatePosition.Left:
+                        Image2Rect.SetValue(Grid.RowProperty, 1);
+                        Image2Rect.SetValue(Grid.ColumnProperty, 0);
+                        break;
+                    case LocatePosition.Right:
+                        Image2Rect.SetValue(Grid.RowProperty, 1);
+                        Image2Rect.SetValue(Grid.ColumnProperty, 2);
+                        break;
+                    case LocatePosition.Top:
+                        Image2Rect.SetValue(Grid.RowProperty, 0);
+                        Image2Rect.SetValue(Grid.ColumnProperty, 1);
+                        break;
+                    case LocatePosition.Bottom:
+                        Image2Rect.SetValue(Grid.RowProperty, 2);
+                        Image2Rect.SetValue(Grid.ColumnProperty, 1);
+                        break;
+                    default:
+                        break;
+                }
+            }
 
-            TopTextBox.SetValue((int)canvasData.ImageTopMargin, false);
-            BottomTextBox.SetValue((int)canvasData.ImageBottomMargin, false);
-            LeftTextBox.SetValue((int)canvasData.ImageLeftMargin, false);
-            RightTextBox.SetValue((int)canvasData.ImageRightMargin, false);
+            ImageWidthHeighTextBlock.Text = $"←横→:{CanvasData.ImageWidth}px\r\n↑縦↓:{CanvasData.ImageHeight}px";
 
-            CanvasColorButton.Background = new SolidColorBrush(canvasData.CanvasColor);
+            CanvasWidthTextBox.Text = CanvasData.CanvasWidth.ToString();
+            CanvasHeightTextBox.Text = CanvasData.CanvasHeight.ToString();
+
+            TopTextBox.SetValue((int)CanvasData.ImageMarginTop, false);
+            BottomTextBox.SetValue((int)CanvasData.ImageMarginBottom, false);
+            LeftTextBox.SetValue((int)CanvasData.ImageMarginLeft, false);
+            RightTextBox.SetValue((int)CanvasData.ImageMarginRight, false);
+
+            CanvasColorButton.Background = new SolidColorBrush(CanvasData.CanvasColor);
 
             _runEvent = true;
         }
 
-        /// <summary>
-        /// キャンバスデータを画面から生成する
-        /// </summary>
-        /// <returns></returns>
-        private CanvasData CreateCanvasData()
+        private void Image2LocateButton(object sender, RoutedEventArgs e)
         {
-            return new CanvasData()
-            {
-                CanvasWidth = int.Parse(CanvasWidthTextBox.Text),
-                CanvasHeight = int.Parse(CanvasHeightTextBox.Text),
-                ImageTopMargin = TopTextBox.Value,
-                ImageBottomMargin = BottomTextBox.Value,
-                ImageLeftMargin = LeftTextBox.Value,
-                ImageRightMargin = RightTextBox.Value,
-                CanvasColor = GetCanvasColorButtonColor(),
-            };
+            CanvasData.Image2LocatePosition = Enum.Parse<LocatePosition>((string)((Button)sender).Tag);
+
+            UpdateView();
+
+            CanvasData.ModifyImageSize();
+
+            CanvasData.UpdateCanvasSize();
+
+            _mainWindow?.UpdateCanvas();
         }
 
         private Color GetCanvasColorButtonColor()
@@ -108,7 +123,7 @@ namespace MojiCollaTool
             ColorSelector.ColorSelectorWindow colorSelectorWindow = new ColorSelector.ColorSelectorWindow(GetCanvasColorButtonColor(), (color) =>
             {
                 CanvasData.CanvasColor = color;
-                _mainWindow?.UpdateCanvas(CanvasData);
+                _mainWindow?.UpdateCanvas();
             });
             colorSelectorWindow.Top = Top;
             colorSelectorWindow.Left = Left;
@@ -123,7 +138,7 @@ namespace MojiCollaTool
             {
                 //  元の色に戻す
                 CanvasData.CanvasColor = ((SolidColorBrush)CanvasColorButton.Background).Color;
-                _mainWindow?.UpdateCanvas(CanvasData);
+                _mainWindow?.UpdateCanvas();
             }
         }
 
@@ -133,39 +148,40 @@ namespace MojiCollaTool
 
             if(sender == TopTextBox)
             {
-                CanvasData.ImageTopMargin = TopTextBox.Value;
+                CanvasData.ImageMarginTop = TopTextBox.Value;
             }
             else if (sender == BottomTextBox)
             {
-                CanvasData.ImageBottomMargin = BottomTextBox.Value;
+                CanvasData.ImageMarginBottom = BottomTextBox.Value;
             }
             else if (sender == LeftTextBox)
             {
-                CanvasData.ImageLeftMargin = LeftTextBox.Value;
+                CanvasData.ImageMarginLeft = LeftTextBox.Value;
             }
             else if(sender == RightTextBox)
             {
-                CanvasData.ImageRightMargin = RightTextBox.Value;
+                CanvasData.ImageMarginRight = RightTextBox.Value;
             }
 
-            CanvasData.UpdateCanvasSize(_imageWidth, _imageHeight);
+            CanvasData.UpdateCanvasSize();
 
             //  画面に設定を反映させる
-            LoadCanvasDataToView(CanvasData);
+            UpdateView();
 
-            _mainWindow?.UpdateCanvas(CanvasData);
+            _mainWindow?.UpdateCanvas();
         }
 
         private void ResetButton_Click(object sender, RoutedEventArgs e)
         {
             //  設定を初期化する
             CanvasData.InitMargin();
-            CanvasData.UpdateCanvasSize(_imageWidth, _imageHeight);
+            CanvasData.UpdateCanvasSize();
 
             //  画面に設定を反映させる
-            LoadCanvasDataToView(CanvasData);
+            UpdateView();
 
-            _mainWindow?.UpdateCanvas(CanvasData);
+            _mainWindow?.UpdateCanvas();
         }
+
     }
 }

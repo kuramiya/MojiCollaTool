@@ -36,7 +36,7 @@
                     </TextBlock>
                 </StackPanel>
             </Button>
-            <Button x:Name="MultiImageButton" Margin="5" Click="SwapImageButton_Click" MinWidth="100">
+            <Button x:Name="MultiImageButton" Margin="5" Click="MultiImageButton_Click" MinWidth="100">
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <Image Source="/Images/multi.png" Margin="5"/>
                     <TextBlock VerticalAlignment="Center">
@@ -91,8 +91,8 @@
                         <ScaleTransform x:Name="CanvasScaleTransform" ScaleX="1" ScaleY="1"/>
                     </Canvas.LayoutTransform>
                     <Rectangle x:Name="CanvasBackgroundRect"/>
-                    <Image x:Name="FirstImage"/>
-                    <Image x:Name="SecondImage"/>
+                    <Image x:Name="ImageControl1"/>
+                    <Image x:Name="ImageControl2"/>
                 </Canvas>
             </ScrollViewer>
         </Grid>

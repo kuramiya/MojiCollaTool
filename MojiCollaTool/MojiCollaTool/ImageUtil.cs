@@ -68,6 +68,20 @@ namespace MojiCollaTool
             }
         }
 
+        public static ImageSource LoadImageSource2(string filePath)
+        {
+            using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            {
+                // FileStreamからBitmapDecoderを作成します。
+                // BitmapCacheOptionをOnLoadにすることで画像データをメモリにキャッシュします。
+                var decoder = BitmapDecoder.Create(fs, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+
+                var writableBitmap =  new WriteableBitmap(decoder.Frames[0]);
+
+                return CreateResizedImage(writableBitmap, writableBitmap.PixelWidth, writableBitmap.PixelHeight);
+            }
+        }
+
         public static ImageSource LoadImageSource(string filePath)
         {
             try
@@ -77,7 +91,7 @@ namespace MojiCollaTool
                 bitmapImage.UriSource = new Uri(filePath);
                 bitmapImage.EndInit();
 
-                var imageSource = ImageUtil.CreateResizedImage(bitmapImage, bitmapImage.PixelWidth, bitmapImage.PixelHeight);
+                var imageSource = CreateResizedImage(bitmapImage, bitmapImage.PixelWidth, bitmapImage.PixelHeight);
 
                 return imageSource;
             }

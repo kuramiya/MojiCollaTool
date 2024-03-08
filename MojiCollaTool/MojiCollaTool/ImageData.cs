@@ -9,8 +9,6 @@ namespace MojiCollaTool
     [Serializable]
     public class ImageData
     {
-        public string FileName { get; set; } = string.Empty;
-
         public double OriginalWidth { get; set; } = 0;
 
         public double OriginalHeight { get; set; } = 0;
@@ -24,12 +22,22 @@ namespace MojiCollaTool
             //  何もしない
         }
 
-        public ImageData(string fileName, double originalWidth, double originalHeight)
+        public ImageData(double originalWidth, double originalHeight)
         {
-            FileName = fileName;
             OriginalWidth = originalWidth;
             OriginalHeight = originalHeight;
             ResetSize();
+        }
+
+        /// <summary>
+        /// 初期化する
+        /// </summary>
+        public void Init()
+        {
+            OriginalWidth = 0;
+            OriginalHeight = 0;
+            ModifiedWidth = 0;
+            ModifiedHeight = 0;
         }
 
         /// <summary>
@@ -42,11 +50,20 @@ namespace MojiCollaTool
         }
 
         /// <summary>
+        /// 存在しないデータであるかを返す
+        /// </summary>
+        /// <returns></returns>
+        public bool IsNullData()
+        {
+            return (OriginalWidth == 0 && OriginalHeight == 0);
+        }
+
+        /// <summary>
         /// サイズを更新する
         /// </summary>
         /// <param name="locatePosition"></param>
         /// <param name="imageData"></param>
-        public void UpdateSize(LocatePosition locatePosition, ImageData imageData)
+        public void ModifySize(LocatePosition locatePosition, ImageData imageData)
         {
             //  最初に初期化しておく
             ResetSize();
@@ -89,5 +106,19 @@ namespace MojiCollaTool
             }
         }
 
+        public void Copy(ImageData copySource)
+        {
+            OriginalWidth = copySource.OriginalWidth;
+            OriginalHeight = copySource.OriginalHeight;
+            ModifiedWidth = copySource.ModifiedWidth;
+            ModifiedHeight = copySource.ModifiedHeight;
+        }
+
+        public ImageData Clone()
+        {
+            ImageData clone = new ImageData();
+            clone.Copy(this);
+            return clone;
+        }
     }
 }

@@ -76,6 +76,11 @@ namespace MojiCollaTool
             UpdateMojiList();
         }
 
+        /// <summary>
+        /// 初期化ボタンの処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void InitButton_Click(object sender, RoutedEventArgs e)
         {
             if (_mojiPanels.Count > 0)
@@ -94,14 +99,30 @@ namespace MojiCollaTool
 
             try
             {
+                //  キャンバス操作画面を閉じる
+                _canvasEditWindow?.Close();
+
+                //  キャンバスデータを初期化する
+                CanvasData.Init();
+
                 //  作業ディレクトリを初期化する
                 DataIO.InitWorkingDirectory();
 
-                //  画像を画面に表示する
-                LoadImageToView(openFileDialog.FileName);
+                //  今の画像の表示を削除する
+                UnloadImage(ImageControl1);
+                UnloadImage(ImageControl2);
+
+                //  画像1を画面に表示する
+                CanvasData.ImageData1 =  LoadImage(ImageControl1, openFileDialog.FileName);
+
+                //  キャンバスサイズを更新する
+                CanvasData.UpdateCanvasSize();
+
+                //  キャンバス表示を更新する
+                UpdateCanvas();
 
                 //  画像を作業ディレクトリにコピーする
-                DataIO.CopyImageToWorkingDirectory(openFileDialog.FileName);
+                DataIO.CopyImageToWorkingDirectory(1, openFileDialog.FileName);
             }
             catch (Exception ex)
             {
@@ -110,6 +131,11 @@ namespace MojiCollaTool
             }
         }
 
+        /// <summary>
+        /// 画像入れ替えボタンの処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SwapImageButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -121,27 +147,38 @@ namespace MojiCollaTool
             SwapImage(openFileDialog.FileName);
         }
 
+        /// <summary>
+        /// 画像のみの入れ替えを行う
+        /// </summary>
+        /// <param name="filePath"></param>
         private void SwapImage(string filePath)
         {
             try
             {
-                //  作業ディレクトリ内の画像パスを取得する
-                var workingDirImagePath = DataIO.GetWorkingDirImagePath();
-                if(string.IsNullOrEmpty(workingDirImagePath) == false)
-                {
-                    if (filePath != workingDirImagePath)
-                    {
-                        //  パスが違うときのみ
-                        //  作業ディレクトリ内の画像を削除する
-                        DataIO.DeleteWorkingDirImage();
-                    }
-                }
+                //  キャンバス操作画面を閉じる
+                _canvasEditWindow?.Close();
 
-                //  画像を画面に表示する
-                LoadImageToView(filePath);
+                //  キャンバスデータを初期化する
+                CanvasData.Init();
+
+                //  作業ディレクトリ内の画像を削除する
+                DataIO.DeleteAllWorkingDirImage(filePath);
+
+                //  今の画像の表示を削除する
+                UnloadImage(ImageControl1);
+                UnloadImage(ImageControl2);
+
+                //  画像1を画面に表示する
+                CanvasData.ImageData1 = LoadImage(ImageControl1, filePath);
+
+                //  キャンバスサイズを更新する
+                CanvasData.UpdateCanvasSize();
+
+                //  キャンバス表示を更新する
+                UpdateCanvas();
 
                 //  画像を作業ディレクトリにコピーする
-                DataIO.CopyImageToWorkingDirectory(filePath);
+                DataIO.CopyImageToWorkingDirectory(1, filePath);
 
                 ShowInfoDialog($"{filePath} 画像入れ替え完了");
             }
@@ -152,26 +189,71 @@ namespace MojiCollaTool
         }
 
         /// <summary>
-        /// 画像を読み出し登録する
+        /// 画像を並べるボタンの処理
         /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MultiImageButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "image files|*.jpg;*.png;";
+            var dialogResult = openFileDialog.ShowDialog();
+
+            if (dialogResult.HasValue == false || dialogResult.Value == false) return;
+
+            try
+            {
+                //  キャンバス操作画面を閉じる
+                _canvasEditWindow?.Close();
+
+                //  画像2の画像データを初期化する
+                CanvasData.ImageData2.Init();
+
+                //  作業ディレクトリ内の画像2データを削除する
+                DataIO.DeleteWorkingDirImage(2, openFileDialog.FileName);
+
+                //  今の画像2の表示を削除する
+                UnloadImage(ImageControl2);
+
+                //  画像2を画面に表示する
+                CanvasData.ImageData2 = LoadImage(ImageControl2, openFileDialog.FileName);
+
+                //  画像の連結に合わせて、サイズを調整する
+                CanvasData.ModifyImageSize();
+
+                //  キャンバスサイズを更新する
+                CanvasData.UpdateCanvasSize();
+
+                //  キャンバス表示を更新する
+                UpdateCanvas();
+
+                //  画像を作業ディレクトリにコピーする
+                DataIO.CopyImageToWorkingDirectory(2, openFileDialog.FileName);
+
+                ShowInfoDialog($"{openFileDialog.FileName} 画像追加完了");
+            }
+            catch (Exception ex)
+            {
+                ShowError("画像追加エラー", ex);
+            }
+        }
+
+        /// <summary>
+        /// 画像を読み出し、表示する
+        /// </summary>
+        /// <param name="image"></param>
         /// <param name="filePath"></param>
-        private void LoadImageToView(string filePath)
+        /// <returns>画像データ</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        private ImageData LoadImage(Image image, string filePath)
         {
             try
             {
-                var imageSource = ImageUtil.LoadImageSource(filePath);
+                var imageSource = ImageUtil.LoadImageSource2(filePath);
 
-                FirstImage.Source = imageSource;
+                image.Source = imageSource;
 
-                MainCanvas.Width = imageSource.Width;
-                MainCanvas.Height = imageSource.Height;
-
-                CanvasData.Init();
-                CanvasData.CanvasWidth = (int)imageSource.Width;
-                CanvasData.CanvasHeight = (int)imageSource.Height;
-                UpdateCanvas(CanvasData);
-
-                ResetScale();
+                return new ImageData(imageSource.Width, imageSource.Height);
             }
             catch (Exception ex)
             {
@@ -179,6 +261,20 @@ namespace MojiCollaTool
             }
         }
 
+        /// <summary>
+        /// 画像を非表示にする
+        /// </summary>
+        /// <param name="image"></param>
+        private void UnloadImage(Image image)
+        {
+            image.Source = null;
+        }
+
+        /// <summary>
+        /// プロジェクトロードボタンの処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoadProjectButton_Click(object sender, RoutedEventArgs e)
         {
             if (_mojiPanels.Count > 0)
@@ -196,12 +292,23 @@ namespace MojiCollaTool
             LoadProject(openFileDialog.FileName);
         }
 
+        /// <summary>
+        /// プロジェクトファイルをロードする
+        /// </summary>
+        /// <param name="filePath"></param>
         private void LoadProject(string filePath)
         {
             try
             {
+                //  キャンバス操作画面を閉じる
+                _canvasEditWindow?.Close();
+
                 //  今ある文字を削除する
                 RemoveAllMojiPanel();
+
+                //  今の画像の表示を削除する
+                UnloadImage(ImageControl1);
+                UnloadImage(ImageControl2);
 
                 //  作業ディレクトリを初期化する
                 DataIO.InitWorkingDirectory();
@@ -209,24 +316,25 @@ namespace MojiCollaTool
                 //  プロジェクトファイルを作業ディレクトリに展開する
                 DataIO.ReadProjectDataToWorkingDir(filePath);
 
-                //  作業ディレクトリから画像を読み出す
-                var workingDirImagePath = DataIO.GetWorkingDirImagePath();
-                if (string.IsNullOrEmpty(workingDirImagePath))
+                //  画像1を画面に表示する
+                var workingDirImagePath = DataIO.GetWorkingDirImagePath(1);
+                if (string.IsNullOrEmpty(workingDirImagePath) == false)
                 {
-                    //  画像がない場合、画像のソースを削除する
-                    FirstImage.Source = null;
+                    LoadImage(ImageControl1, workingDirImagePath);
                 }
-                else
+
+                //  画像2を画面に表示する
+                workingDirImagePath = DataIO.GetWorkingDirImagePath(2);
+                if (string.IsNullOrEmpty(workingDirImagePath) == false)
                 {
-                    //  画像がある場合、表示する
-                    LoadImageToView(workingDirImagePath);
+                    LoadImage(ImageControl2, workingDirImagePath);
                 }
 
                 //  作業ディレクトリからキャンバスデータを読み出す
-                var canvasData = DataIO.ReadCanvasDataFromWorkingDir();
+                CanvasData = DataIO.ReadCanvasDataFromWorkingDir();
 
                 //  キャンバスデータを画面に反映する
-                UpdateCanvas(canvasData);
+                UpdateCanvas();
 
                 //  作業ディレクトリから文字データを読み出す
                 var mojiDatas = DataIO.ReadMojiDatasFromWorkingDir();
@@ -478,8 +586,8 @@ namespace MojiCollaTool
         {
             if(_canvasEditWindow == null || _canvasEditWindow.IsVisible == false)
             {
-                CanvasEditWindow canvasEditWindow = new CanvasEditWindow((int)FirstImage.ActualWidth, (int)FirstImage.ActualHeight, CanvasData.Clone(), this);
-                canvasEditWindow.Show();
+                _canvasEditWindow = new CanvasEditWindow(CanvasData, this);
+                _canvasEditWindow.Show();
             }
         }
 
@@ -487,19 +595,30 @@ namespace MojiCollaTool
         /// キャンバスを更新する
         /// </summary>
         /// <param name="canvasData"></param>
-        public void UpdateCanvas(CanvasData canvasData)
+        public void UpdateCanvas()
         {
-            CanvasData = canvasData;
+            if(CanvasData.ImageData1.IsNullData() == false)
+            {
+                ImageControl1.Width = CanvasData.ImageData1.ModifiedWidth;
+                ImageControl1.Height = CanvasData.ImageData1.ModifiedHeight;
+            }
 
-            MainCanvas.Width = canvasData.CanvasWidth;
-            MainCanvas.Height = canvasData.CanvasHeight;
+            if(CanvasData.ImageData2.IsNullData() == false)
+            {
+                ImageControl2.Width = CanvasData.ImageData2.ModifiedWidth;
+                ImageControl2.Height = CanvasData.ImageData2.ModifiedHeight;
+            }
 
-            CanvasBackgroundRect.Fill = new SolidColorBrush(canvasData.CanvasColor);
+            MainCanvas.Width = CanvasData.CanvasWidth;
+            MainCanvas.Height = CanvasData.CanvasHeight;
 
-            CanvasBackgroundRect.Width = canvasData.CanvasWidth;
-            CanvasBackgroundRect.Height = canvasData.CanvasHeight;
+            CanvasBackgroundRect.Fill = new SolidColorBrush(CanvasData.CanvasColor);
 
-            FirstImage.Margin = new Thickness(canvasData.ImageLeftMargin, canvasData.ImageTopMargin, canvasData.ImageRightMargin, canvasData.ImageBottomMargin);
+            CanvasBackgroundRect.Width = CanvasData.CanvasWidth;
+            CanvasBackgroundRect.Height = CanvasData.CanvasHeight;
+
+            ImageControl1.Margin = CanvasData.GetImage1Margin();
+            ImageControl2.Margin = CanvasData.GetImage2Margin();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

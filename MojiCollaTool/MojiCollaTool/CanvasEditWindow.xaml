@@ -28,10 +28,10 @@
                 <Border BorderBrush="Black" BorderThickness="1" Background="LightBlue" Width="100" Height="30" Grid.Row="1" Grid.Column="1">
                     <TextBlock Text="画像１" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Border>
-                <Button x:Name="Image2TopButton" Tag="Top" Content="画像2" Grid.Row="0" Grid.Column="1" Width="100" Height="30"/>
-                <Button x:Name="Image2BottomButton" Tag="Bottom" Content="画像2" Grid.Row="2" Grid.Column="1" Width="100" Height="30"/>
-                <Button x:Name="Image2LeftButton" Tag="Left" Content="画像2" Grid.Row="1" Grid.Column="0" Width="100" Height="30"/>
-                <Button x:Name="Image2RightButton" Tag="Right" Content="画像2" Grid.Row="1" Grid.Column="2" Width="100" Height="30"/>
+                <Button x:Name="Image2TopButton" Tag="Top" Content="▲" Grid.Row="0" Grid.Column="1" Width="100" Height="30" Click="Image2LocateButton"/>
+                <Button x:Name="Image2BottomButton" Tag="Bottom" Content="▼" Grid.Row="2" Grid.Column="1" Width="100" Height="30" Click="Image2LocateButton"/>
+                <Button x:Name="Image2LeftButton" Tag="Left" Content="◀" Grid.Row="1" Grid.Column="0" Width="100" Height="30" Click="Image2LocateButton"/>
+                <Button x:Name="Image2RightButton" Tag="Right" Content="▶" Grid.Row="1" Grid.Column="2" Width="100" Height="30" Click="Image2LocateButton"/>
                 <Border x:Name="Image2Rect" BorderBrush="Black" BorderThickness="1" Background="LightCoral" Width="100" Height="30" Visibility="Hidden" Grid.Row="1" Grid.Column="0">
                     <TextBlock Text="画像２" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Border>
