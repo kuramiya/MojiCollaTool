@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MojiCollaTool"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title="キャンバス拡大画面" Height="450" Width="700">
+        Title="キャンバス設定画面" Height="450" Width="700">
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
