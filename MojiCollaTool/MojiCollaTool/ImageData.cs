@@ -9,20 +9,20 @@ namespace MojiCollaTool
     [Serializable]
     public class ImageData
     {
-        public double OriginalWidth { get; set; } = 0;
+        public int OriginalWidth { get; set; } = 0;
 
-        public double OriginalHeight { get; set; } = 0;
+        public int OriginalHeight { get; set; } = 0;
 
-        public double ModifiedWidth { get; set; } = 0;
+        public int ModifiedWidth { get; set; } = 0;
 
-        public double ModifiedHeight { get; set; } = 0;
+        public int ModifiedHeight { get; set; } = 0;
 
         public ImageData()
         {
             //  何もしない
         }
 
-        public ImageData(double originalWidth, double originalHeight)
+        public ImageData(int originalWidth, int originalHeight)
         {
             OriginalWidth = originalWidth;
             OriginalHeight = originalHeight;
@@ -77,13 +77,13 @@ namespace MojiCollaTool
                     {
                         //  自分の方が大きいので、自分を縮める
                         ModifiedHeight = imageData.OriginalHeight;
-                        ModifiedWidth = OriginalWidth * (imageData.OriginalHeight / OriginalHeight);
+                        ModifiedWidth = (int)((double)OriginalWidth * ((double)imageData.OriginalHeight / (double)OriginalHeight));
                     }
                     else
                     {
                         //  自分の方が小さい場合、相手を縮める
                         imageData.ModifiedHeight = OriginalHeight;
-                        imageData.ModifiedWidth = imageData.OriginalWidth * (OriginalHeight / imageData.OriginalHeight);
+                        imageData.ModifiedWidth = (int)((double)imageData.OriginalWidth * ((double)OriginalHeight / (double)imageData.OriginalHeight));
                     }
                     break;
                 case LocatePosition.Top:
@@ -92,13 +92,13 @@ namespace MojiCollaTool
                     {
                         //  自分の方が大きいので、自分を縮める
                         ModifiedWidth = imageData.OriginalWidth;
-                        ModifiedHeight = OriginalHeight * (imageData.OriginalWidth / OriginalWidth);
+                        ModifiedHeight = (int)((double)OriginalHeight * ((double)imageData.OriginalWidth / (double)OriginalWidth));
                     }
                     else
                     {
                         //  自分の方が小さい場合、相手を縮める
                         imageData.ModifiedWidth = OriginalWidth;
-                        imageData.ModifiedHeight = imageData.OriginalHeight * (OriginalWidth / imageData.OriginalWidth);
+                        imageData.ModifiedHeight = (int)((double)imageData.OriginalHeight * ((double)OriginalWidth / (double)imageData.OriginalWidth));
                     }
                     break;
                 default:

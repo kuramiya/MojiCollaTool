@@ -25,12 +25,12 @@ namespace MojiCollaTool
         /// <summary>
         /// キャンバスの横幅
         /// </summary>
-        public double CanvasWidth { get; set; } = 0;
+        public int CanvasWidth { get; set; } = 0;
 
         /// <summary>
         /// キャンバスの縦幅
         /// </summary>
-        public double CanvasHeight { get; set; } = 0;
+        public int CanvasHeight { get; set; } = 0;
 
         /// <summary>
         /// 画像1のデータ
@@ -50,7 +50,7 @@ namespace MojiCollaTool
         /// <summary>
         /// 画像縦サイズ
         /// </summary>
-        public double ImageWidth
+        public int ImageWidth
         {
             get
             {
@@ -70,7 +70,7 @@ namespace MojiCollaTool
         /// <summary>
         /// 画像横サイズ
         /// </summary>
-        public double ImageHeight
+        public int ImageHeight
         {
             get
             {
@@ -87,13 +87,13 @@ namespace MojiCollaTool
             }
         }
 
-        public double ImageMarginTop { get; set; }
+        public int ImageMarginTop { get; set; }
 
-        public double ImageMarginLeft { get; set; }
+        public int ImageMarginLeft { get; set; }
 
-        public double ImageMarginBottom { get; set; }
+        public int ImageMarginBottom { get; set; }
 
-        public double ImageMarginRight { get; set; }
+        public int ImageMarginRight { get; set; }
 
         /// <summary>
         /// キャンバスの色

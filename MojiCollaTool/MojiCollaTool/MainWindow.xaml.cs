@@ -179,8 +179,6 @@ namespace MojiCollaTool
 
                 //  画像を作業ディレクトリにコピーする
                 DataIO.CopyImageToWorkingDirectory(1, filePath);
-
-                ShowInfoDialog($"{filePath} 画像入れ替え完了");
             }
             catch (Exception ex)
             {
@@ -200,6 +198,14 @@ namespace MojiCollaTool
             var dialogResult = openFileDialog.ShowDialog();
 
             if (dialogResult.HasValue == false || dialogResult.Value == false) return;
+
+            //  画像1が存在していない場合、画像1から設定する
+            //  画像入れ替えと同じ処理を行なう
+            if (CanvasData.ImageData1.IsNullData())
+            {
+                SwapImage(openFileDialog.FileName);
+                return;
+            }
 
             try
             {
@@ -229,8 +235,6 @@ namespace MojiCollaTool
 
                 //  画像を作業ディレクトリにコピーする
                 DataIO.CopyImageToWorkingDirectory(2, openFileDialog.FileName);
-
-                ShowInfoDialog($"{openFileDialog.FileName} 画像追加完了");
             }
             catch (Exception ex)
             {
@@ -253,7 +257,7 @@ namespace MojiCollaTool
 
                 image.Source = imageSource;
 
-                return new ImageData(imageSource.Width, imageSource.Height);
+                return new ImageData((int)imageSource.Width, (int)imageSource.Height);
             }
             catch (Exception ex)
             {
@@ -344,8 +348,6 @@ namespace MojiCollaTool
                 {
                     AddMojiPanel(new MojiPanel(mojiData, this));
                 }
-
-                ShowInfoDialog($"{filePath} プロジェクト読み出し完了");
             }
             catch (Exception ex)
             {

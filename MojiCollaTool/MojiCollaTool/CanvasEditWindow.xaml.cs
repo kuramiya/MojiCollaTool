@@ -104,11 +104,11 @@ namespace MojiCollaTool
         {
             CanvasData.Image2LocatePosition = Enum.Parse<LocatePosition>((string)((Button)sender).Tag);
 
-            UpdateView();
-
             CanvasData.ModifyImageSize();
 
             CanvasData.UpdateCanvasSize();
+
+            UpdateView();
 
             _mainWindow?.UpdateCanvas();
         }
