@@ -88,7 +88,12 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="UpdateButton" Content="適用" Width="100" FontSize="20" Grid.Column="0" Click="UpdateButton_Click"/>
+            <Button x:Name="UpdateButton" Width="100" Grid.Column="0" Click="UpdateButton_Click">
+                <TextBlock FontSize="11">
+                    透明度など<LineBreak/>
+                    手動入力を反映
+                </TextBlock>
+            </Button>
             <Button x:Name="OKButton" Content="OK" Width="100" FontSize="20" Grid.Column="1" Click="OKButton_Click"/>
         </Grid>
     </Grid>

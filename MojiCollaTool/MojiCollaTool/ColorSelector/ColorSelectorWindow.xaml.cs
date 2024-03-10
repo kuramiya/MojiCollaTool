@@ -197,6 +197,8 @@ namespace MojiCollaTool.ColorSelector
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
+            UpdateColorHistory(ManualColorPicker.AfterBrush.Color);
+
             if (updateAction != null) updateAction(ManualColorPicker.AfterBrush.Color);
         }
 
