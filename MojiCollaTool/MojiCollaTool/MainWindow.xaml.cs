@@ -42,13 +42,23 @@ namespace MojiCollaTool
         /// </summary>
         public CanvasData CanvasData { get; set; } = new CanvasData();
 
+        /// <summary>
+        /// キャンバス設定画面
+        /// </summary>
         private CanvasEditWindow _canvasEditWindow = null!;
+
+        /// <summary>
+        /// 最後にダイアログで使用したディレクトリ
+        /// </summary>
+        private string? lastUsedDirectory = string.Empty;
 
         private bool _runEvent = false;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            lastUsedDirectory = DataIO.GetExeDirPath();
 
             Title = $"MojiCollaTool ver{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
 
@@ -92,6 +102,7 @@ namespace MojiCollaTool
             }
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (string.IsNullOrEmpty(lastUsedDirectory) == false) openFileDialog.InitialDirectory = lastUsedDirectory;
             openFileDialog.Filter = "image files|*.jpg;*.png;";
             var dialogResult = openFileDialog.ShowDialog();
 
@@ -123,6 +134,8 @@ namespace MojiCollaTool
 
                 //  画像を作業ディレクトリにコピーする
                 DataIO.CopyImageToWorkingDirectory(1, openFileDialog.FileName);
+
+                lastUsedDirectory = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
             }
             catch (Exception ex)
             {
@@ -139,6 +152,7 @@ namespace MojiCollaTool
         private void SwapImageButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (string.IsNullOrEmpty(lastUsedDirectory) == false) openFileDialog.InitialDirectory = lastUsedDirectory;
             openFileDialog.Filter = "image files|*.jpg;*.png;";
             var dialogResult = openFileDialog.ShowDialog();
 
@@ -179,6 +193,8 @@ namespace MojiCollaTool
 
                 //  画像を作業ディレクトリにコピーする
                 DataIO.CopyImageToWorkingDirectory(1, filePath);
+
+                lastUsedDirectory = System.IO.Path.GetDirectoryName(filePath);
             }
             catch (Exception ex)
             {
@@ -194,6 +210,7 @@ namespace MojiCollaTool
         private void MultiImageButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (string.IsNullOrEmpty(lastUsedDirectory) == false) openFileDialog.InitialDirectory = lastUsedDirectory;
             openFileDialog.Filter = "image files|*.jpg;*.png;";
             var dialogResult = openFileDialog.ShowDialog();
 
@@ -235,6 +252,8 @@ namespace MojiCollaTool
 
                 //  画像を作業ディレクトリにコピーする
                 DataIO.CopyImageToWorkingDirectory(2, openFileDialog.FileName);
+
+                lastUsedDirectory = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
             }
             catch (Exception ex)
             {
@@ -288,6 +307,7 @@ namespace MojiCollaTool
             }
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (string.IsNullOrEmpty(lastUsedDirectory) == false) openFileDialog.InitialDirectory = lastUsedDirectory;
             openFileDialog.Filter = "mctzip project file|*.mctzip";
             var dialogResult = openFileDialog.ShowDialog();
 
@@ -348,6 +368,8 @@ namespace MojiCollaTool
                 {
                     AddMojiPanel(new MojiPanel(mojiData, this));
                 }
+
+                lastUsedDirectory = System.IO.Path.GetDirectoryName(filePath);
             }
             catch (Exception ex)
             {
@@ -358,6 +380,7 @@ namespace MojiCollaTool
         private void SaveProjectButton_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
+            if (string.IsNullOrEmpty(lastUsedDirectory) == false) saveFileDialog.InitialDirectory = lastUsedDirectory;
             saveFileDialog.Filter = "mctzip project file|*.mctzip";
             saveFileDialog.FileName = $"MCToolProject{DateTime.Now:yyyyMMdd-HHmmss}.mctzip";
 
@@ -368,6 +391,8 @@ namespace MojiCollaTool
             try
             {
                 DataIO.WriteWorkingDirToProjectDataFile(saveFileDialog.FileName, _mojiPanels.Select(x => x.MojiData), CanvasData);
+
+                lastUsedDirectory = System.IO.Path.GetDirectoryName(saveFileDialog.FileName);
 
                 ShowInfoDialog($"{saveFileDialog.FileName} プロジェクト保存完了");
             }
@@ -382,7 +407,7 @@ namespace MojiCollaTool
         /// </summary>
         /// <param name="message"></param>
         /// <param name="ex"></param>
-        private void ShowError(string message, Exception? ex = null)
+        public static void ShowError(string message, Exception? ex = null)
         {
             StringBuilder logMessage = new StringBuilder();
             logMessage.AppendLine(message);
@@ -503,6 +528,7 @@ namespace MojiCollaTool
         private void OutputImageButton_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
+            if (string.IsNullOrEmpty(lastUsedDirectory) == false) saveFileDialog.InitialDirectory = lastUsedDirectory;
             saveFileDialog.Filter = "png file|*.png|jpg file|*.jpg";
             saveFileDialog.FileName = $"MojiColla{DateTime.Now:yyyyMMdd-HHmmss}.png";
             var dialogResult = saveFileDialog.ShowDialog();
@@ -525,6 +551,8 @@ namespace MojiCollaTool
                 {
                     MainCanvas.ToImage(saveFileDialog.FileName, new PngBitmapEncoder());
                 }
+
+                lastUsedDirectory = System.IO.Path.GetDirectoryName(saveFileDialog.FileName);
 
                 ShowInfoDialog($"{saveFileDialog.FileName} 画像出力完了");
             }

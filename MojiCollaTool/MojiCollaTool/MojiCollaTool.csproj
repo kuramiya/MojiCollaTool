@@ -6,8 +6,8 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>mctool-icon.ico</ApplicationIcon>
-    <AssemblyVersion>1.1.0.1</AssemblyVersion>
-    <FileVersion>1.1.0.1</FileVersion>
+    <AssemblyVersion>1.1.1.0</AssemblyVersion>
+    <FileVersion>1.1.1.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,12 +15,14 @@
     <None Remove="Images\copy.png" />
     <None Remove="Images\delete.png" />
     <None Remove="Images\folder.png" />
+    <None Remove="Images\folder16.png" />
     <None Remove="Images\image.png" />
     <None Remove="Images\moji.png" />
     <None Remove="Images\mojiimage.png" />
     <None Remove="Images\multi.png" />
     <None Remove="Images\new.png" />
     <None Remove="Images\save.png" />
+    <None Remove="Images\save16.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,12 +34,14 @@
     <Resource Include="Images\copy.png" />
     <Resource Include="Images\delete.png" />
     <Resource Include="Images\folder.png" />
+    <Resource Include="Images\folder16.png" />
     <Resource Include="Images\image.png" />
     <Resource Include="Images\moji.png" />
     <Resource Include="Images\mojiimage.png" />
     <Resource Include="Images\multi.png" />
     <Resource Include="Images\new.png" />
     <Resource Include="Images\save.png" />
+    <Resource Include="Images\save16.png" />
   </ItemGroup>
 
 </Project>

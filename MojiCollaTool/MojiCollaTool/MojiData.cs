@@ -88,6 +88,7 @@ namespace MojiCollaTool
 
         public void Copy(MojiData source)
         {
+            //  IDはコピーしない
             FullText = source.FullText;
             X = source.X;
             Y = source.Y;
@@ -110,6 +111,13 @@ namespace MojiCollaTool
             RotateAngle = source.RotateAngle;
         }
 
+        public MojiData Clone()
+        {
+            MojiData clone = new MojiData();
+            clone.Copy(this);
+            return clone;
+        }
+
         /// <summary>
         /// 文字を複製する
         /// </summary>
@@ -121,9 +129,9 @@ namespace MojiCollaTool
 
             reproductionMojiData.Copy(this);
 
-            //  わかりやすくするために、座標を少しずらす
-            reproductionMojiData.X += 10;
-            reproductionMojiData.Y += 10;
+            //  わかりやすくするために、座標をデフォルトに戻す
+            reproductionMojiData.X = 0;
+            reproductionMojiData.Y = 0;
 
             return reproductionMojiData;
         }

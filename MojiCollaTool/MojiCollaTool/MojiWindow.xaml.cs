@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,15 +20,19 @@ namespace MojiCollaTool
     /// </summary>
     public partial class MojiWindow : Window
     {
-        private MojiPanel mojiPanel;
+        private MojiPanel _mojiPanel;
 
-        public bool IsHideOnly = true;
+        /// <summary>
+        /// 画面を隠すことのみを示すフラグ
+        /// 画面の本当の破棄処理を制御するために用意している
+        /// </summary>
+        public bool IsHideOnly { get; set; } = true;
 
-        private bool runEvent = false;
+        private bool _runEvent = false;
 
         public MojiWindow(MojiPanel mojiPanel)
         {
-            this.mojiPanel= mojiPanel;
+            this._mojiPanel= mojiPanel;
 
             InitializeComponent();
 
@@ -38,9 +43,9 @@ namespace MojiCollaTool
 
         private void Window_ContentRendered(object sender, EventArgs e)
         {
-            LoadMojiDataToWindow(mojiPanel.MojiData);
+            LoadMojiDataToWindow(_mojiPanel.MojiData);
 
-            runEvent = true;
+            _runEvent = true;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -57,7 +62,7 @@ namespace MojiCollaTool
 
         public void LoadMojiDataToWindow(MojiData mojiData)
         {
-            runEvent = false;
+            _runEvent = false;
 
             Title = $"[{mojiData.Id}] {mojiData.ExampleText}";
             IDLabel.Content = $"Moji ID:{mojiData.Id}";
@@ -93,85 +98,85 @@ namespace MojiCollaTool
             BackgroundBoxBorderColorButton.Background = new SolidColorBrush(mojiData.BackgroundBoxBorderColor);
             BackgroundBoxBorderThicknessTextBox.SetValue((int)mojiData.BackgroundBoxBorderThickness);
 
-            runEvent = true;
+            _runEvent = true;
         }
 
         public void UpdateXY(double x, double y)
         {
-            runEvent = false;
+            _runEvent = false;
 
             LocationXTextBox.SetValue((int)x, false);
             LocationYTextBox.SetValue((int)y, false);
 
-            runEvent = true;
+            _runEvent = true;
         }
 
         private void ReproductionButton_Click(object sender, RoutedEventArgs e)
         {
-            mojiPanel.Reproduction();
+            _mojiPanel.Reproduction();
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (MainWindow.ShowOKCancelDialog("文字を削除してよろしいですか？") == false) return;
 
-            mojiPanel.Remove();
+            _mojiPanel.Remove();
         }
 
         public void UpdateMojiView()
         {
-            mojiPanel.MojiData.FullText = TextTextBox.Text;
-            Title = $"[{mojiPanel.MojiData.Id}] {mojiPanel.MojiData.ExampleText}";
-            mojiPanel.MojiData.FontSize = FontSizeTextBox.Value;
-            mojiPanel.MojiData.X = LocationXTextBox.Value;
-            mojiPanel.MojiData.Y = LocationYTextBox.Value;
-            mojiPanel.MojiData.TextDirection = (TextDirection)DirectionComboBox.SelectedIndex;
-            mojiPanel.MojiData.IsBold = (BoldCheckBox.IsChecked == true);
-            mojiPanel.MojiData.IsItalic = (ItalicCheckBox.IsChecked == true);
-            mojiPanel.MojiData.LineMargin = LineMarginTextBox.Value;
-            mojiPanel.MojiData.CharacterMargin = CharacterMarginTextBox.Value;
-            mojiPanel.MojiData.FontFamilyName = (string)FontFamilyComboBox.SelectedValue;
-            mojiPanel.MojiData.BorderThickness = BorderThicknessTextBox.Value;
-            mojiPanel.MojiData.BorderBlurrRadius = BorderBlurrRadiusTextBox.Value;
-            mojiPanel.MojiData.IsBackgroundBoxExists = (BackgroundBoxCheckBox.IsChecked == true);
-            mojiPanel.MojiData.BackgoundBoxPadding = BackgroundBoxPaddingTextBox.Value;
-            mojiPanel.MojiData.BackgroundBoxBorderThickness = BackgroundBoxBorderThicknessTextBox.Value;
-            mojiPanel.MojiData.RotateAngle = RotateTextBox.Value;
+            _mojiPanel.MojiData.FullText = TextTextBox.Text;
+            Title = $"[{_mojiPanel.MojiData.Id}] {_mojiPanel.MojiData.ExampleText}";
+            _mojiPanel.MojiData.FontSize = FontSizeTextBox.Value;
+            _mojiPanel.MojiData.X = LocationXTextBox.Value;
+            _mojiPanel.MojiData.Y = LocationYTextBox.Value;
+            _mojiPanel.MojiData.TextDirection = (TextDirection)DirectionComboBox.SelectedIndex;
+            _mojiPanel.MojiData.IsBold = (BoldCheckBox.IsChecked == true);
+            _mojiPanel.MojiData.IsItalic = (ItalicCheckBox.IsChecked == true);
+            _mojiPanel.MojiData.LineMargin = LineMarginTextBox.Value;
+            _mojiPanel.MojiData.CharacterMargin = CharacterMarginTextBox.Value;
+            _mojiPanel.MojiData.FontFamilyName = (string)FontFamilyComboBox.SelectedValue;
+            _mojiPanel.MojiData.BorderThickness = BorderThicknessTextBox.Value;
+            _mojiPanel.MojiData.BorderBlurrRadius = BorderBlurrRadiusTextBox.Value;
+            _mojiPanel.MojiData.IsBackgroundBoxExists = (BackgroundBoxCheckBox.IsChecked == true);
+            _mojiPanel.MojiData.BackgoundBoxPadding = BackgroundBoxPaddingTextBox.Value;
+            _mojiPanel.MojiData.BackgroundBoxBorderThickness = BackgroundBoxBorderThicknessTextBox.Value;
+            _mojiPanel.MojiData.RotateAngle = RotateTextBox.Value;
 
-            mojiPanel.UpdateMojiView();
+            _mojiPanel.UpdateMojiView();
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (runEvent == false) return;
+            if (_runEvent == false) return;
 
             UpdateMojiView();
         }
 
         private void TextBox_ValueChanged(object sender, UpDownTextBoxEvent e)
         {
-            if (runEvent == false) return;
+            if (_runEvent == false) return;
 
             UpdateMojiView();
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (runEvent == false) return;
+            if (_runEvent == false) return;
 
             UpdateMojiView();
         }
 
         private void CheckBox_CheckChanged(object sender, RoutedEventArgs e)
         {
-            if (runEvent == false) return;
+            if (_runEvent == false) return;
 
             UpdateMojiView();
         }
 
         private void ColorButton_Click(Color currentColor, Action<Color> action)
         {
-            if (runEvent == false) return;
+            if (_runEvent == false) return;
 
             ColorSelector.ColorSelectorWindow colorSelectorWindow = new ColorSelector.ColorSelectorWindow(currentColor, action);
             colorSelectorWindow.Top = Top;
@@ -188,41 +193,41 @@ namespace MojiCollaTool
 
         private void ForeColorButton_Click(object sender, RoutedEventArgs e)
         {
-            ColorButton_Click(mojiPanel.MojiData.ForeColor, (color) =>
+            ColorButton_Click(_mojiPanel.MojiData.ForeColor, (color) =>
             {
-                mojiPanel.MojiData.ForeColor = color;
+                _mojiPanel.MojiData.ForeColor = color;
                 ((Button)sender).Background = new SolidColorBrush(color);
-                mojiPanel.UpdateMojiView();
+                _mojiPanel.UpdateMojiView();
             });
         }
 
         private void BorderColorButton_Click(object sender, RoutedEventArgs e)
         {
-            ColorButton_Click(mojiPanel.MojiData.BorderColor, (color) =>
+            ColorButton_Click(_mojiPanel.MojiData.BorderColor, (color) =>
             {
-                mojiPanel.MojiData.BorderColor = color;
+                _mojiPanel.MojiData.BorderColor = color;
                 ((Button)sender).Background = new SolidColorBrush(color);
-                mojiPanel.UpdateMojiView();
+                _mojiPanel.UpdateMojiView();
             });
         }
 
         private void BackgroundBoxColorButton_Click(object sender, RoutedEventArgs e)
         {
-            ColorButton_Click(mojiPanel.MojiData.BackgroundBoxColor, (color) =>
+            ColorButton_Click(_mojiPanel.MojiData.BackgroundBoxColor, (color) =>
             {
-                mojiPanel.MojiData.BackgroundBoxColor = color;
+                _mojiPanel.MojiData.BackgroundBoxColor = color;
                 ((Button)sender).Background = new SolidColorBrush(color);
-                mojiPanel.UpdateMojiView();
+                _mojiPanel.UpdateMojiView();
             });
         }
 
         private void BackgroundBoxBorderColorButton_Click(object sender, RoutedEventArgs e)
         {
-            ColorButton_Click(mojiPanel.MojiData.BackgroundBoxBorderColor, (color) =>
+            ColorButton_Click(_mojiPanel.MojiData.BackgroundBoxBorderColor, (color) =>
             {
-                mojiPanel.MojiData.BackgroundBoxBorderColor = color;
+                _mojiPanel.MojiData.BackgroundBoxBorderColor = color;
                 ((Button)sender).Background = new SolidColorBrush(color);
-                mojiPanel.UpdateMojiView();
+                _mojiPanel.UpdateMojiView();
             });
         }
 
@@ -230,8 +235,61 @@ namespace MojiCollaTool
         {
             if (ShowTopMostCheckBox.IsChecked.HasValue == false) return;
 
-            mojiPanel.ShowTopmost = ShowTopMostCheckBox.IsChecked.Value;
-            Topmost = mojiPanel.ShowTopmost;
+            _mojiPanel.ShowTopmost = ShowTopMostCheckBox.IsChecked.Value;
+            Topmost = _mojiPanel.ShowTopmost;
+        }
+
+        private void SaveFormatButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.InitialDirectory = DataIO.GetMojiFormatDirPath();
+                saveFileDialog.Filter = "moji format files|*.xml";
+                var dialogResult = saveFileDialog.ShowDialog();
+
+                if (dialogResult.HasValue == false || dialogResult.Value == false) return;
+
+                //  保存する文字データの本文は、ファイル名と同じにする
+                MojiData formatMojiData = _mojiPanel.MojiData.Clone();
+                formatMojiData.FullText = System.IO.Path.GetFileNameWithoutExtension(saveFileDialog.FileName);
+
+                DataIO.WriteMojiFormat(formatMojiData, saveFileDialog.FileName);
+            }
+            catch (Exception ex)
+            {
+                MainWindow.ShowError("文字フォーマット保存エラー", ex);
+            }
+        }
+
+        private void LoadFormatButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.InitialDirectory = DataIO.GetMojiFormatDirPath();
+                openFileDialog.Filter = "moji format files|*.xml";
+                var dialogResult = openFileDialog.ShowDialog();
+
+                if (dialogResult.HasValue == false || dialogResult.Value == false) return;
+
+                var formatMojiData = DataIO.ReadMojiData(openFileDialog.FileName);
+
+                //  IDと座標、テキストはそのままにしておく、他はコピーする
+                formatMojiData.Id = _mojiPanel.MojiData.Id;
+                formatMojiData.X = _mojiPanel.MojiData.X;
+                formatMojiData.Y = _mojiPanel.MojiData.Y;
+                formatMojiData.FullText = _mojiPanel.MojiData.FullText;   
+                _mojiPanel.MojiData.Copy(formatMojiData);
+
+                LoadMojiDataToWindow(_mojiPanel.MojiData);
+
+                _mojiPanel.UpdateMojiView();
+            }
+            catch (Exception ex)
+            {
+                MainWindow.ShowError("文字フォーマット読み出しエラー", ex);
+            }
         }
     }
 }

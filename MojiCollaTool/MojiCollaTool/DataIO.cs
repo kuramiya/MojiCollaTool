@@ -69,6 +69,30 @@ namespace MojiCollaTool
         }
 
         /// <summary>
+        /// 文字フォーマットを保存するパスを返す
+        /// 存在しない場合、作成する
+        /// </summary>
+        /// <returns></returns>
+        public static string GetMojiFormatDirPath()
+        {
+            try
+            {
+                var dirPath = Path.Combine(GetExeDirPath(), "MojiFormat");
+
+                if(Directory.Exists(dirPath) == false)
+                {
+                    Directory.CreateDirectory(dirPath);
+                }
+
+                return dirPath;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("GetMojiFormatDirPath error.", ex);
+            }
+        }
+
+        /// <summary>
         /// ディレクトリ内の画像ファイルパスを返す
         /// </summary>
         /// <param name="dirPath"></param>
@@ -220,6 +244,25 @@ namespace MojiCollaTool
                 if (obj == null) throw new InvalidOperationException("XML convert null error.");
 
                 return (T)obj;
+            }
+        }
+
+        /// <summary>
+        /// 文字フォーマットデータを出力する
+        /// </summary>
+        /// <param name="mojiData"></param>
+        /// <param name="filePath"></param>
+        public static void WriteMojiFormat(MojiData mojiData, string filePath)
+        {
+            try
+            {
+                WriteXMLData(mojiData, filePath);
+            }
+            catch (Exception ex)
+            {
+                var ioex = new InvalidOperationException("WriteMojiFormat error.", ex);
+                ioex.Data.Add("MojiData", mojiData);
+                throw ioex;
             }
         }
 
