@@ -105,7 +105,7 @@ namespace MojiCollaTool
                     }
                     else if(TATEGAKI_SHIFT_TARGET_CHARS_SMALL.Contains(character))
                     {
-                        RenderTransform = new TranslateTransform(Width / 6, 0);
+                        RenderTransform = new TranslateTransform(Width / 8, -Height / 14);
                     }
                     else if (TATEGAKI_90DEG_ROTATE_TARGET_CHARS.Contains(character))
                     {
