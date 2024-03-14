@@ -621,6 +621,12 @@ namespace MojiCollaTool
             }
         }
 
+        private void FontEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            FontEditWindow fontEditWindow = new FontEditWindow();
+            fontEditWindow.ShowDialog();
+        }
+
         /// <summary>
         /// キャンバスを更新する
         /// </summary>

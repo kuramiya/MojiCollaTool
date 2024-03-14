@@ -12,16 +12,6 @@ namespace MojiCollaTool
     public class FontUtil
     {
         /// <summary>
-        /// フォント一覧のテキストボックス
-        /// </summary>
-        public static readonly List<TextBlock> FontTextBlocks = new List<TextBlock>();
-
-        static FontUtil()
-        {
-            FontTextBlocks.AddRange(GetFontTextBlocks());
-        }
-
-        /// <summary>
         /// フォント一覧のテキストボックスリストを返す
         /// </summary>
         /// <returns></returns>

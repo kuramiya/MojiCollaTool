@@ -12,7 +12,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -84,7 +83,7 @@
                 <TextBlock Text="文字を追加する" VerticalAlignment="Center"/>
             </StackPanel>
         </Button>
-        <Grid x:Name="CanvasGrid" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" Background="Gray" AllowDrop="True" Drop="CanvasGrid_Drop" DragOver="CanvasGrid_DragOver" PreviewMouseWheel="CanvasGrid_PreviewMouseWheel">
+        <Grid x:Name="CanvasGrid" Grid.Row="1" Grid.Column="0" Background="Gray" AllowDrop="True" Drop="CanvasGrid_Drop" DragOver="CanvasGrid_DragOver" PreviewMouseWheel="CanvasGrid_PreviewMouseWheel">
             <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
                 <Canvas x:Name="MainCanvas" Background="Gray" Grid.Column="0">
                     <Canvas.LayoutTransform>
@@ -96,31 +95,45 @@
                 </Canvas>
             </ScrollViewer>
         </Grid>
-        <GroupBox Header="文字リスト" Grid.Row="1" Grid.Column="1">
-            <ListView x:Name="MojiListView" Grid.Row="1" Grid.Column="1" HorizontalContentAlignment="Stretch" PreviewMouseLeftButtonUp="MojiListView_PreviewMouseLeftButtonUp">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="Gray" BorderThickness="1" Padding="5">
-                            <StackPanel Orientation="Vertical">
-                                <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                    <TextBlock Text="ID:"/>
-                                    <TextBlock Text="{Binding Id}"/>
+        <Grid  Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <GroupBox Header="文字リスト" Grid.Row="0">
+                <ListView x:Name="MojiListView" Grid.Row="1" Grid.Column="1" HorizontalContentAlignment="Stretch" PreviewMouseLeftButtonUp="MojiListView_PreviewMouseLeftButtonUp">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="Gray" BorderThickness="1" Padding="5">
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                        <TextBlock Text="ID:"/>
+                                        <TextBlock Text="{Binding Id}"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding ExampleText}" Grid.Row="1"/>
                                 </StackPanel>
-                                <TextBlock Text="{Binding ExampleText}" Grid.Row="1"/>
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </GroupBox>
-        <Button x:Name="CanvasEditButton" Grid.Row="2" Grid.Column="1" Margin="5" Click="CanvasEditButton_Click">
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <Image Source="/Images/canvas.png" Margin="5"/>
-                <TextBlock VerticalAlignment="Center">
-                    キャンバスを<LineBreak/>
-                    設定する
-                </TextBlock>
-            </StackPanel>
-        </Button>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </GroupBox>
+            <Button x:Name="FontEditButton" Grid.Row="1" Margin="5" HorizontalContentAlignment="Left" Click="FontEditButton_Click">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Image Source="/Images/moji.png" Margin="5"/>
+                    <TextBlock VerticalAlignment="Center">
+                        フォント設定
+                    </TextBlock>
+                </StackPanel>
+            </Button>
+            <Button x:Name="CanvasEditButton" Grid.Row="2" Margin="5" HorizontalContentAlignment="Left" Click="CanvasEditButton_Click">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Image Source="/Images/canvas.png" Margin="5"/>
+                    <TextBlock VerticalAlignment="Center">
+                        キャンバス設定
+                    </TextBlock>
+                </StackPanel>
+            </Button>
+        </Grid>
     </Grid>
 </Window>
