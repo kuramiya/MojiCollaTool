@@ -72,8 +72,14 @@ namespace MojiCollaTool
 
             _children = new VisualCollection(this);
 
+            //  第二の文字の縁取りがある場合、その描画オブジェクトを追加する
+            if (mojiData.IsSecondBorderExists)
+            {
+                _children.Add(CreateCharacterBorderDrawingVisual(characterGeometry, mojiData.SecondBorderThickness, mojiData.SecondBorderColor, mojiData.SecondBorderBlurrRadius));
+            }
+
             //  文字の縁取りがある場合、その描画オブジェクトを追加する
-            if(mojiData.IsBorderExists)
+            if (mojiData.IsBorderExists)
             {
                 _children.Add(CreateCharacterBorderDrawingVisual(characterGeometry, mojiData.BorderThickness, mojiData.BorderColor, mojiData.BorderBlurrRadius));
             }

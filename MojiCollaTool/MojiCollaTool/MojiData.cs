@@ -61,6 +61,14 @@ namespace MojiCollaTool
 
         public double BorderBlurrRadius { get; set; } = 0;
 
+        public Color SecondBorderColor { get; set; } = Colors.White;
+
+        public bool IsSecondBorderExists { get => SecondBorderThickness > 0; }
+
+        public double SecondBorderThickness { get; set; } = 0;
+
+        public double SecondBorderBlurrRadius { get; set; } = 0;
+
         public bool IsBackgroundBoxExists { get; set; } = true;
 
         public Color BackgroundBoxColor { get; set; } = Colors.White;
@@ -103,6 +111,9 @@ namespace MojiCollaTool
             BorderColor = source.BorderColor;
             BorderThickness = source.BorderThickness;
             BorderBlurrRadius = source.BorderBlurrRadius;
+            SecondBorderColor = source.SecondBorderColor;
+            SecondBorderThickness = source.SecondBorderThickness;
+            SecondBorderBlurrRadius = source.SecondBorderBlurrRadius;
             IsBackgroundBoxExists = source.IsBackgroundBoxExists;
             BackgroundBoxColor = source.BackgroundBoxColor;
             BackgoundBoxPadding = source.BackgoundBoxPadding;

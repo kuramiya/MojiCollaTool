@@ -90,6 +90,11 @@ namespace MojiCollaTool
 
             BorderThicknessTextBox.SetValue((int)mojiData.BorderThickness);
             BorderColorButton.Background = new SolidColorBrush(mojiData.BorderColor);
+            BorderBlurrRadiusTextBox.SetValue((int)mojiData.BorderBlurrRadius);
+
+            SecondBorderThicknessTextBox.SetValue((int)mojiData.SecondBorderThickness);
+            SecondBorderColorButton.Background = new SolidColorBrush(mojiData.SecondBorderColor);
+            SecondBorderBlurrRadiusTextBox.SetValue((int)mojiData.SecondBorderBlurrRadius);
 
             BackgroundBoxCheckBox.IsChecked = mojiData.IsBackgroundBoxExists;
             BackgroundBoxColorButton.Background = new SolidColorBrush(mojiData.BackgroundBoxColor);
@@ -138,6 +143,8 @@ namespace MojiCollaTool
             _mojiPanel.MojiData.FontFamilyName = (string)FontFamilyComboBox.SelectedValue;
             _mojiPanel.MojiData.BorderThickness = BorderThicknessTextBox.Value;
             _mojiPanel.MojiData.BorderBlurrRadius = BorderBlurrRadiusTextBox.Value;
+            _mojiPanel.MojiData.SecondBorderThickness = SecondBorderThicknessTextBox.Value;
+            _mojiPanel.MojiData.SecondBorderBlurrRadius = SecondBorderBlurrRadiusTextBox.Value;
             _mojiPanel.MojiData.IsBackgroundBoxExists = (BackgroundBoxCheckBox.IsChecked == true);
             _mojiPanel.MojiData.BackgoundBoxPadding = BackgroundBoxPaddingTextBox.Value;
             _mojiPanel.MojiData.BackgroundBoxBorderThickness = BackgroundBoxBorderThicknessTextBox.Value;
@@ -206,6 +213,16 @@ namespace MojiCollaTool
             ColorButton_Click(_mojiPanel.MojiData.BorderColor, (color) =>
             {
                 _mojiPanel.MojiData.BorderColor = color;
+                ((Button)sender).Background = new SolidColorBrush(color);
+                _mojiPanel.UpdateMojiView();
+            });
+        }
+
+        private void SecondBorderColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            ColorButton_Click(_mojiPanel.MojiData.SecondBorderColor, (color) =>
+            {
+                _mojiPanel.MojiData.SecondBorderColor = color;
                 ((Button)sender).Background = new SolidColorBrush(color);
                 _mojiPanel.UpdateMojiView();
             });
