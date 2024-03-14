@@ -61,7 +61,7 @@ namespace MojiCollaTool
 
         public double BorderBlurrRadius { get; set; } = 0;
 
-        public Color SecondBorderColor { get; set; } = Colors.White;
+        public Color SecondBorderColor { get; set; } = Colors.Black;
 
         public bool IsSecondBorderExists { get => SecondBorderThickness > 0; }
 
