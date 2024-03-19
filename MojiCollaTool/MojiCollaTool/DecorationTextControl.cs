@@ -72,6 +72,9 @@ namespace MojiCollaTool
 
             _children = new VisualCollection(this);
 
+            //  デバッグ用の箱を追加する
+            //_children.Add(CreateDebugBox());
+
             //  第二の文字の縁取りがある場合、その描画オブジェクトを追加する
             if (mojiData.IsSecondBorderExists)
             {
@@ -163,6 +166,18 @@ namespace MojiCollaTool
             if(borderBlurrRadius > 0)
             {
                 drawingVisual.Effect = new BlurEffect { Radius = borderBlurrRadius };
+            }
+
+            return drawingVisual;
+        }
+
+        private DrawingVisual CreateDebugBox()
+        {
+            DrawingVisual drawingVisual = new DrawingVisual();
+
+            using (var drawingContext = drawingVisual.RenderOpen())
+            {
+                drawingContext.DrawRectangle(new SolidColorBrush(Colors.Red), null, new Rect(0, 0, Width, Height));
             }
 
             return drawingVisual;
