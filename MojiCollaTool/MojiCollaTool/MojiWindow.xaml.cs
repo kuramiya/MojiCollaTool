@@ -98,7 +98,9 @@ namespace MojiCollaTool
 
             BackgroundBoxCheckBox.IsChecked = mojiData.IsBackgroundBoxExists;
             BackgroundBoxColorButton.Background = new SolidColorBrush(mojiData.BackgroundBoxColor);
-            BackgroundBoxPaddingTextBox.SetValue((int)mojiData.BackgoundBoxPadding);
+            BackgroundBoxPaddingTextBox.SetValue((int)mojiData.BackgroundBoxPadding);
+
+            BackgroundBoxPaddingCornerRadiusTextBox.SetValue((int)mojiData.BackgroundBoxCornerRadius);
 
             BackgroundBoxBorderColorButton.Background = new SolidColorBrush(mojiData.BackgroundBoxBorderColor);
             BackgroundBoxBorderThicknessTextBox.SetValue((int)mojiData.BackgroundBoxBorderThickness);
@@ -146,8 +148,9 @@ namespace MojiCollaTool
             _mojiPanel.MojiData.SecondBorderThickness = SecondBorderThicknessTextBox.Value;
             _mojiPanel.MojiData.SecondBorderBlurrRadius = SecondBorderBlurrRadiusTextBox.Value;
             _mojiPanel.MojiData.IsBackgroundBoxExists = (BackgroundBoxCheckBox.IsChecked == true);
-            _mojiPanel.MojiData.BackgoundBoxPadding = BackgroundBoxPaddingTextBox.Value;
+            _mojiPanel.MojiData.BackgroundBoxPadding = BackgroundBoxPaddingTextBox.Value;
             _mojiPanel.MojiData.BackgroundBoxBorderThickness = BackgroundBoxBorderThicknessTextBox.Value;
+            _mojiPanel.MojiData.BackgroundBoxCornerRadius = BackgroundBoxPaddingCornerRadiusTextBox.Value;
             _mojiPanel.MojiData.RotateAngle = RotateTextBox.Value;
 
             _mojiPanel.UpdateMojiView();

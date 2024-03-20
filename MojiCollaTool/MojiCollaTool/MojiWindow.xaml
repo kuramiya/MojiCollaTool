@@ -83,7 +83,7 @@
                             <ComboBoxItem Content="横書き"/>
                             <ComboBoxItem Content="縦書き"/>
                         </ComboBox>
-                        <Label Content="回転:"/>
+                        <Label Content="回転:" HorizontalContentAlignment="Right" Width="50"/>
                         <local:UpDownTextBox x:Name="RotateTextBox" ValueMinLimit="-180" ValueMaxLimit="180" ValueChanged="TextBox_ValueChanged"/>
                     </StackPanel>
                 </GroupBox>
@@ -106,7 +106,7 @@
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <Label Content="文字サイズ:"/>
                         <local:UpDownTextBox x:Name="FontSizeTextBox" ValueMinLimit="1" ValueChanged="TextBox_ValueChanged"/>
-                        <Label Content="文字色:"/>
+                        <Label Content="文字色:" HorizontalContentAlignment="Right" Width="60"/>
                         <Button Style="{DynamicResource ColorButtonStyle}" x:Name="ForeColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="ForeColorButton_Click"/>
                     </StackPanel>
                 </GroupBox>
@@ -114,7 +114,7 @@
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <Label Content="文字間隔:"/>
                         <local:UpDownTextBox x:Name="CharacterMarginTextBox" ValueMinLimit="-1000" ValueChanged="TextBox_ValueChanged"/>
-                        <Label Content="行間隔:"/>
+                        <Label Content="行間隔:" HorizontalContentAlignment="Right" Width="60"/>
                         <local:UpDownTextBox x:Name="LineMarginTextBox" ValueMinLimit="-1000" ValueChanged="TextBox_ValueChanged"/>
                     </StackPanel>
                 </GroupBox>
@@ -124,9 +124,9 @@
                             <StackPanel Orientation="Horizontal" Margin="5">
                                 <Label Content="縁取り幅:"/>
                                 <local:UpDownTextBox x:Name="BorderThicknessTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
-                                <Label Content="縁取り色:"/>
+                                <Label Content="縁取り色:" HorizontalContentAlignment="Right" Width="70"/>
                                 <Button Style="{DynamicResource ColorButtonStyle}" x:Name="BorderColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="BorderColorButton_Click"/>
-                                <Label Content="縁取りぼかし値:"/>
+                                <Label Content="縁取りぼかし値:" HorizontalContentAlignment="Right" Width="100"/>
                                 <local:UpDownTextBox x:Name="BorderBlurrRadiusTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
                             </StackPanel>
                         </GroupBox>
@@ -134,9 +134,9 @@
                             <StackPanel Orientation="Horizontal" Margin="5">
                                 <Label Content="縁取り幅:"/>
                                 <local:UpDownTextBox x:Name="SecondBorderThicknessTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
-                                <Label Content="縁取り色:"/>
+                                <Label Content="縁取り色:" HorizontalContentAlignment="Right" Width="70"/>
                                 <Button Style="{DynamicResource ColorButtonStyle}" x:Name="SecondBorderColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="SecondBorderColorButton_Click"/>
-                                <Label Content="縁取りぼかし値:"/>
+                                <Label Content="縁取りぼかし値:" HorizontalContentAlignment="Right" Width="100"/>
                                 <local:UpDownTextBox x:Name="SecondBorderBlurrRadiusTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
                             </StackPanel>
                         </GroupBox>
@@ -146,15 +146,17 @@
                     <StackPanel Orientation="Vertical" Margin="5">
                         <CheckBox x:Name="BackgroundBoxCheckBox" Content="背景ボックスを表示する" VerticalAlignment="Center" HorizontalAlignment="Left" Checked="CheckBox_CheckChanged" Unchecked="CheckBox_CheckChanged" Margin="5"/>
                         <StackPanel Orientation="Horizontal"  Margin="5">
-                            <Label Content="背景ボックスのパディング:"/>
+                            <Label Content="外枠までの幅:" HorizontalContentAlignment="Right" Width="80"/>
                             <local:UpDownTextBox x:Name="BackgroundBoxPaddingTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
-                            <Label Content="背景ボックスの色:"/>
+                            <Label Content="背景色:" HorizontalContentAlignment="Right" Width="70"/>
                             <Button Style="{DynamicResource ColorButtonStyle}" x:Name="BackgroundBoxColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="BackgroundBoxColorButton_Click"/>
+                            <Label Content="角丸め値:" HorizontalContentAlignment="Right" Width="70"/>
+                            <local:UpDownTextBox x:Name="BackgroundBoxPaddingCornerRadiusTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="5">
-                            <Label Content="背景ボックスの縁取り幅:"/>
+                            <Label Content="縁取り幅:" HorizontalContentAlignment="Right" Width="80"/>
                             <local:UpDownTextBox x:Name="BackgroundBoxBorderThicknessTextBox" ValueMinLimit="0" ValueChanged="TextBox_ValueChanged"/>
-                            <Label Content="背景ボックスの縁取り色:"/>
+                            <Label Content="縁取り色:" HorizontalContentAlignment="Right" Width="70"/>
                             <Button Style="{DynamicResource ColorButtonStyle}" x:Name="BackgroundBoxBorderColorButton" Width="100" Height="28" Background="Black" BorderThickness="1" BorderBrush="Black" Click="BackgroundBoxBorderColorButton_Click"/>
                         </StackPanel>
                     </StackPanel>

@@ -58,7 +58,7 @@ https://stackoverflow.com/questions/78032415/how-to-apply-effect-inside-wpf-uiel
 
 OnRenderメソッドのオーバーラードではなく、DrawingVisualをChildrenに追加する方法でエフェクトを追加することに成功した。
 
-## 文字の箱
+## 背景ボックス
 
 ### 参考リンク集
 
@@ -71,14 +71,28 @@ StackPanelのサイズはFormattedTextのサイズに依存しており、文字
 StackPanelにはPaddingがなかった。Gridに入れることで対処する。Gridもなかった。
 Gridに入れて、StackPanelのMarginを操作することで対応する。
 
-
-## 文字の箱の縁取り
+## 背景ボックスの縁取り
 
 ### 参考リンク集
 
 ### 実装メモ
 上記文字の箱の親に、さらにBorderクラスを使用する。
 色設定、太さのパラメータが必要。
+
+## 背景ボックスの角丸化
+
+### 参考リンク集
+https://learn.microsoft.com/ja-jp/dotnet/desktop/wpf/graphics-multimedia/how-to-draw-a-rectangle?view=netframeworkdesktop-4.8
+
+### 実装メモ
+現状の実装は下記のようになっている。
+MojiPanel(ContentControl) -> Border(背景ボックスの縁取り) -> Grid(背景ボックスの色) -> StackPanel(行並べ)
+
+BorderにCornerRadiusというパラメータがあることを発見。
+使用してみたが、背景の縁取りには有効であるが、背景箱そのものには効果がない
+角丸を実装するならGrid内にRectangleを配置して、それで背景などを設定した方が良い、
+
+
 
 ## 懸念点メモ
 - ネット上のサンプルでは縁取りと縁取りのぼかしは別々の項目となっている

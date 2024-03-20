@@ -37,7 +37,7 @@ namespace MojiCollaTool
 
         public double Y { get; set; }
 
-        public int FontSize { get; set; } = 20;
+        public int FontSize { get; set; } = 50;
 
         public string FontFamilyName { get; set; } = "ＭＳ ゴシック";
 
@@ -73,11 +73,13 @@ namespace MojiCollaTool
 
         public Color BackgroundBoxColor { get; set; } = Colors.White;
 
-        public double BackgoundBoxPadding { get; set; } = 0;
+        public double BackgroundBoxPadding { get; set; } = 0;
 
         public double BackgroundBoxBorderThickness { get; set; } = 0;
 
         public Color BackgroundBoxBorderColor { get; set; } = Colors.Black;
+
+        public double BackgroundBoxCornerRadius { get; set; } = 0;
 
         public bool IsRotateActive { get => RotateAngle != 0; }
 
@@ -116,9 +118,10 @@ namespace MojiCollaTool
             SecondBorderBlurrRadius = source.SecondBorderBlurrRadius;
             IsBackgroundBoxExists = source.IsBackgroundBoxExists;
             BackgroundBoxColor = source.BackgroundBoxColor;
-            BackgoundBoxPadding = source.BackgoundBoxPadding;
+            BackgroundBoxPadding = source.BackgroundBoxPadding;
             BackgroundBoxBorderThickness = source.BackgroundBoxBorderThickness;
             BackgroundBoxBorderColor = source.BackgroundBoxBorderColor;
+            BackgroundBoxCornerRadius = source.BackgroundBoxCornerRadius;
             RotateAngle = source.RotateAngle;
         }
 

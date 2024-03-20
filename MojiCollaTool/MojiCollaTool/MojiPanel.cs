@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
+using System.Windows.Shapes;
 
 namespace MojiCollaTool
 {
@@ -37,12 +38,7 @@ namespace MojiCollaTool
         public bool ShowTopmost { get; set; } = false;
 
         /// <summary>
-        /// 背景の箱の縁取り
-        /// </summary>
-        private Border backgroundBoxBorder = new Border();
-
-        /// <summary>
-        /// 背景の箱となるグリッド
+        /// 背景配置用のグリッド
         /// </summary>
         private Grid backgroundGrid = new Grid();
 
@@ -50,6 +46,11 @@ namespace MojiCollaTool
         /// 文字列を配置するパネル
         /// </summary>
         private StackPanel stackPanel = new StackPanel();
+
+        /// <summary>
+        /// 背景ボックス
+        /// </summary>
+        private Rectangle backgroundBoxRectangle = new Rectangle();
 
         /// <summary>
         /// 前回のパネルの幅
@@ -88,10 +89,16 @@ namespace MojiCollaTool
         {
             MojiWindow = new MojiWindow(this);
 
-            AddChild(backgroundBoxBorder);
+            AddChild(backgroundGrid);
 
-            backgroundBoxBorder.Child = backgroundGrid;
+            //  透明色を設定しておく
+            //  これによりマウスのヒットボックスが背景にも及ぶようになる
+            backgroundGrid.Background = Brushes.Transparent;
+            backgroundGrid.Children.Add(backgroundBoxRectangle);
 
+            //  透明色を設定しておく
+            //  これによりマウスのヒットボックスが背景にも及ぶようになる
+            stackPanel.Background = Brushes.Transparent;
             stackPanel.VerticalAlignment = VerticalAlignment.Center;
             stackPanel.HorizontalAlignment = HorizontalAlignment.Center;
             backgroundGrid.Children.Add(stackPanel);
@@ -290,39 +297,40 @@ namespace MojiCollaTool
                 stackPanel.Children.Add(linePanel);
             }
 
-            //  背景の箱を設定する
+            //  背景ボックスを設定する
             if(MojiData.IsBackgroundBoxExists)
             {
-                stackPanel.Background = Brushes.Transparent;
-                backgroundGrid.Background = new SolidColorBrush(MojiData.BackgroundBoxColor);
+                //  背景ボックスのパディング設定
+                stackPanel.Margin = new Thickness(MojiData.BackgroundBoxPadding);
 
-                stackPanel.Margin = new Thickness(MojiData.BackgoundBoxPadding);
-
-                backgroundBoxBorder.BorderThickness = new Thickness(MojiData.BackgroundBoxBorderThickness);
-                backgroundBoxBorder.BorderBrush = new SolidColorBrush(MojiData.BackgroundBoxBorderColor);
+                //  背景ボックスの色、縁取りなどの設定
+                backgroundBoxRectangle.Fill = new SolidColorBrush(MojiData.BackgroundBoxColor);
+                backgroundBoxRectangle.Stroke = new SolidColorBrush(MojiData.BackgroundBoxBorderColor);
+                backgroundBoxRectangle.StrokeThickness = MojiData.BackgroundBoxBorderThickness;
+                backgroundBoxRectangle.RadiusX = backgroundBoxRectangle.RadiusY = MojiData.BackgroundBoxCornerRadius;
             }
             else
             {
-                //  透明色を設定しておく
-                //  これによりマウスのヒットボックスが背景にも及ぶようになる
-                backgroundGrid.Background = Brushes.Transparent;
-                stackPanel.Background = Brushes.Transparent;
-
+                //  背景ボックスのパディングをゼロにする
                 stackPanel.Margin = new Thickness(0);
 
-                backgroundBoxBorder.BorderThickness = new Thickness(0);
+                //  背景ボックスの色、縁取りなどを消す
+                backgroundBoxRectangle.Fill = Brushes.Transparent;
+                backgroundBoxRectangle.StrokeThickness = 0;
+                backgroundBoxRectangle.Stroke = Brushes.Transparent;
+                backgroundBoxRectangle.RadiusX = backgroundBoxRectangle.RadiusY = 0;
             }
 
             //  文字の回転を行う
-            if(MojiData.IsRotateActive)
+            if (MojiData.IsRotateActive)
             {
-                backgroundBoxBorder.RenderTransformOrigin = new Point(0.5, 0.5);
-                backgroundBoxBorder.RenderTransform = new RotateTransform(MojiData.RotateAngle);
+                backgroundGrid.RenderTransformOrigin = new Point(0.5, 0.5);
+                backgroundGrid.RenderTransform = new RotateTransform(MojiData.RotateAngle);
             }
             else
             {
-                backgroundBoxBorder.RenderTransformOrigin = new Point(0, 0);
-                backgroundBoxBorder.RenderTransform = null;
+                backgroundGrid.RenderTransformOrigin = new Point(0, 0);
+                backgroundGrid.RenderTransform = null;
             }
             
             //  レイアウトを計算し直すために呼んでいる
@@ -333,14 +341,14 @@ namespace MojiCollaTool
                 //  縦書きで前回より位置がずれた場合、X座標を元の位置に戻す
                 if(previousWidth > 0)
                 {
-                    Margin = new Thickness(Math.Round(Margin.Left - (backgroundBoxBorder.DesiredSize.Width - previousWidth)), Margin.Top, Margin.Right, Margin.Bottom);
+                    Margin = new Thickness(Math.Round(Margin.Left - (backgroundGrid.DesiredSize.Width - previousWidth)), Margin.Top, Margin.Right, Margin.Bottom);
                     MojiData.X = Margin.Left;
                     MojiWindow?.UpdateXY(MojiData.X, MojiData.Y);
                 }
 
                 //  この時点でのパネルの幅を保存しておく
                 //  縦書きで元の位置に戻すため
-                previousWidth = backgroundBoxBorder.DesiredSize.Width;
+                previousWidth = backgroundGrid.DesiredSize.Width;
             }
             else
             {

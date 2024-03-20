@@ -139,6 +139,12 @@ namespace MojiCollaTool
             return _children[index];
         }
 
+        /// <summary>
+        /// 文字の描画オブジェクトを生成して返す
+        /// </summary>
+        /// <param name="characterGeometry"></param>
+        /// <param name="foreColor"></param>
+        /// <returns></returns>
         private DrawingVisual CreateCharacterDrawingVisual(Geometry characterGeometry, Color foreColor)
         {
             DrawingVisual drawingVisual = new DrawingVisual();
@@ -151,6 +157,14 @@ namespace MojiCollaTool
             return drawingVisual;
         }
 
+        /// <summary>
+        /// 文字の縁取りオブジェクトを生成して返す
+        /// </summary>
+        /// <param name="characterGeometry"></param>
+        /// <param name="borderThickness"></param>
+        /// <param name="borderColor"></param>
+        /// <param name="borderBlurrRadius"></param>
+        /// <returns></returns>
         private DrawingVisual CreateCharacterBorderDrawingVisual(Geometry characterGeometry, double borderThickness, Color borderColor, double borderBlurrRadius)
         {
             DrawingVisual drawingVisual = new DrawingVisual();
