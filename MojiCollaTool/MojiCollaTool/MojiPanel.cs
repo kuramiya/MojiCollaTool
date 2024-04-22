@@ -53,6 +53,11 @@ namespace MojiCollaTool
         private Rectangle backgroundBoxRectangle = new Rectangle();
 
         /// <summary>
+        /// 文字オブジェクトを再利用のためのオブジェクトプール
+        /// </summary>
+        private DecoratedCharacterControlTotalPool decoratedCharacterControlTotalPool = new DecoratedCharacterControlTotalPool();
+
+        /// <summary>
         /// 前回のパネルの幅
         /// 縦書きで開業が起きた際に、元の場所に戻すために使用する
         /// </summary>
@@ -109,7 +114,7 @@ namespace MojiCollaTool
             MouseDoubleClick += MojiPanel_MouseDoubleClick;
             Unloaded += MojiPanel_Unloaded;
 
-            UpdateMojiView();
+            UpdateMojiView(true);
         }
 
         /// <summary>
@@ -215,10 +220,23 @@ namespace MojiCollaTool
         /// <summary>
         /// 文字の表示を更新する
         /// </summary>
-        public void UpdateMojiView()
+        public void UpdateMojiView(bool isTextDecorationUpdated)
         {
-            //  文字パネルの中身を初期化する
-            stackPanel.Children.Clear();
+            //  文字パネルの中身をクリアする
+            foreach (StackPanel child in stackPanel.Children)
+            {
+                child.Children.Clear();
+            }
+
+            //  文字の装飾が更新された場合、プールされている文字は再利用できない
+            //  文字のプールをクリ化する
+            if(isTextDecorationUpdated)
+            {
+                decoratedCharacterControlTotalPool.Clear();
+            }
+
+            //  文字オブジェクトプールの使用状況をリセットする
+            decoratedCharacterControlTotalPool.ResetUsedCounter();
 
             //  文字パネルの位置を設定する
             Margin = new Thickness(MojiData.X, MojiData.Y, 0, 0);
@@ -237,7 +255,7 @@ namespace MojiCollaTool
             }
 
             //  改行ごとに分ける
-            var lines = MojiData.FullText.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            var lines = MojiData.GetTextLines();
 
             List<Panel> linePanels = new List<Panel>();
 
@@ -274,10 +292,10 @@ namespace MojiCollaTool
                 foreach (var character in characters)
                 {
                     //  縦書きのために、１文字ずつ文字を作成する
-                    DecorationTextControl decorationTextControl = new DecorationTextControl(character, MojiData);
+                    DecoratedCharacterControl decoratedCharacterControl = decoratedCharacterControlTotalPool.GetDecoratedCharacterControl(character, MojiData);
 
                     //  行パネルに追加する
-                    linePanel.Children.Add(decorationTextControl);
+                    linePanel.Children.Add(decoratedCharacterControl);
                 }
 
                 linePanels.Add(linePanel);
@@ -356,7 +374,6 @@ namespace MojiCollaTool
                 //  縦横切り替えでウォーキングが際限なくずれるのが面倒なため
                 previousWidth = 0;
             }
-
         }
     }
 }

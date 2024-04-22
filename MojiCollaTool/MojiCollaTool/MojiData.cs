@@ -96,6 +96,45 @@ namespace MojiCollaTool
             FullText = $"サンプル{id}";
         }
 
+        /// <summary>
+        /// 改行ごとの文字列リストを返す
+        /// </summary>
+        /// <returns></returns>
+        public string[] GetTextLines()
+        {
+            return FullText.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+        }
+
+        /// <summary>
+        /// 文字装飾が同じかどうかを返す
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool IsDecorationSame(MojiData other)
+        {
+            return
+                (FontSize == other.FontSize) &&
+                (FontFamilyName == other.FontFamilyName) &&
+                (TextDirection == other.TextDirection) &&
+                (IsBold == other.IsBold) &&
+                (IsItalic == other.IsItalic) &&
+                (CharacterMargin == other.CharacterMargin) &&
+                (LineMargin == other.LineMargin) &&
+                (ForeColor == other.ForeColor) &&
+                (BorderColor == other.BorderColor) &&
+                (BorderThickness == other.BorderThickness) &&
+                (BorderBlurrRadius == other.BorderBlurrRadius) &&
+                (SecondBorderColor == other.SecondBorderColor) &&
+                (SecondBorderThickness == other.SecondBorderThickness) &&
+                (SecondBorderBlurrRadius == other.SecondBorderBlurrRadius) &&
+                (IsBackgroundBoxExists == other.IsBackgroundBoxExists) &&
+                (BackgroundBoxColor == other.BackgroundBoxColor) &&
+                (BackgroundBoxPadding == other.BackgroundBoxPadding) &&
+                (BackgroundBoxBorderThickness == other.BackgroundBoxBorderThickness) &&
+                (BackgroundBoxBorderColor == other.BackgroundBoxBorderColor) &&
+                (BackgroundBoxCornerRadius == other.BackgroundBoxCornerRadius);
+        }
+
         public void Copy(MojiData source)
         {
             //  IDはコピーしない

@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 
 namespace MojiCollaTool
 {
-    public class DecorationTextControl : FrameworkElement
+    public class DecoratedCharacterControl : FrameworkElement
     {
         /// <summary>
         /// 縦書き対応のために90°右回転させる必要のある文字
@@ -31,6 +31,11 @@ namespace MojiCollaTool
         /// </summary>
         private const string TATEGAKI_SHIFT_TARGET_CHARS_SMALL = "ぁぃぅぇぉっゃゅょゎゕゖァィゥェォヵㇰヶㇱㇲッㇳㇴㇵㇶㇷㇷ゚ㇸㇹㇺャュョㇻㇼㇽㇾㇿヮ";
 
+        /// <summary>
+        /// 文字の種別
+        /// </summary>
+        public char Character { get; set; }
+
         // Create a collection of child visual objects.
         private readonly VisualCollection _children = null!;
 
@@ -44,8 +49,10 @@ namespace MojiCollaTool
         /// </summary>
         private readonly static RotateTransform tategaki90DegRotate = new RotateTransform(90);
 
-        public DecorationTextControl(char character, MojiData mojiData)
+        public DecoratedCharacterControl(char character, MojiData mojiData)
         {
+            Character = character;
+
             //  フォーマットされた描画用文字を作成する
             FormattedText formattedText = new FormattedText(
                 character.ToString(),   //  文字

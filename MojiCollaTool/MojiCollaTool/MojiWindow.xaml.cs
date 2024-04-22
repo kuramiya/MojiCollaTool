@@ -130,7 +130,7 @@ namespace MojiCollaTool
             _mojiPanel.Remove();
         }
 
-        public void UpdateMojiView()
+        public void UpdateMojiView(bool isTextDecoraitonUpdated)
         {
             _mojiPanel.MojiData.FullText = TextTextBox.Text;
             Title = $"[{_mojiPanel.MojiData.Id}] {_mojiPanel.MojiData.ExampleText}";
@@ -153,35 +153,35 @@ namespace MojiCollaTool
             _mojiPanel.MojiData.BackgroundBoxCornerRadius = BackgroundBoxPaddingCornerRadiusTextBox.Value;
             _mojiPanel.MojiData.RotateAngle = RotateTextBox.Value;
 
-            _mojiPanel.UpdateMojiView();
+            _mojiPanel.UpdateMojiView(isTextDecoraitonUpdated);
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (_runEvent == false) return;
 
-            UpdateMojiView();
+            UpdateMojiView(false);
         }
 
         private void TextBox_ValueChanged(object sender, UpDownTextBoxEvent e)
         {
             if (_runEvent == false) return;
 
-            UpdateMojiView();
+            UpdateMojiView(true);
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_runEvent == false) return;
 
-            UpdateMojiView();
+            UpdateMojiView(true);
         }
 
         private void CheckBox_CheckChanged(object sender, RoutedEventArgs e)
         {
             if (_runEvent == false) return;
 
-            UpdateMojiView();
+            UpdateMojiView(true);
         }
 
         private void ColorButton_Click(Color currentColor, Action<Color> action)
@@ -207,7 +207,7 @@ namespace MojiCollaTool
             {
                 _mojiPanel.MojiData.ForeColor = color;
                 ((Button)sender).Background = new SolidColorBrush(color);
-                _mojiPanel.UpdateMojiView();
+                _mojiPanel.UpdateMojiView(true);
             });
         }
 
@@ -217,7 +217,7 @@ namespace MojiCollaTool
             {
                 _mojiPanel.MojiData.BorderColor = color;
                 ((Button)sender).Background = new SolidColorBrush(color);
-                _mojiPanel.UpdateMojiView();
+                _mojiPanel.UpdateMojiView(true);
             });
         }
 
@@ -227,7 +227,7 @@ namespace MojiCollaTool
             {
                 _mojiPanel.MojiData.SecondBorderColor = color;
                 ((Button)sender).Background = new SolidColorBrush(color);
-                _mojiPanel.UpdateMojiView();
+                _mojiPanel.UpdateMojiView(true);
             });
         }
 
@@ -237,7 +237,7 @@ namespace MojiCollaTool
             {
                 _mojiPanel.MojiData.BackgroundBoxColor = color;
                 ((Button)sender).Background = new SolidColorBrush(color);
-                _mojiPanel.UpdateMojiView();
+                _mojiPanel.UpdateMojiView(true);
             });
         }
 
@@ -247,7 +247,7 @@ namespace MojiCollaTool
             {
                 _mojiPanel.MojiData.BackgroundBoxBorderColor = color;
                 ((Button)sender).Background = new SolidColorBrush(color);
-                _mojiPanel.UpdateMojiView();
+                _mojiPanel.UpdateMojiView(true);
             });
         }
 
@@ -304,7 +304,7 @@ namespace MojiCollaTool
 
                 LoadMojiDataToWindow(_mojiPanel.MojiData);
 
-                _mojiPanel.UpdateMojiView();
+                _mojiPanel.UpdateMojiView(true);
             }
             catch (Exception ex)
             {
