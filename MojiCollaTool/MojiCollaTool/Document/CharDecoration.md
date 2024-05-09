@@ -142,14 +142,37 @@ https://qiita.com/WaToI/items/a8cb0441eb6cb200aa77
 文字オブジェクトはスタックパネル内に順番に配置されている。
 文字オブジェクトのインスタンス（FrameworkElementを継承している）は、複数追加することはできない。そういった再利用は不可。
 
-#### 文字オブジェクトの管理
+#### 文字処理の高速化
+
+ぼかし処理の入った文字が入ると、かなり処理が重くなる。
+パフォーマンス分析を行ってみたが、99%がカーネル処理（管理できない内部処理）で締められている。
+ぼかし処理が原因らしい。
+
+パフォーマンス向上の基礎。
+https://learn.microsoft.com/ja-jp/dotnet/desktop/wpf/advanced/optimizing-performance-text?view=netframeworkdesktop-4.8
+
+現状、DecoratedCharacterControlを文字ごとに配置して、それに１つずつぼかし処理をいれるということを行っている。
+このため、複数のコントロールとの干渉が起きた際に計算が複雑になり、それが処理の重さにつながっているのではないか？
+であれば、１つ１つの文字で実装するのではなく、まとめて描画、まとめてぼかし処理をすればマシになるのではないかと思われる。
+その際は文字の配置、間隔や行の間隔などの処理方法がガラリと変わるため、
 
 
-#### 文字オブジェクト（DecoratedCharacterControl）の識別
+##### CacheModeの指定
+https://learn.microsoft.com/ja-jp/dotnet/desktop/wpf/graphics-multimedia/how-to-improve-rendering-performance-by-caching-an-element?view=netframeworkdesktop-4.8
+https://sourcechord.hatenablog.com/entry/2014/02/21/221734
 
+効果があるのかいまいちわからない。
 
+##### 文字処理の変更
+Gryphを使用する方法を検討する。
+これが軽量化につながるかは不明。
+ただ、レイアウトなどはマシになるかもしれない。
+https://learn.microsoft.com/ja-jp/dotnet/desktop/wpf/advanced/typography?view=netframeworkdesktop-4.8
 
+実装例っぽい。
 
+https://days-of-programming.blogspot.com/search/label/WPF%E7%94%A8%E7%B8%A6%E6%9B%B8%E3%81%8D%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%83%96%E3%83%AD%E3%83%83%E3%82%AF%20Tategaki
+https://github.com/EH500-Kintarou/Tategaki/tree/master/Tategaki
 
 ## 懸念点メモ
 - ネット上のサンプルでは縁取りと縁取りのぼかしは別々の項目となっている
