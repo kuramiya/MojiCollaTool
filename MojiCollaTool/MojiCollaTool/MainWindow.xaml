@@ -90,6 +90,9 @@
                     <Canvas.LayoutTransform>
                         <ScaleTransform x:Name="CanvasScaleTransform" ScaleX="1" ScaleY="1"/>
                     </Canvas.LayoutTransform>
+                    <Canvas.CacheMode>
+                        <BitmapCache EnableClearType="True" RenderAtScale="1" SnapsToDevicePixels="False"/>
+                    </Canvas.CacheMode>
                     <Rectangle x:Name="CanvasBackgroundRect"/>
                     <Image x:Name="ImageControl1"/>
                     <Image x:Name="ImageControl2"/>
